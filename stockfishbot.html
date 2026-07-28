@@ -976,6 +976,11 @@
 
                 if (isCollapsed) {
                     currentSection.classList.remove('collapsed');
+                    
+                    window.scrollTo({
+                        top: currentSection.offsetTop - 150,
+                        behavior: 'smooth'
+                    });
                 }
             });
         });
