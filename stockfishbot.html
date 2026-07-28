@@ -844,6 +844,26 @@
         document.getElementById('start-btn').addEventListener('click', () => {
             document.getElementById('intro-page').classList.add('intro-hidden');
             document.body.classList.add('started');
+
+            document.querySelectorAll('section').forEach(sec => {
+                sec.classList.add('collapsed');
+            });
+
+            const introSection = document.getElementById('intro');
+            if (introSection) {
+                introSection.classList.remove('collapsed');
+            }
+
+            document.querySelectorAll('.sidebar-nav li a').forEach(nav => nav.classList.remove('active'));
+            const introNavLink = document.querySelector('.sidebar-nav li a[href="#intro"]');
+            if (introNavLink) {
+                introNavLink.classList.add('active');
+            }
+
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         });
 
         document.querySelectorAll('.intro-card').forEach(card => {
