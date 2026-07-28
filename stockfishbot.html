@@ -913,6 +913,14 @@
                 document.getElementById('intro-page').classList.add('intro-hidden');
                 document.body.classList.add('started');
 
+                document.querySelectorAll('section').forEach(sec => {
+                    if (!sec.classList.contains('collapsed')) {
+                        sec.classList.add('instant-collapse');
+                        sec.classList.add('collapsed');
+                        setTimeout(() => sec.classList.remove('instant-collapse'), 50);
+                    }
+                });
+
                 const targetSelector = this.getAttribute('data-target');
                 const navLink = document.querySelector(`.sidebar-nav li a[href="${targetSelector}"]`);
                 
