@@ -943,29 +943,6 @@
         let isClicking = false;
         let clickTimeout;
 
-        window.addEventListener('scroll', () => {
-            if (isClicking) return;
-
-            let current = sections[0].getAttribute('id');
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                if (pageYOffset >= sectionTop - 150) {
-                    current = section.getAttribute('id');
-                }
-            });
-
-            if (window.innerHeight + window.pageYOffset >= document.documentElement.scrollHeight - 10) {
-                current = sections[sections.length - 1].getAttribute('id');
-            }
-
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href').includes(current)) {
-                    link.classList.add('active');
-                }
-            });
-        });
-
         navLinks.forEach(link => {
             link.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -977,31 +954,41 @@
                     sidebarOverlay.classList.remove('show');
                 }
 
-                navLinks.forEach(nav => nav.classList.remove('active'));
-                this.classList.add('active');
-
-                sections.forEach(sec => {
-                    if (!sec.classList.contains('collapsed')) {
-                        sec.classList.add('instant-collapse');
-                        sec.classList.add('collapsed');
-                        setTimeout(() => sec.classList.remove('instant-collapse'), 50);
-                    }
-                });
-
                 const targetId = this.getAttribute('href').substring(1);
                 const targetSection = document.getElementById(targetId);
-                
+
                 if (targetSection) {
-                    targetSection.classList.remove('collapsed');
-                    
-                    const bottomSpacer = document.getElementById('bottom-spacer');
-                    const neededHeight = window.innerHeight - targetSection.scrollHeight - 150;
-                    bottomSpacer.style.height = Math.max(200, neededHeight) + 'px';
-                    
-                    window.scrollTo({
-                        top: targetSection.offsetTop - 150,
-                        behavior: 'smooth'
-                    });
+                    const isCollapsed = targetSection.classList.contains('collapsed');
+
+                    if (!isCollapsed) {
+                        targetSection.classList.remove('instant-collapse');
+                        targetSection.classList.add('collapsed');
+                        this.classList.remove('active');
+                        document.getElementById('bottom-spacer').style.height = '200px';
+                    } else {
+                        navLinks.forEach(nav => nav.classList.remove('active'));
+                        this.classList.add('active');
+
+                        document.querySelectorAll('section').forEach(sec => {
+                            if (sec !== targetSection && !sec.classList.contains('collapsed')) {
+                                sec.classList.add('instant-collapse');
+                                sec.classList.add('collapsed');
+                                setTimeout(() => sec.classList.remove('instant-collapse'), 50);
+                            }
+                        });
+
+                        targetSection.classList.remove('instant-collapse');
+                        targetSection.classList.remove('collapsed');
+                        
+                        const bottomSpacer = document.getElementById('bottom-spacer');
+                        const neededHeight = window.innerHeight - targetSection.scrollHeight - 150;
+                        bottomSpacer.style.height = Math.max(200, neededHeight) + 'px';
+                        
+                        window.scrollTo({
+                            top: targetSection.offsetTop - 150,
+                            behavior: 'smooth'
+                        });
+                    }
                 }
 
                 clickTimeout = setTimeout(() => {
@@ -1043,13 +1030,21 @@
             title.addEventListener('click', () => {
                 const currentSection = title.parentElement;
                 const isCollapsed = currentSection.classList.contains('collapsed');
+                
+                const sectionId = currentSection.getAttribute('id');
+                const targetNavLink = document.querySelector(`.sidebar-nav li a[href="#${sectionId}"]`);
 
                 if (!isCollapsed) {
                     currentSection.classList.remove('instant-collapse');
                     currentSection.classList.add('collapsed');
                     
+                    if (targetNavLink) targetNavLink.classList.remove('active');
+                    
                     document.getElementById('bottom-spacer').style.height = '200px';
                 } else {
+                    navLinks.forEach(nav => nav.classList.remove('active'));
+                    if (targetNavLink) targetNavLink.classList.add('active');
+
                     document.querySelectorAll('section').forEach(sec => {
                         if (sec !== currentSection && !sec.classList.contains('collapsed')) {
                             sec.classList.add('instant-collapse'); 
