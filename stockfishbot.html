@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>종합 봇 매뉴얼 (네이티브 기반 아이리스)</title>
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/variable/pretendardvariable.css" />
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #f8f9fa;
+            --text-main: #333333;
+            --text-muted: #6c757d;
+            --sidebar-bg: #1e1e2f;
+            --sidebar-text: #ffffff;
+            --sidebar-hover: #2a2a40;
+            --card-bg: #ffffff;
+            --border-color: #e9ecef;
+            --code-bg: #f1f3f5;
+            --code-text: #e83e8c;
+            --vip-bg: #fff3cd;
+            --vip-text: #856404;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
+            color: var(--text-main);
+            background-color: var(--secondary-color);
+            display: flex;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background-color: var(--sidebar-bg);
+            color: var(--sidebar-text);
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            overflow-y: auto;
+            padding-top: 2rem;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 0 1.5rem 1.5rem 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+        }
+
+        .sidebar-nav li a {
+            display: block;
+            padding: 0.8rem 1.5rem;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .sidebar-nav li a:hover, .sidebar-nav li a.active {
+            background-color: var(--sidebar-hover);
+            color: var(--sidebar-text);
+            border-left: 4px solid var(--primary-color);
+            padding-left: calc(1.5rem - 4px);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 3rem 4rem;
+            max-width: 1200px;
+        }
+
+        /* Search Bar */
+        .search-container {
+            margin-bottom: 2rem;
+            position: sticky;
+            top: 1rem;
+            z-index: 10;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            background-color: var(--card-bg);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: border-color 0.2s;
+            font-family: inherit;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        /* Sections */
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border-color);
+            color: var(--text-main);
+            scroll-margin-top: 6rem;
+        }
+
+        /* Command Cards */
+        .command-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .command-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .command-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+        }
+
+        .command-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .command-code {
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .command-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .command-example {
+            background-color: #f8f9fa;
+            padding: 0.8rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #495057;
+            border-left: 3px solid #ced4da;
+        }
+
+        /* Badges */
+        .badge {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.25rem 0.6rem;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        .badge.vip {
+            background-color: var(--vip-bg);
+            color: var(--vip-text);
+            border: 1px solid #ffeeba;
+        }
+
+        .badge.admin {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .badge.info {
+            background-color: #e2e3e5;
+            color: #383d41;
+            border: 1px solid #d6d8db;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                padding-top: 1rem;
+            }
+            .sidebar-nav {
+                display: flex;
+                overflow-x: auto;
+                padding-bottom: 0.5rem;
+                white-space: nowrap;
+            }
+            .sidebar-nav li a {
+                border-left: none;
+                border-bottom: 4px solid transparent;
+            }
+            .sidebar-nav li a:hover, .sidebar-nav li a.active {
+                border-left: none;
+                border-bottom: 4px solid var(--primary-color);
+                padding-left: 1.5rem;
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>🤖 봇 종합 매뉴얼</h2>
+            <p style="color: rgba(255,255,255,0.5); font-size: 0.85rem; margin-top: 0.3rem;">네이티브 기반 아이리스</p>
+        </div>
+        <ul class="sidebar-nav">
+            <li><a href="#intro" class="active">📍 시작하기 & 계정 연동</a></li>
+            <li><a href="#utility">🛠️ 유틸리티 & 정보</a></li>
+            <li><a href="#ai-gulbi">🤖 AI 굴비봇</a></li>
+            <li><a href="#game-fishing">🎣 낚시 게임</a></li>
+            <li><a href="#game-semantle">🧩 꼬맨틀 게임</a></li>
+            <li><a href="#game-mafia">🕵️ 마피아 게임</a></li>
+            <li><a href="#game-sword">⚔️ 검 강화 게임</a></li>
+            <li><a href="#admin">👑 관리자 전용</a></li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="명령어 또는 기능 검색 (예: 낚시 시작, 굴비야, 프로필)...">
+        </div>
+
+        <!-- 시작하기 -->
+        <section id="intro">
+            <h2 class="section-title">📍 시작하기 & 계정 연동</h2>
+            <p style="margin-bottom: 1.5rem; color: var(--text-muted);">봇의 기본 기능과 게임을 즐기기 위한 공통 계정 설정 명령어입니다.</p>
+            <div class="command-grid">
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/[게임명] 등록 @닉네임</span> <span class="badge info">필수</span></div>
+                    <div class="command-desc">각 게임(낚시, 꼬맨틀, 검 강화, 굴비)을 처음 시작할 때 계정을 생성합니다.</div>
+                    <div class="command-example">예: /낚시 등록 @홍길동<br>예: /꼬맨틀 등록 @홍길동</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/[게임명] 연동 @닉네임</span></div>
+                    <div class="command-desc">다른 오픈채팅방이나 디스코드에서도 동일한 계정을 사용하기 위해 연동을 요청합니다. 요청 후 기존 방에서 <strong>/[게임명] 연동 확인 [코드]</strong>를 입력해 승인해야 합니다.</div>
+                    <div class="command-example">예: /낚시 연동 @홍길동</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/[게임명] 로그아웃 @닉네임</span></div>
+                    <div class="command-desc">현재 채팅방에서 연동된 계정을 로그아웃합니다. (마지막 연결된 방에서는 로그아웃 불가)</div>
+                    <div class="command-example">예: /굴비 로그아웃 @홍길동</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/후원</span></div>
+                    <div class="command-desc">스톡피시봇의 AI 비용 유지를 위한 후원 정보를 확인합니다. (카카오페이, 토스 링크 제공)</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 유틸리티 -->
+        <section id="utility">
+            <h2 class="section-title">🛠️ 유틸리티 & 시스템 정보</h2>
+            <div class="command-grid">
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">!profile</span></div>
+                    <div class="command-desc">사용자의 카카오톡/디스코드 프로필, 가입된 오픈채팅방, 최근 메시지, 봇 커맨드 사용 기록 등을 조회합니다. (@멘션으로 타인 조회 가능)</div>
+                    <div class="command-example">예: !profile<br>예: !profile @홍길동</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/봇상태</span> 또는 <span class="command-code">/봇</span></div>
+                    <div class="command-desc">봇이 구동 중인 기기의 CPU, RAM, 배터리 상태, 업타임 및 인터넷 다운로드 속도를 확인합니다.</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/날씨 [지역명]</span></div>
+                    <div class="command-desc">기상청 및 대기 질 정보를 바탕으로 현재 날씨, 온도, 습도, 미세먼지 및 주간 날씨 정보를 제공합니다.</div>
+                    <div class="command-example">예: /날씨 강남구</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">!ping</span></div>
+                    <div class="command-desc">봇의 응답 속도(ms 단위)를 체크합니다.</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">!userid</span> / <span class="command-code">!chatid</span></div>
+                    <div class="command-desc">사용자 고유 해시 ID 또는 현재 채팅방의 ID를 반환합니다.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI 굴비봇 -->
+        <section id="ai-gulbi">
+            <h2 class="section-title">🤖 AI 굴비봇 (GPT, Gemini, Claude, Grok 연동)</h2>
+            <div class="command-grid">
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">굴비야 [질문]</span></div>
+                    <div class="command-desc">AI 굴비봇에게 질문합니다. 기본적으로 설정된 모델과 페르소나로 대답합니다.</div>
+                    <div class="command-example">예: 굴비야 파이썬이 뭐야?</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">굴비야-s [질문]</span></div>
+                    <div class="command-desc">실시간 <strong>웹 검색</strong>을 포함하여 굴비봇에게 질문합니다. 최신 정보가 필요할 때 유용합니다.</div>
+                    <div class="command-example">예: 굴비야-s 오늘 서울 날씨 어때?</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/굴비 분석,[모델별칭],[내용]</span></div>
+                    <div class="command-desc">이미지, 동영상(프레임 추출), PDF, 문서, 오디오 파일 등을 분석합니다. 분석할 파일에 <strong>답장(Reply)</strong> 기능과 함께 사용해야 합니다.</div>
+                    <div class="command-example">예: /굴비 분석,g4o,이 사진에 뭐가 있어?</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/굴비 수정,[모델별칭],[내용]</span></div>
+                    <div class="command-desc">답장한 원본 이미지를 지정한 프롬프트대로 수정(Edit)합니다.</div>
+                    <div class="command-example">예: /굴비 수정,gi2,배경을 우주로 바꿔줘</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/굴비 그려줘 [프롬프트]</span></div>
+                    <div class="command-desc">텍스트 프롬프트를 바탕으로 AI 이미지를 생성합니다.</div>
+                    <div class="command-example">예: /굴비 그려줘 달에서 코딩하는 고양이</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/llm,[페르소나],[질문]</span> <span class="badge admin">관리자</span></div>
+                    <div class="command-desc">LLM 백화점 기능. GPT, Gemini, Claude, Grok, DeepSeek 등 여러 AI 모델의 답변을 동시에 받아 비교합니다.</div>
+                    <div class="command-example">예: /llm,기본,인공지능의 미래는?</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/굴비 내정보</span></div>
+                    <div class="command-desc">나의 굴비봇 텍스트/이미지 일일 사용 한도, 기억력, 경고 횟수, 설정된 모델 및 페르소나를 확인합니다.</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">커스텀 페르소나 명령어</span></div>
+                    <div class="command-desc">특정 역할이 부여된 간편 명령어들입니다. (운세, 해몽, 타로, 번역, 맞춤법, 요약, 삼행시 등)</div>
+                    <div class="command-example">예: /오늘운세<br>예: /해몽 하늘을 나는 꿈<br>예: /요약 [내용]<br>예: /호시노 (블루아카이브 캐릭터 모드)</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 낚시 게임 -->
+        <section id="game-fishing">
+            <h2 class="section-title">🎣 낚시 게임</h2>
+            <div class="command-grid">
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/낚시 시작</span></div>
+                    <div class="command-desc">낚시를 1회 진행합니다. (미끼, 내구도, 배고픔 1씩 소모)</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/황금 낚시 시작</span> <span class="badge vip">VIP</span></div>
+                    <div class="command-desc">미끼, 내구도, 배고픔이 허용하는 한 최대 100번까지 연속으로 낚시를 진행합니다.</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/낚시 출석</span> (또는 <span class="command-code">/ㅊㅊ</span>)</div>
+                    <div class="command-desc">매일 1회 출석 보상(골드, 미끼, 경험치, 보석 등)을 받습니다. 출석 일수 및 클랜 레벨에 따라 보상이 증가합니다.</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/낚시 프로필</span></div>
+                    <div class="command-desc">내 낚시 레벨, 랭킹, 골드, 도감 진행도, 보석 보유량, 재능 등 모든 상태를 한눈에 보여주는 프로필 카드를 출력합니다.</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/낚시 가방</span> & <span class="command-code">/낚시 도감</span></div>
+                    <div class="command-desc">현재 낚은 물고기 목록(최대 1,000마리)을 확인하거나, 물고기 도감 수집 상태를 확인합니다.</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/낚시 판매</span></div>
+                    <div class="command-desc">가방에 있는 모든 물고기를 판매하여 골드를 획득합니다.</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">장비 관리 명령어</span></div>
+                    <div class="command-desc">미끼 구매 및 낚싯대 강화/수리 관련 명령어입니다.</div>
+                    <div class="command-example">/낚시 미끼구매 [개수]<br>/낚시 수리 [횟수]<br>/낚시 강화 [횟수]<br>/낚시 미끼통/내구도 강화<br><br><b>VIP 전용:</b> /낚시 일괄 미끼구매, /낚시 일괄 강화, /낚시 일괄 수리</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/낚시 아이템 구매 [번호] [개수]</span></div>
+                    <div class="command-desc">골드 부스트, 행운의 낚싯대, 식량(배고픔 회복용) 등의 아이템을 상점에서 구매합니다.<br>*(상점 리스트는 <b>/낚시 아이템리스트</b>로 확인)*</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/낚시 식사 [개수]</span></div>
+                    <div class="command-desc">구매한 비축 식량을 소모하여 배고픔 수치를 회복합니다. (VIP는 <b>/낚시 일괄 식사</b> 가능)</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/낚시 인챈트 [보석명] [횟수]</span></div>
+                    <div class="command-desc">루비, 에메랄드, 다이아몬드 등 획득한 보석으로 패시브 효과를 인챈트합니다. (VIP 일괄 인챈트 가능)</div>
+                    <div class="command-example">예: /낚시 인챈트 루비 1<br>효과 확인: /낚시 보석</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/낚시 거래소</span> 기능</div>
+                    <div class="command-desc">유저들끼리 보석을 사고파는 기능입니다.</div>
+                    <div class="command-example">/낚시 거래소리스트<br>/낚시 거래소 등록 [보석] [개수] [가격]<br>/낚시 거래소 구매 [보석] [번호] [개수]<br>/낚시 거래소 취소 [보석]</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/낚시 클랜</span> 기능</div>
+                    <div class="command-desc">클랜을 창설하고 멤버를 받아 패시브 혜택을 공유합니다.</div>
+                    <div class="command-example">/낚시 클랜 창설 [클랜명] (비용 1억G)<br>/낚시 클랜 가입 [클랜명]<br>/낚시 클랜 승인/거절 @[닉네임]<br>/낚시 클랜정보 [클랜명]</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/낚시 자동 ... 활성화</span> <span class="badge vip">VIP</span></div>
+                    <div class="command-desc">물고기 자동 판매, 자동 퀘스트 수집, 자동 미끼 구매 등 번거로운 행동을 황금낚시 시 자동으로 수행합니다.</div>
+                    <div class="command-example">/낚시 자동 판매 활성화<br>/낚시 자동 퀘스트 수집 활성화</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 꼬맨틀 게임 -->
+        <section id="game-semantle">
+            <h2 class="section-title">🧩 꼬맨틀 게임 (단어 유사도 추리)</h2>
+            <p style="margin-bottom: 1.5rem; color: var(--text-muted);">AI 언어 모델의 단어 벡터값을 기반으로, 숨겨진 정답 단어와 가장 유사도가 높은 단어를 맞추는 두뇌 게임입니다.</p>
+            <div class="command-grid">
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">ㅐ [단어]</span> (로컬) / <span class="command-code">ㅂ [단어]</span> (글로벌)</div>
+                    <div class="command-desc">단어를 제출하여 정답과의 유사도 점수와 순위를 확인합니다. (로컬은 해당 채팅방 전용, 글로벌은 모든 봇 연동방 공통 정답)</div>
+                    <div class="command-example">예: ㅐ 사과<br>예: ㅂ 우주</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/꼬맨틀 출석</span> (또는 <span class="command-code">/ㄲㅁㅌ</span>)</div>
+                    <div class="command-desc">매일 1회 꼬맨틀 출석 체크를 하여 코인과 경험치를 획득합니다.</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/꼬맨틀 프로필</span></div>
+                    <div class="command-desc">내 꼬맨틀 레벨, 승리 횟수, 코인, 경험치 및 글로벌 랭킹을 확인합니다.</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/꼬맨틀 힌트 유사도/초성</span></div>
+                    <div class="command-desc">코인을 소모하여 정답에 대한 힌트를 얻습니다. (유사도 힌트: 15 코인 / 초성 힌트: 20 코인)</div>
+                    <div class="command-example">예: /꼬맨틀 힌트 유사도<br>예: /꼬맨틀 힌트 초성 글로벌</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/정답자랭킹</span></div>
+                    <div class="command-desc">가장 정답을 많이 맞춘 꼬맨틀 TOP 1000 유저 랭킹을 출력합니다.</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/솔버</span> <span class="badge admin">관리자</span></div>
+                    <div class="command-desc">유사도 오차를 역계산하여 정답에 근접한 단어 리스트를 찾아내는 치트 도구입니다.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 마피아 게임 -->
+        <section id="game-mafia">
+            <h2 class="section-title">🕵️ 마피아 게임</h2>
+            <div class="command-grid">
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/마피아개최 [방이름]</span></div>
+                    <div class="command-desc">새로운 마피아 게임 세션을 생성합니다. 생성 시 방 이름과 방 번호가 발급됩니다.</div>
+                    <div class="command-example">예: /마피아개최 테스트방</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/마피아참가 [방이름]_[방번호] @[닉네임]</span></div>
+                    <div class="command-desc">개최된 마피아 게임에 참가합니다. 이 명령어는 참가자의 <b>1:1 갠톡방</b>에서 입력해야 직업 안내를 받을 수 있습니다.</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/마피아설정</span></div>
+                    <div class="command-desc">방장이 마피아, 의사, 경찰의 수와 낮 회의/투표 시간을 설정하고 게임을 시작합니다.</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">밤 능력 사용 명령어</span></div>
+                    <div class="command-desc">밤이 되면 각 직업의 역할을 수행합니다. <b>(개인 채팅방에서 사용)</b></div>
+                    <div class="command-example">마피아: /마피아지목 @닉네임<br>의사: /의사치료 @닉네임<br>경찰: /경찰조사 @닉네임</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/투표 @닉네임</span> 또는 <span class="command-code">/투표 패스</span></div>
+                    <div class="command-desc">낮 회의가 종료된 후 마피아로 의심되는 사람을 투표하여 처형합니다.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 검 강화 게임 -->
+        <section id="game-sword">
+            <h2 class="section-title">⚔️ 검 강화 게임</h2>
+            <div class="command-grid">
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/검 출석</span></div>
+                    <div class="command-desc">매일 출석 보상으로 5,000G를 획득합니다.</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/검 강화</span></div>
+                    <div class="command-desc">골드를 지불하여 내 검을 1단계 강화합니다. 확률에 따라 성공, 유지, 등급 하락, 파괴(0강)가 결정됩니다.</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/검 판매</span></div>
+                    <div class="command-desc">강화된 검을 판매하여 골드를 획득합니다. 검 레벨의 제곱 비례로 비싸집니다. (+0강으로 초기화됨)</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/검 확률표</span></div>
+                    <div class="command-desc">구간별 강화 성공 확률, 비용, 실패 패널티 표를 확인합니다.</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/검 프로필</span> & <span class="command-code">/검 랭킹</span></div>
+                    <div class="command-desc">내 현재 골드와 강화 수치를 확인하거나 전체 서버의 최고 강화 등급 TOP 1000 랭킹을 확인합니다.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 관리자 전용 -->
+        <section id="admin">
+            <h2 class="section-title">👑 관리자 전용 기능 (Super Admin / Admin)</h2>
+            <p style="margin-bottom: 1.5rem; color: var(--text-muted);">개발자 및 지정된 권한 관리자만 사용할 수 있는 서버/유저 제어 명령어입니다.</p>
+            <div class="command-grid">
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/chatlog @닉네임</span></div>
+                    <div class="command-desc">해당 유저의 채팅 로그 및 이력을 조회합니다.</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/[게임명] 정지/해제 @닉네임</span></div>
+                    <div class="command-desc">규칙을 위반한 악성 유저를 낚시, 꼬맨틀, 검강화, 굴비봇에서 각각 사용 정지시키거나 해제합니다.</div>
+                    <div class="command-example">예: /굴비 정지 @어그로꾼<br>예: /낚시 해제 @홍길동</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/[게임명] 전체동기화</span></div>
+                    <div class="command-desc">로컬 SQLite DB 데이터를 구글 드라이브 클라우드로 백업합니다.</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/[게임명] 불러오기</span></div>
+                    <div class="command-desc">구글 드라이브에 저장된 백업 DB 데이터를 서버로 다시 불러와 덮어씁니다.</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">/굴비 [자원] 설정/추가</span></div>
+                    <div class="command-desc">유저의 일일 텍스트/이미지 한도, 기억력을 임의로 추가하거나 설정합니다.</div>
+                    <div class="command-example">예: /굴비 텍스트한도 추가 @홍길동 100</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">!delcache</span></div>
+                    <div class="command-desc">이름 및 프로필 아바타 캐시 데이터를 초기화하여 강제로 새로고침합니다.</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">!shutdown</span></div>
+                    <div class="command-desc">개발자 전용. 서버 긴급 점검 시 봇 작동을 일시 중지(관리자 제외)시킵니다.</div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // 사이드바 스크롤 스파이 및 네비게이션 액티브 상태 변경
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.sidebar-nav li a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 150) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // 부드러운 스크롤 이동
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetSection = document.getElementById(targetId);
+                window.scrollTo({
+                    top: targetSection.offsetTop - 80,
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // 실시간 검색 기능 (카드 필터링)
+        const searchInput = document.getElementById('searchInput');
+        const commandCards = document.querySelectorAll('.command-card');
+        const sectionElements = document.querySelectorAll('section');
+
+        searchInput.addEventListener('input', function(e) {
+            const term = e.target.value.toLowerCase();
+
+            sectionElements.forEach(section => {
+                let hasVisibleCard = false;
+                const cardsInSection = section.querySelectorAll('.command-card');
+
+                cardsInSection.forEach(card => {
+                    const text = card.textContent.toLowerCase();
+                    if (text.includes(term)) {
+                        card.style.display = 'block';
+                        hasVisibleCard = true;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                // 카드가 하나도 없으면 섹션 자체를 숨김 처리 (검색어 있을 때만)
+                if (term !== '' && !hasVisibleCard) {
+                    section.style.display = 'none';
+                } else {
+                    section.style.display = 'block';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
