@@ -157,7 +157,11 @@
             opacity: 0;
             margin-top: 0;
             margin-bottom: 0;
-            transition: none;
+        }
+
+        section.instant-collapse p,
+        section.instant-collapse .command-grid {
+            transition: none !important;
         }
 
         .command-grid {
@@ -846,7 +850,11 @@
             document.body.classList.add('started');
 
             document.querySelectorAll('section').forEach(sec => {
-                sec.classList.add('collapsed');
+                if (!sec.classList.contains('collapsed')) {
+                    sec.classList.add('instant-collapse');
+                    sec.classList.add('collapsed');
+                    setTimeout(() => sec.classList.remove('instant-collapse'), 50);
+                }
             });
 
             const introSection = document.getElementById('intro');
@@ -938,7 +946,13 @@
                 navLinks.forEach(nav => nav.classList.remove('active'));
                 this.classList.add('active');
 
-                sections.forEach(sec => sec.classList.add('collapsed'));
+                sections.forEach(sec => {
+                    if (!sec.classList.contains('collapsed')) {
+                        sec.classList.add('instant-collapse');
+                        sec.classList.add('collapsed');
+                        setTimeout(() => sec.classList.remove('instant-collapse'), 50);
+                    }
+                });
 
                 const targetId = this.getAttribute('href').substring(1);
                 const targetSection = document.getElementById(targetId);
@@ -992,11 +1006,19 @@
                 const currentSection = title.parentElement;
                 const isCollapsed = currentSection.classList.contains('collapsed');
 
-                document.querySelectorAll('section').forEach(sec => {
-                    sec.classList.add('collapsed');
-                });
-
-                if (isCollapsed) {
+                if (!isCollapsed) {
+                    currentSection.classList.remove('instant-collapse');
+                    currentSection.classList.add('collapsed');
+                } else {
+                    document.querySelectorAll('section').forEach(sec => {
+                        if (sec !== currentSection && !sec.classList.contains('collapsed')) {
+                            sec.classList.add('instant-collapse');
+                            sec.classList.add('collapsed');
+                            setTimeout(() => sec.classList.remove('instant-collapse'), 50);
+                        }
+                    });
+                    
+                    currentSection.classList.remove('instant-collapse');
                     currentSection.classList.remove('collapsed');
                     
                     window.scrollTo({
