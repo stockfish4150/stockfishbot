@@ -73,7 +73,7 @@
             padding: 0.8rem 1.5rem;
             color: rgba(255,255,255,0.7);
             text-decoration: none;
-            transition: all 0.2s ease;
+            transition: background-color 0.2s ease, color 0.2s ease;
             font-weight: 500;
         }
 
@@ -598,8 +598,11 @@
         // 사이드바 스크롤 스파이 및 네비게이션 액티브 상태 변경
         const sections = document.querySelectorAll('section');
         const navLinks = document.querySelectorAll('.sidebar-nav li a');
+        let isClicking = false; // 클릭 상태 확인 변수 추가
 
         window.addEventListener('scroll', () => {
+            if (isClicking) return; // 클릭으로 이동 중일 때는 스크롤 감지 무시
+
             let current = '';
             sections.forEach(section => {
                 const sectionTop = section.offsetTop;
@@ -607,6 +610,10 @@
                     current = section.getAttribute('id');
                 }
             });
+
+            if (window.innerHeight + window.pageYOffset >= document.documentElement.scrollHeight - 10) {
+                current = sections[sections.length - 1].getAttribute('id');
+            }
 
             navLinks.forEach(link => {
                 link.classList.remove('active');
@@ -620,12 +627,23 @@
         navLinks.forEach(link => {
             link.addEventListener('click', function(e) {
                 e.preventDefault();
+                isClicking = true; // 클릭 상태 활성화
+
+                // 모든 링크에서 active 제거 후 클릭한 링크만 즉시 활성화
+                navLinks.forEach(nav => nav.classList.remove('active'));
+                this.classList.add('active');
+
                 const targetId = this.getAttribute('href').substring(1);
                 const targetSection = document.getElementById(targetId);
                 window.scrollTo({
                     top: targetSection.offsetTop - 80,
                     behavior: 'smooth'
                 });
+
+                // 스크롤 이동이 완료될 쯤(약 0.8초 후) 상태 해제하여 다시 스크롤 감지 시작
+                setTimeout(() => {
+                    isClicking = false;
+                }, 800);
             });
         });
 
