@@ -37,7 +37,6 @@
             line-height: 1.6;
         }
 
-        /* Sidebar */
         .sidebar {
             width: 280px;
             background-color: var(--sidebar-bg);
@@ -84,7 +83,6 @@
             padding-left: calc(1.5rem - 4px);
         }
 
-        /* Main Content */
         .main-content {
             margin-left: 280px;
             flex: 1;
@@ -92,7 +90,6 @@
             max-width: 1200px;
         }
 
-        /* Search Bar */
         .search-container {
             margin-bottom: 2rem;
             position: sticky;
@@ -117,7 +114,6 @@
             border-color: var(--primary-color);
         }
 
-        /* Sections */
         .section-title {
             font-size: 2rem;
             font-weight: 700;
@@ -129,7 +125,6 @@
             scroll-margin-top: 6rem;
         }
 
-        /* Command Cards */
         .command-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -185,7 +180,6 @@
             border-left: 3px solid #ced4da;
         }
 
-        /* Badges */
         .badge {
             font-size: 0.75rem;
             font-weight: 700;
@@ -212,7 +206,6 @@
             border: 1px solid #d6d8db;
         }
 
-        /* 상단 반투명 헤더 영역 스타일 추가 */
         .top-header {
             display: none;
             position: fixed;
@@ -236,7 +229,6 @@
             color: var(--text-main);
         }
 
-        /* 모바일 메뉴 토글 버튼 스타일 수정 (테두리 및 배경 제거, 줄 3개) */
         .menu-toggle-btn {
             background: none;
             border: none;
@@ -247,7 +239,6 @@
             box-shadow: none;
         }
 
-        /* 모바일 오버레이 배경 추가 */
         .sidebar-overlay {
             display: none;
             position: fixed;
@@ -265,18 +256,15 @@
             opacity: 1;
         }
 
-        /* 시작하기 버튼을 누른 후 상단 헤더 표시 (모든 기기 공통) */
         body.started .top-header {
             display: flex;
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             body {
                 flex-direction: column;
             }
             
-            /* 인트로 화면 모바일 스크롤 가능하게 수정 */
             .intro-container {
                 align-items: flex-start;
                 overflow-y: auto;
@@ -286,7 +274,6 @@
                 margin: auto;
             }
 
-            /* 사이드바를 화면 밖으로 숨기고 슬라이드 인 애니메이션 적용 */
             .sidebar {
                 width: 250px;
                 height: calc(100vh - 60px);
@@ -316,11 +303,10 @@
             .main-content {
                 margin-left: 0;
                 padding: 1.5rem;
-                padding-top: 5rem; /* 상단 헤더 영역과 겹치지 않게 여백 추가 */
+                padding-top: 5rem;
             }
         }
 
-        /* 인트로 화면 */
         .intro-container {
             position: fixed;
             top: 0;
@@ -384,7 +370,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* 인트로 카드 디자인 */
         .intro-cards {
             display: flex;
             gap: 1.2rem;
@@ -432,7 +417,6 @@
 </head>
 <body>
 
-    <!-- 시작 화면 (인트로 페이지) -->
     <div id="intro-page" class="intro-container">
         <div class="intro-content">
             <h1 class="intro-title">Stockfishbot</h1>
@@ -465,13 +449,11 @@
         </div>
     </div>
 
-    <!-- 상단 반투명 헤더 영역 추가 -->
     <header id="top-header" class="top-header">
         <span class="top-header-title">Stockfishbot</span>
         <button id="menu-toggle-btn" class="menu-toggle-btn">☰</button>
     </header>
 
-    <!-- 모바일 오버레이 배경 추가 -->
     <div id="sidebar-overlay" class="sidebar-overlay"></div>
 
     <aside class="sidebar">
@@ -496,7 +478,6 @@
             <input type="text" id="searchInput" class="search-input" placeholder="명령어 또는 기능 검색">
         </div>
 
-        <!-- 시작하기 -->
         <section id="intro">
             <h2 class="section-title">📍 시작하기</h2>
             <p style="margin-bottom: 1.5rem; color: var(--text-muted);">스톡피시봇을 시작하기 위한 튜토리얼입니다.</p>
@@ -524,7 +505,6 @@
             </div>
         </section>
 
-        <!-- AI 굴비봇 -->
         <section id="ai-gulbi">
             <h2 class="section-title">🤖 굴비봇 (GPT, Gemini, Claude, Grok, DeepSeek)</h2>
             <p style="margin-bottom: 1.5rem; color: var(--text-muted);">91개의 AI 모델이 있는 굴비봇입니다.</p>
@@ -572,7 +552,6 @@
             </div>
         </section>
 
-        <!-- 낚시 게임 -->
         <section id="game-fishing">
             <h2 class="section-title">🎣 낚시 게임</h2>
             <p style="margin-bottom: 1.5rem; color: var(--text-muted);">스톡피시봇의 가장 큰 게임입니다.</p>
@@ -645,7 +624,6 @@
             </div>
         </section>
 
-        <!-- 꼬맨틀 게임 -->
         <section id="game-semantle">
             <h2 class="section-title">🧩 꼬맨틀</h2>
             <p style="margin-bottom: 1.5rem; color: var(--text-muted);">유사도를 기준으로 단어를 추측하는 게임입니다.</p>
@@ -683,7 +661,6 @@
             </div>
         </section>
 
-        <!-- 마피아 게임 -->
         <section id="game-mafia">
             <h2 class="section-title">🕵️ 마피아</h2>
             <p style="margin-bottom: 1.5rem; color: var(--text-muted);">여러명이서 심심할 때 같이 하기 좋은 게임입니다.</p>
@@ -715,7 +692,6 @@
             </div>
         </section>
 
-        <!-- 검 강화 게임 -->
         <section id="game-sword">
             <h2 class="section-title">⚔️ 검 강화 게임</h2>
             <p style="margin-bottom: 1.5rem; color: var(--text-muted);">무난하게 경쟁하기 좋은 게임입니다.</p>
@@ -753,7 +729,6 @@
             </div>
         </section>
 
-        <!-- 관리자 전용 -->
         <section id="admin">
             <h2 class="section-title">👑 관리자</h2>
             <p style="margin-bottom: 1.5rem; color: var(--text-muted);">스톡피시봇을 관리합니다.</p>
@@ -791,7 +766,6 @@
             </div>
         </section>
 
-        <!-- 유틸리티 -->
         <section id="utility">
             <h2 class="section-title">🛠️ 시스템</h2>
             <p style="margin-bottom: 1.5rem; color: var(--text-muted);">스톡피시봇 시스템 상태를 확인합니다.</p>
@@ -822,25 +796,20 @@
     </main>
 
     <script>
-        // 인트로 페이지 버튼 이벤트
         document.getElementById('start-btn').addEventListener('click', () => {
             document.getElementById('intro-page').classList.add('intro-hidden');
             document.body.classList.add('started');
         });
 
-        // 인트로 카드 클릭 시 해당 섹션으로 이동
         document.querySelectorAll('.intro-card').forEach(card => {
             card.addEventListener('click', function() {
-                // 인트로 화면 숨김 처리
                 document.getElementById('intro-page').classList.add('intro-hidden');
                 document.body.classList.add('started');
 
-                // 설정된 대상 섹션에 대응하는 사이드바 메뉴 요소를 찾아 클릭 이벤트 발생
                 const targetSelector = this.getAttribute('data-target');
                 const navLink = document.querySelector(`.sidebar-nav li a[href="${targetSelector}"]`);
                 
                 if (navLink) {
-                    // 화면 전환을 위해 약간의 지연 후 스크롤 이동
                     setTimeout(() => {
                         navLink.click();
                     }, 100);
@@ -848,30 +817,27 @@
             });
         });
 
-        // 모바일 사이드바 토글 기능 추가
         const menuToggleBtn = document.getElementById('menu-toggle-btn');
         const sidebar = document.querySelector('.sidebar');
-        const sidebarOverlay = document.getElementById('sidebar-overlay'); // 오버레이 요소 추가
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
 
         menuToggleBtn.addEventListener('click', () => {
             sidebar.classList.toggle('open');
-            sidebarOverlay.classList.toggle('show'); // 오버레이 토글 추가
+            sidebarOverlay.classList.toggle('show');
         });
 
-        // 빈 화면(오버레이) 터치 시 사이드바 닫기 추가
         sidebarOverlay.addEventListener('click', () => {
             sidebar.classList.remove('open');
             sidebarOverlay.classList.remove('show');
         });
 
-        // 사이드바 스크롤 스파이 및 네비게이션 액티브 상태 변경
         const sections = document.querySelectorAll('section');
         const navLinks = document.querySelectorAll('.sidebar-nav li a');
-        let isClicking = false; // 클릭 상태 확인 변수 추가
+        let isClicking = false;
         let clickTimeout;
 
         window.addEventListener('scroll', () => {
-            if (isClicking) return; // 클릭으로 이동 중일 때는 스크롤 감지 무시
+            if (isClicking) return;
 
             let current = sections[0].getAttribute('id');
             sections.forEach(section => {
@@ -893,20 +859,17 @@
             });
         });
 
-        // 부드러운 스크롤 이동
         navLinks.forEach(link => {
             link.addEventListener('click', function(e) {
                 e.preventDefault();
-                isClicking = true; // 클릭 상태 활성화
+                isClicking = true;
                 clearTimeout(clickTimeout);
 
-                // 모바일에서 메뉴 항목 클릭 시 사이드바 닫기
                 if (window.innerWidth <= 768) {
                     sidebar.classList.remove('open');
-                    sidebarOverlay.classList.remove('show'); // 메뉴 클릭 시 오버레이 닫기 추가
+                    sidebarOverlay.classList.remove('show');
                 }
 
-                // 모든 링크에서 active 제거 후 클릭한 링크만 즉시 활성화
                 navLinks.forEach(nav => nav.classList.remove('active'));
                 this.classList.add('active');
 
@@ -917,14 +880,12 @@
                     behavior: 'smooth'
                 });
 
-                // 스크롤 이동이 완료될 쯤(넉넉하게 2.0초 후) 상태 해제하여 다시 스크롤 감지 시작
                 clickTimeout = setTimeout(() => {
                     isClicking = false;
                 }, 2000);
             });
         });
 
-        // 실시간 검색 기능 (카드 필터링)
         const searchInput = document.getElementById('searchInput');
         const commandCards = document.querySelectorAll('.command-card');
         const sectionElements = document.querySelectorAll('section');
@@ -946,7 +907,6 @@
                     }
                 });
 
-                // 카드가 하나도 없으면 섹션 자체를 숨김 처리 (검색어 있을 때만)
                 if (term !== '' && !hasVisibleCard) {
                     section.style.display = 'none';
                 } else {
