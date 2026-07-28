@@ -830,7 +830,6 @@
         document.getElementById('start-btn').addEventListener('click', () => {
             document.getElementById('intro-page').classList.add('intro-hidden');
             document.body.classList.add('started');
-            document.querySelector('.sidebar-nav li a[href="#intro"]').click();
         });
 
         document.querySelectorAll('.intro-card').forEach(card => {
@@ -950,6 +949,12 @@
                 } else {
                     section.style.display = 'block';
                 }
+            });
+        });
+
+        document.querySelectorAll('.section-title').forEach(title => {
+            title.addEventListener('click', () => {
+                title.parentElement.classList.toggle('collapsed');
             });
         });
     </script>
