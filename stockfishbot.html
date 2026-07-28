@@ -960,6 +960,10 @@
                 if (targetSection) {
                     targetSection.classList.remove('collapsed');
                     
+                    const mainContent = document.querySelector('.main-content');
+                    const neededPadding = window.innerHeight - targetSection.scrollHeight - 150;
+                    mainContent.style.paddingBottom = Math.max(48, neededPadding) + 'px';
+                    
                     window.scrollTo({
                         top: targetSection.offsetTop - 150,
                         behavior: 'smooth'
@@ -1009,17 +1013,23 @@
                 if (!isCollapsed) {
                     currentSection.classList.remove('instant-collapse');
                     currentSection.classList.add('collapsed');
+                    
+                    document.querySelector('.main-content').style.paddingBottom = '3rem';
                 } else {
                     document.querySelectorAll('section').forEach(sec => {
                         if (sec !== currentSection && !sec.classList.contains('collapsed')) {
-                            sec.classList.add('instant-collapse');
+                            sec.classList.add('instant-collapse'); 
                             sec.classList.add('collapsed');
-                            setTimeout(() => sec.classList.remove('instant-collapse'), 50);
+                            setTimeout(() => sec.classList.remove('instant-collapse'), 50); 
                         }
                     });
                     
                     currentSection.classList.remove('instant-collapse');
                     currentSection.classList.remove('collapsed');
+                    
+                    const mainContent = document.querySelector('.main-content');
+                    const neededPadding = window.innerHeight - currentSection.scrollHeight - 150;
+                    mainContent.style.paddingBottom = Math.max(48, neededPadding) + 'px';
                     
                     window.scrollTo({
                         top: currentSection.offsetTop - 150,
