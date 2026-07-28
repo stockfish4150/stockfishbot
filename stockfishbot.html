@@ -973,6 +973,8 @@
                 const currentSection = title.parentElement;
                 const isCollapsed = currentSection.classList.contains('collapsed');
 
+                const rectTop = currentSection.getBoundingClientRect().top;
+
                 document.querySelectorAll('section').forEach(sec => {
                     sec.classList.add('collapsed');
                 });
@@ -980,7 +982,13 @@
                 if (isCollapsed) {
                     currentSection.classList.remove('collapsed');
                     
+                    const lockInterval = setInterval(() => {
+                        const newTop = currentSection.getBoundingClientRect().top;
+                        window.scrollBy(0, newTop - rectTop);
+                    }, 10);
+                    
                     setTimeout(() => {
+                        clearInterval(lockInterval);
                         window.scrollTo({
                             top: currentSection.offsetTop - 150,
                             behavior: 'smooth'
