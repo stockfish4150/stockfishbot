@@ -510,6 +510,23 @@
             line-height: 1.5;
             word-break: keep-all;
         }
+
+        @media (max-width: 768px) {
+            .intro-content {
+                width: 100%;
+                padding: 1.5rem;
+            }
+            .intro-cards {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                gap: 1.5rem;
+            }
+            .intro-card {
+                width: 100% !important;
+                height: auto !important;
+            }
+        }
     </style>
 </head>
 <body>
