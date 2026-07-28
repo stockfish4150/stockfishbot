@@ -924,10 +924,13 @@
                 
                 if (targetSection) {
                     targetSection.classList.remove('collapsed');
-                    window.scrollTo({
-                        top: targetSection.offsetTop - 150,
-                        behavior: 'smooth'
-                    });
+                    
+                    setTimeout(() => {
+                        window.scrollTo({
+                            top: targetSection.offsetTop - 150,
+                            behavior: 'smooth'
+                        });
+                    }, 400);
                 }
 
                 clickTimeout = setTimeout(() => {
@@ -977,10 +980,12 @@
                 if (isCollapsed) {
                     currentSection.classList.remove('collapsed');
                     
-                    window.scrollTo({
-                        top: currentSection.offsetTop - 150,
-                        behavior: 'smooth'
-                    });
+                    setTimeout(() => {
+                        window.scrollTo({
+                            top: currentSection.offsetTop - 150,
+                            behavior: 'smooth'
+                        });
+                    }, 400);
                 }
             });
         });
