@@ -272,6 +272,32 @@
             color: transparent;
         }
 
+        .bottom-spacer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            margin-top: 2rem;
+            transition: height 0.4s ease-in-out;
+        }
+
+        .bottom-logo {
+            font-weight: 800;
+            font-size: 4rem;
+            background: linear-gradient(to right, #0047ab, #8a2be2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+            user-select: none;
+        }
+
+        @media (max-width: 768px) {
+            .bottom-logo {
+                font-size: 2.5rem;
+            }
+        }
+
         .menu-toggle-btn {
             background: none;
             border: none;
@@ -842,6 +868,10 @@
             </div>
         </section>
 
+        <div id="bottom-spacer" class="bottom-spacer">
+            <span class="bottom-logo">Stockfishbot</span>
+        </div>
+
     </main>
 
     <script>
@@ -960,9 +990,9 @@
                 if (targetSection) {
                     targetSection.classList.remove('collapsed');
                     
-                    const mainContent = document.querySelector('.main-content');
-                    const neededPadding = window.innerHeight - targetSection.scrollHeight - 150;
-                    mainContent.style.paddingBottom = Math.max(48, neededPadding) + 'px';
+                    const bottomSpacer = document.getElementById('bottom-spacer');
+                    const neededHeight = window.innerHeight - targetSection.scrollHeight - 150;
+                    bottomSpacer.style.height = Math.max(200, neededHeight) + 'px';
                     
                     window.scrollTo({
                         top: targetSection.offsetTop - 150,
@@ -1014,7 +1044,7 @@
                     currentSection.classList.remove('instant-collapse');
                     currentSection.classList.add('collapsed');
                     
-                    document.querySelector('.main-content').style.paddingBottom = '3rem';
+                    document.getElementById('bottom-spacer').style.height = '200px';
                 } else {
                     document.querySelectorAll('section').forEach(sec => {
                         if (sec !== currentSection && !sec.classList.contains('collapsed')) {
@@ -1027,9 +1057,9 @@
                     currentSection.classList.remove('instant-collapse');
                     currentSection.classList.remove('collapsed');
                     
-                    const mainContent = document.querySelector('.main-content');
-                    const neededPadding = window.innerHeight - currentSection.scrollHeight - 150;
-                    mainContent.style.paddingBottom = Math.max(48, neededPadding) + 'px';
+                    const bottomSpacer = document.getElementById('bottom-spacer');
+                    const neededHeight = window.innerHeight - currentSection.scrollHeight - 150;
+                    bottomSpacer.style.height = Math.max(200, neededHeight) + 'px';
                     
                     window.scrollTo({
                         top: currentSection.offsetTop - 150,
