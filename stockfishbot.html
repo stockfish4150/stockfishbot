@@ -125,6 +125,25 @@
             border-bottom: 2px solid var(--border-color);
             color: var(--text-main);
             scroll-margin-top: 6rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-title::after {
+            content: '^';
+            font-size: 1.5rem;
+            color: var(--text-muted);
+        }
+
+        section.collapsed .section-title::after {
+            content: 'v';
+        }
+
+        section.collapsed p,
+        section.collapsed .command-grid {
+            display: none;
         }
 
         .command-grid {
@@ -811,6 +830,7 @@
         document.getElementById('start-btn').addEventListener('click', () => {
             document.getElementById('intro-page').classList.add('intro-hidden');
             document.body.classList.add('started');
+            document.querySelector('.sidebar-nav li a[href="#intro"]').click();
         });
 
         document.querySelectorAll('.intro-card').forEach(card => {
@@ -885,12 +905,18 @@
                 navLinks.forEach(nav => nav.classList.remove('active'));
                 this.classList.add('active');
 
+                sections.forEach(sec => sec.classList.add('collapsed'));
+
                 const targetId = this.getAttribute('href').substring(1);
                 const targetSection = document.getElementById(targetId);
-                window.scrollTo({
-                    top: targetSection.offsetTop - 150,
-                    behavior: 'smooth'
-                });
+                
+                if (targetSection) {
+                    targetSection.classList.remove('collapsed');
+                    window.scrollTo({
+                        top: targetSection.offsetTop - 150,
+                        behavior: 'smooth'
+                    });
+                }
 
                 clickTimeout = setTimeout(() => {
                     isClicking = false;
