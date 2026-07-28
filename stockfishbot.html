@@ -135,15 +135,28 @@
             content: '^';
             font-size: 1.5rem;
             color: var(--text-muted);
+            display: inline-block;
+            transition: transform 0.4s ease;
         }
 
         section.collapsed .section-title::after {
-            content: 'v';
+            transform: rotate(180deg);
+        }
+
+        section p,
+        section .command-grid {
+            max-height: 5000px;
+            opacity: 1;
+            overflow: hidden;
+            transition: max-height 0.4s ease-in-out, opacity 0.3s ease-in-out, margin 0.4s ease-in-out;
         }
 
         section.collapsed p,
         section.collapsed .command-grid {
-            display: none;
+            max-height: 0;
+            opacity: 0;
+            margin-top: 0;
+            margin-bottom: 0;
         }
 
         .command-grid {
@@ -954,7 +967,16 @@
 
         document.querySelectorAll('.section-title').forEach(title => {
             title.addEventListener('click', () => {
-                title.parentElement.classList.toggle('collapsed');
+                const currentSection = title.parentElement;
+                const isCollapsed = currentSection.classList.contains('collapsed');
+
+                document.querySelectorAll('section').forEach(sec => {
+                    sec.classList.add('collapsed');
+                });
+
+                if (isCollapsed) {
+                    currentSection.classList.remove('collapsed');
+                }
             });
         });
     </script>
