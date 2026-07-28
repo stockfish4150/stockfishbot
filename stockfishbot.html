@@ -604,7 +604,7 @@
         window.addEventListener('scroll', () => {
             if (isClicking) return; // 클릭으로 이동 중일 때는 스크롤 감지 무시
 
-            let current = '';
+            let current = sections[0].getAttribute('id');
             sections.forEach(section => {
                 const sectionTop = section.offsetTop;
                 if (pageYOffset >= sectionTop - 80) {
