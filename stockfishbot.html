@@ -243,9 +243,150 @@
                 padding: 1.5rem;
             }
         }
+
+        /* 인트로 화면 */
+        .intro-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: var(--secondary-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .intro-content {
+            text-align: center;
+            padding: 2rem;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .intro-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+        }
+
+        .intro-desc {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+        }
+
+        .start-button {
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ffffff;
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+            font-family: inherit;
+        }
+
+        .start-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(74, 144, 226, 0.4);
+            background-color: #357abd;
+        }
+
+        .intro-hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 인트로 카드 디자인 */
+        .intro-cards {
+            display: flex;
+            gap: 1.2rem;
+            margin-bottom: 2.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .intro-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            width: 220px;
+            text-align: left;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .intro-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+        }
+
+        .intro-card-icon {
+            font-size: 1.8rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .intro-card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
+        }
+
+        .intro-card-desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            word-break: keep-all;
+        }
     </style>
 </head>
 <body>
+
+    <!-- 시작 화면 (인트로 페이지) -->
+    <div id="intro-page" class="intro-container">
+        <div class="intro-content">
+            <h1 class="intro-title">Stockfishbot</h1>
+            <p class="intro-desc">디스코드 최고의 다기능 엔터테인먼트 봇, 스톡피시봇에 오신 것을 환영합니다.</p>
+            
+            <div class="intro-cards">
+                <div class="intro-card">
+                    <div class="intro-card-icon">🤖</div>
+                    <div class="intro-card-title">AI</div>
+                    <div class="intro-card-desc">GPT, Gemini 등 대화, 사진 분석, 이미지 생성과 편집.</div>
+                </div>
+                <div class="intro-card">
+                    <div class="intro-card-icon">🎮</div>
+                    <div class="intro-card-title">게임</div>
+                    <div class="intro-card-desc">낚시, 꼬맨틀, 마피아, 검 강화 게임 플레이.</div>
+                </div>
+                <div class="intro-card">
+                    <div class="intro-card-icon">👑</div>
+                    <div class="intro-card-title">관리</div>
+                    <div class="intro-card-desc">채팅 로그 확인, 유저 제재, 데이터 동기화 및 셧다운.</div>
+                </div>
+                <div class="intro-card">
+                    <div class="intro-card-icon">🛠️</div>
+                    <div class="intro-card-title">기타</div>
+                    <div class="intro-card-desc">유저 프로필 확인, 봇 시스템 상태 및 반응 속도 체크.</div>
+                </div>
+            </div>
+
+            <button id="start-btn" class="start-button">사용 설명서 보기</button>
+        </div>
+    </div>
 
     <aside class="sidebar">
         <div class="sidebar-header">
@@ -595,6 +736,11 @@
     </main>
 
     <script>
+        // 인트로 페이지 버튼 이벤트
+        document.getElementById('start-btn').addEventListener('click', () => {
+            document.getElementById('intro-page').classList.add('intro-hidden');
+        });
+
         // 사이드바 스크롤 스파이 및 네비게이션 액티브 상태 변경
         const sections = document.querySelectorAll('section');
         const navLinks = document.querySelectorAll('.sidebar-nav li a');
