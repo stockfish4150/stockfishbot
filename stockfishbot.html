@@ -527,6 +527,12 @@
                 height: auto !important;
             }
         }
+
+        [data-lucide] {
+            width: 1em;
+            height: 1em;
+            vertical-align: -0.125em;
+        }
     </style>
 </head>
 <body>
@@ -538,19 +544,19 @@
             
             <div class="intro-cards">
                 <div class="intro-card" data-target="#ai-gulbi">
-                    <div class="intro-card-icon">🤖 AI</div>
+                    <div class="intro-card-icon"><i data-lucide="bot"></i> AI</div>
                     <div class="intro-card-desc">Chat GPT, Claude 등 AI 질문, 이미지 생성 및 편집, 파일 분석 등 실생활 AI 도구</div>
                 </div>
                 <div class="intro-card" data-target="#game-fishing">
-                    <div class="intro-card-icon">🎮 게임</div>
+                    <div class="intro-card-icon"><i data-lucide="gamepad-2"></i> 게임</div>
                     <div class="intro-card-desc">낚시, 꼬맨틀, 마피아, 검 강화 게임 등 플레이</div>
                 </div>
                 <div class="intro-card" data-target="#admin">
-                    <div class="intro-card-icon">🪪 관리</div>
+                    <div class="intro-card-icon"><i data-lucide="user-shield"></i> 관리</div>
                     <div class="intro-card-desc">유저 정지/해제, 데이터 동기화 등 유저 관리</div>
                 </div>
                 <div class="intro-card" data-target="#utility">
-                    <div class="intro-card-icon">🛠️ 유틸리티</div>
+                    <div class="intro-card-icon"><i data-lucide="toolbox"></i> 유틸리티</div>
                     <div class="intro-card-desc">오늘 종합 날씨, 주가 정보, 이모티콘 국기 이름 등 일상생활 도우미</div>
                 </div>
             </div>
@@ -572,17 +578,17 @@
             <p style="color: rgba(255,255,255,0.5); font-size: 0.85rem; margin-top: 0.3rem;">stockfishbot 명령어</p>
         </div>
         <ul class="sidebar-nav">
-            <li><a href="#intro" class="active">[튜토리얼] 📍 시작하기</a></li>
-            <li><a href="#gulbi-bot">[AI] 🤖 굴비봇</a></li>
-            <li><a href="#game-fishing">[게임] 🎣 낚시</a></li>
-            <li><a href="#game-fishing-lite">[게임] 🎣 낚시 (라이트)</a></li>
-            <li><a href="#game-semantle">[게임] 🧩 꼬맨틀</a></li>
-            <li><a href="#game-mafia">[게임] 🕵️ 마피아</a></li>
-            <li><a href="#game-sword">[게임] ⚔️ 검 강화</a></li>
-            <li><a href="#chatlog">[관리] 📜 채팅 로그</a></li>
-            <li><a href="#admin">[관리] 🪪 관리자</a></li>
-            <li><a href="#utility">[기타] 🛠️ 유틸리티</a></li>
-            <li><a href="#system">[기타] 🛠️ 시스템</a></li>
+            <li><a href="#intro" class="active">[튜토리얼] <i data-lucide="pin"></i> 시작하기</a></li>
+            <li><a href="#gulbi-bot">[AI] <i data-lucide="bot"></i> 굴비봇</a></li>
+            <li><a href="#game-fishing">[게임] <i data-lucide="fishing-rod"></i> 낚시</a></li>
+            <li><a href="#game-fishing-lite">[게임] <i data-lucide="fishing-rod"></i> 낚시 (라이트)</a></li>
+            <li><a href="#game-semantle">[게임] <i data-lucide="puzzle"></i> 꼬맨틀</a></li>
+            <li><a href="#game-mafia">[게임] <i data-lucide="hat-glasses"></i> 마피아</a></li>
+            <li><a href="#game-sword">[게임] <i data-lucide="swords"></i> 검 강화</a></li>
+            <li><a href="#chatlog">[관리] <i data-lucide="message-square-text"></i> 채팅 로그</a></li>
+            <li><a href="#admin">[관리] <i data-lucide="user-shield"></i> 관리자</a></li>
+            <li><a href="#utility">[기타] <i data-lucide="toolbox"></i> 유틸리티</a></li>
+            <li><a href="#system">[기타] <i data-lucide="settings"></i> 시스템</a></li>
         </ul>
     </aside>
 
@@ -592,7 +598,7 @@
         </div>
 
         <section id="intro">
-            <h2 class="section-title">📍 시작하기</h2>
+            <h2 class="section-title"><i data-lucide="pin"></i> 시작하기</h2>
             <p style="margin-bottom: 1.5rem; color: var(--text-muted);">스톡피시봇을 시작하기 위한 튜토리얼입니다.</p>
             <div class="command-grid">
                 <div class="command-card">
@@ -619,7 +625,7 @@
         </section>
 
         <section id="gulbi-bot">
-            <h2 class="section-title">🤖 굴비봇 (AI)</h2>
+            <h2 class="section-title"><i data-lucide="bot"></i> 굴비봇 (AI)</h2>
             <p style="margin-bottom: 1.5rem; color: var(--text-muted);">Chat GPT, Gemini, Claude, Grok, DeepSeek 등 91 개의 AI 모델을 지원하는 AI 봇입니다.</p>
             <div class="command-grid">
                 
@@ -717,7 +723,7 @@
         </section>
 
         <section id="game-fishing">
-            <h2 class="section-title">🎣 낚시 게임</h2>
+            <h2 class="section-title"><i data-lucide="fishing-rod"></i> 낚시 게임</h2>
             <p style="margin-bottom: 1.5rem; color: var(--text-muted);">스톡피시봇의 가장 큰 콘텐츠인 낚시 게임 시스템입니다.</p>
             <div class="command-grid">
                 
@@ -797,7 +803,7 @@
         </section>
 
         <section id="game-fishing-lite">
-            <h2 class="section-title">🎣 낚시 게임 (라이트 버전)</h2>
+            <h2 class="section-title"><i data-lucide="fishing-rod"></i> 낚시 게임 (라이트 버전)</h2>
             <p style="margin-bottom: 1.5rem; color: var(--text-muted);">골드, 미끼, 내구도 등의 요소 없이 순수하게 낚시와 레벨업 본연의 재미에 집중한 가벼운 버전입니다.</p>
             <div class="command-grid">
                 
@@ -835,7 +841,7 @@
         </section>
 
         <section id="game-semantle">
-            <h2 class="section-title">🧩 꼬맨틀</h2>
+            <h2 class="section-title"><i data-lucide="puzzle"></i> 꼬맨틀</h2>
             <p style="margin-bottom: 1.5rem; color: var(--text-muted);">단어의 의미(유사도)를 기반으로 비밀 단어를 추리하는 게임입니다.</p>
             <div class="command-grid">
                 
@@ -879,7 +885,7 @@
         </section>
 
         <section id="game-mafia">
-            <h2 class="section-title">🕵️ 마피아</h2>
+            <h2 class="section-title"><i data-lucide="hat-glasses"></i> 마피아</h2>
             <p style="margin-bottom: 1.5rem; color: var(--text-muted);">여러 명이서 심심할 때 같이 하기 좋은 클래식 마피아 게임입니다.</p>
             <div class="command-grid">
                 
@@ -911,7 +917,7 @@
         </section>
 
         <section id="game-sword">
-            <h2 class="section-title">⚔️ 검 강화 게임</h2>
+            <h2 class="section-title"><i data-lucide="swords"></i> 검 강화 게임</h2>
             <p style="margin-bottom: 1.5rem; color: var(--text-muted);">골드를 모으고 확률을 시험하여 최고 레벨의 검을 만드는 게임입니다.</p>
             <div class="command-grid">
                 
@@ -961,7 +967,7 @@
         </section>
 
         <section id="chatlog">
-            <h2 class="section-title">📜 채팅 로그</h2>
+            <h2 class="section-title"><i data-lucide="message-square-text"></i> 채팅 로그</h2>
             <p style="margin-bottom: 1.5rem; color: var(--text-muted);">채팅방 내 특정 유저의 대화 기록을 조회하고 관리하는 시스템입니다.</p>
             <div class="command-grid">
                 
@@ -999,7 +1005,7 @@
         </section>
 
         <section id="admin">
-            <h2 class="section-title">🪪 관리자</h2>
+            <h2 class="section-title"><i data-lucide="user-shield"></i> 관리자</h2>
             <p style="margin-bottom: 1.5rem; color: var(--text-muted);">스톡피시봇을 관리합니다.</p>
             <div class="command-grid">
                 <div class="command-card">
@@ -1026,7 +1032,7 @@
         </section>
 
         <section id="utility">
-            <h2 class="section-title">🛠️ 유틸리티</h2>
+            <h2 class="section-title"><i data-lucide="toolbox"></i> 유틸리티</h2>
             <p style="margin-bottom: 1.5rem; color: var(--text-muted);">실시간 날씨 정보, 영한 변환, 국기 검색, 주가 검색 등 다양한 편의 기능을 제공합니다.</p>
             <div class="command-grid">
                 
@@ -1076,7 +1082,7 @@
         </section>
 
         <section id="system">
-            <h2 class="section-title">🛠️ 시스템</h2>
+            <h2 class="section-title"><i data-lucide="settings"></i> 시스템</h2>
             <p style="margin-bottom: 1.5rem; color: var(--text-muted);">스톡피시봇 시스템 상태를 확인합니다.</p>
             <div class="command-grid">
                 <div class="command-card">
@@ -1108,6 +1114,7 @@
 
     </main>
 
+    <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         document.getElementById('start-btn').addEventListener('click', () => {
             document.getElementById('intro-page').classList.add('intro-hidden');
@@ -1305,6 +1312,8 @@
                 }
             });
         });
+
+        lucide.createIcons();
     </script>
 </body>
 </html>
