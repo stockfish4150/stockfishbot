@@ -623,13 +623,13 @@
         </section>
 
         <section id="ai-gulbi">
-            <h2 class="section-title">🤖 굴비봇 (AI)</h2>
+            <h2 class="section-title">🤖 굴비봇 (AI 챗봇 & 유틸리티)</h2>
             <p style="margin-bottom: 1.5rem; color: var(--text-muted);">Chat GPT, Gemini, Claude, DeepSeek 등 90여 개의 AI 모델을 지원하는 만능 AI 봇입니다.</p>
             <div class="command-grid">
                 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">기본 질문</span></div>
-                    <div class="command-desc">기본 모델로 AI에게 질문합니다.<br>(기본 모델: Gemini 3.1 Flash Lite)</div>
+                    <div class="command-desc">설정된 기본 모델(기본값: Gemini 3.1 Flash Lite)로 AI에게 질문합니다.</div>
                     <div class="command-example">[예시]<br>굴비야 파이썬이 뭐야?<br>hey gulbi hello!</div>
                 </div>
 
@@ -641,14 +641,14 @@
 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">모델 지정 질문</span></div>
-                    <div class="command-desc">AI 모델(GPT, Claude, DeepSeek 등)을 직접 지정하여 질문합니다. 검색 사용 시 모델명 뒤에 <code>-s</code>를 붙입니다.</div>
-                    <div class="command-example">[예시]<br>/g4o, 파이썬 코드 짜줘<br>/dsc, 안녕 넌 누구니?<br>/g5.5-s, 최신 IT 기사 찾아줘</div>
+                    <div class="command-desc">특정 AI 모델(GPT, Claude, DeepSeek 등)을 직접 지정하여 질문합니다. 검색 시 모델명 뒤에 <code>-s</code>를 붙입니다.</div>
+                    <div class="command-example">[예시]<br>/g4o, 파이썬 코드 짜줘<br>/dsc, 안녕 넌 누구니? (딥시크)<br>/g5.5-s, 최신 IT 기사 찾아줘</div>
                 </div>
 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">페르소나 (역할 부여)</span></div>
                     <div class="command-desc">AI에게 특정한 역할이나 말투를 부여하여 대화합니다.</div>
-                    <div class="command-example">[예시]<br>/g5.6sol,코딩,이 코드에서 에러가 나는 이유를 알려줘.<br>/상담,g3.6f,나 오늘 너무 우울해. 어떡하면 좋을까?</div>
+                    <div class="command-example">[예시]<br>코딩굴비야 이 코드 에러 왜 나?<br>/상담,g4o,나 오늘 너무 우울해</div>
                 </div>
 
                 <div class="command-card">
@@ -659,37 +659,37 @@
 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">파일 및 미디어 분석</span></div>
-                    <div class="command-desc">텍스트, 이미지, 동영상, 음원, PDF, 엑셀 등 다양한 파일을 분석합니다.<br><b>※ 꼭 파일/사진에 답장해주세요.</b></div>
-                    <div class="command-example">[예시]<br>/굴비 분석,g4o,이 사진에 뭐가 있어?<br>/gulbi analyze,g3.1fl,이 문서 요약해줘</div>
+                    <div class="command-desc">텍스트, 이미지, 동영상, 음원, PDF, 엑셀 등 다양한 파일을 분석합니다.<br><b>※ 반드시 파일/사진에 답장(Reply)하며 사용하세요.</b></div>
+                    <div class="command-example">[예시]<br>/굴비 분석,g4o,이 사진에 뭐가 있어?<br>/굴비 분석,g3.1fl,이 문서 요약해줘</div>
                 </div>
 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">이미지 생성</span></div>
                     <div class="command-desc">프롬프트를 기반으로 새로운 이미지를 생성합니다.</div>
-                    <div class="command-example">[예시]<br>/굴비 그려줘 달에서 코딩하는 고양이<br>/gi2,사이버펑크 도시 풍경</div>
+                    <div class="command-example">[예시]<br>/굴비 그려줘 달에서 코딩하는 고양이<br>/gi2, 사이버펑크 도시 풍경</div>
                 </div>
 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">이미지 수정</span></div>
-                    <div class="command-desc">기존 이미지를 원하는 대로 편집 및 수정합니다.<br><b>※ 꼭 수정할 이미지에 답장해주세요.</b></div>
-                    <div class="command-example">[예시]<br>/굴비 수정,gi2,배경을 우주로 바꿔줘.<br>/gulbi edit,gi2,이 그림에 pastel color로 채색해줘.</div>
+                    <div class="command-desc">기존 이미지를 원하는 대로 편집 및 수정합니다.<br><b>※ 반드시 수정할 이미지에 답장(Reply)하며 사용하세요.</b></div>
+                    <div class="command-example">[예시]<br>/굴비 수정,gi2,배경을 우주로 바꿔줘</div>
                 </div>
 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">프리셋 (간편 명령어)</span></div>
                     <div class="command-desc">자주 쓰는 기능과 애니메이션/게임 캐릭터 봇이 내장되어 있습니다.</div>
-                    <div class="command-example">[예시]<br>/오늘운세, /해몽 [내용], /오늘타로<br>/날씨 [지역], /번역 [문장], /요약 [내용]<br>/맞춤법 [문장], /메뉴 [점심/저녁]<br>/천체 이미지 [천체]</div>
+                    <div class="command-example">[예시]<br>/오늘운세, /해몽 [내용], /오늘타로<br>/날씨 [지역], /번역 [문장], /요약 [내용]<br>/맞춤법 [문장], /메뉴 [점심/저녁]<br>/호시노 으헤~, /아로나 선생님!</div>
                 </div>
 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">감쓰통 (감정 쓰레기통)</span></div>
-                    <div class="command-desc">특정 채팅방을 다정하고 착한 AI 절친과의 1:1 대화방으로 만듭니다. 감쓰통을 킨 상태일 때는 모든 말에 자동으로 답변합니다.</div>
+                    <div class="command-desc">특정 채팅방을 다정하고 착한 AI 절친과의 1:1 대화방으로 만듭니다. (호출어 없이 자동 답장)</div>
                     <div class="command-example">[예시]<br>/감쓰통 on<br>/감쓰통 off<br>/감쓰통 초기화</div>
                 </div>
 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">계정 연동 및 관리</span></div>
-                    <div class="command-desc">나의 기존 데이터를 다른 곳에서 사용할 수 있도록 계정을 연동합니다.</div>
+                    <div class="command-desc">여러 채팅방이나 플랫폼(카톡/디스코드)에서 내 데이터를 하나로 연동합니다.</div>
                     <div class="command-example">[예시]<br>/굴비 등록 @닉네임<br>/굴비 연동 @닉네임<br>/굴비 연동 확인 [코드]<br>/굴비 로그아웃 @닉네임</div>
                 </div>
 
@@ -709,6 +709,12 @@
                     <div class="command-title"><span class="command-code">LLM 백화점</span> <span class="badge admin">관리자</span></div>
                     <div class="command-desc">하나의 질문을 여러 AI 모델(GPT, Gemini, Claude 등)에게 동시에 물어보고 답변을 비교합니다.</div>
                     <div class="command-example">[예시]<br>/llm,기본,인공지능의 미래는?</div>
+                </div>
+
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">셧다운</span> 관련 <span class="badge admin">관리자</span></div>
+                    <div class="command-desc">관리자를 제외한 모든 유저의 굴비봇 사용을 중지합니다.</div>
+                    <div class="command-example">[예시]<br>!shutdown</div>
                 </div>
 
             </div>
@@ -1001,11 +1007,6 @@
             <p style="margin-bottom: 1.5rem; color: var(--text-muted);">스톡피시봇을 관리합니다.</p>
             <div class="command-grid">
                 <div class="command-card">
-                    <div class="command-title"><span class="command-code">채팅 로그</span> 관련</div>
-                    <div class="command-desc">원하는 유저의 채팅 기록을 확인합니다.</div>
-                    <div class="command-example">[예시]<br>/chatlog @닉네임</div>
-                </div>
-                <div class="command-card">
                     <div class="command-title"><span class="command-code">정지/해제</span> 관련</div>
                     <div class="command-desc">악성 유저들을 정지시키거나 해제합니다.</div>
                     <div class="command-example">[예시]<br>/굴비 정지 @어그로꾼<br>/낚시 해제 @닉네임</div>
@@ -1024,11 +1025,6 @@
                     <div class="command-title"><span class="command-code">유저 데이터</span> 관련</div>
                     <div class="command-desc">유저 데이터를 관리합니다.</div>
                     <div class="command-example">[예시]<br>/굴비 텍스트한도 추가 @닉네임 100</div>
-                </div>
-                <div class="command-card">
-                    <div class="command-title"><span class="command-code">셧다운</span> 관련 <span class="badge admin">관리자</span></div>
-                    <div class="command-desc">관리자를 제외한 모든 유저의 굴비봇 사용을 중지합니다.</div>
-                    <div class="command-example">[예시]<br>!shutdown</div>
                 </div>
             </div>
         </section>
