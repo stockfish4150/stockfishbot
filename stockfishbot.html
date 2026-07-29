@@ -1275,11 +1275,13 @@
                         targetSection.classList.remove('collapsed');
                         
                         bottomSpacer.style.height = (200 + extraNeeded) + 'px';
-                        
-                        window.scrollTo({
-                            top: targetSection.offsetTop - 150,
-                            behavior: 'smooth'
-                        });
+
+                        setTimeout(() => {
+                            window.scrollTo({
+                                top: targetScrollY,
+                                behavior: 'smooth'
+                            });
+                        }, 10);
                     }
                 }
 
@@ -1367,11 +1369,13 @@
                     currentSection.classList.remove('collapsed');
                     
                     bottomSpacer.style.height = (200 + extraNeeded) + 'px';
-                    
-                    window.scrollTo({
-                        top: currentSection.offsetTop - 150,
-                        behavior: 'smooth'
-                    });
+
+                    setTimeout(() => {
+                        window.scrollTo({
+                            top: targetScrollY,
+                            behavior: 'smooth'
+                        });
+                    }, 10);
                 }
             });
         });
