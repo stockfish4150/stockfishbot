@@ -713,73 +713,81 @@
 
         <section id="game-fishing">
             <h2 class="section-title">🎣 낚시 게임</h2>
-            <p style="margin-bottom: 1.5rem; color: var(--text-muted);">스톡피시봇의 가장 큰 게임입니다.</p>
+            <p style="margin-bottom: 1.5rem; color: var(--text-muted);">스톡피시봇의 가장 큰 콘텐츠인 낚시 게임 시스템입니다.</p>
             <div class="command-grid">
+                
                 <div class="command-card">
-                    <div class="command-title"><span class="command-code">낚시</span> 관련</div>
-                    <div class="command-desc">한 번 물고기를 낚습니다.</div>
-                    <div class="command-example">[예시]<br>/낚시 시작</div>
+                    <div class="command-title"><span class="command-code">출석</span></div>
+                    <div class="command-desc">매일 출석하여 연속 출석 일수 및 레벨에 비례하는 보상(골드, 미끼, 포인트, 보석)을 받습니다.</div>
+                    <div class="command-example">[예시]<br>/ㅊㅊ<br>/출석<br>/낚시 출석</div>
                 </div>
+
                 <div class="command-card">
-                    <div class="command-title"><span class="command-code">황금 낚시</span> 관련 <span class="badge vip">VIP</span></div>
-                    <div class="command-desc">최대 100번 물고기를 낚습니다.</div>
-                    <div class="command-example">[예시]<br>/황금 낚시 시작</div>
+                    <div class="command-title"><span class="command-code">낚시 시작</span></div>
+                    <div class="command-desc">미끼, 내구도, 배고픔을 1씩 소모하여 물고기를 낚고 경험치 및 골드, 보석을 획득합니다.</div>
+                    <div class="command-example">[예시]<br>/낚시 시작<br><br><b>[VIP 전용]</b><br>/황금 낚시 시작 (최대 100회 연속 진행)</div>
                 </div>
+
                 <div class="command-card">
-                    <div class="command-title"><span class="command-code">출석</span> 관련</div>
-                    <div class="command-desc">매일 낚시 게임에 출석합니다.</div>
-                    <div class="command-example">[예시]<br>/ㅊㅊ<br>/낚시 출석</div>
+                    <div class="command-title"><span class="command-code">정보 및 프로필</span></div>
+                    <div class="command-desc">나의 레벨, 재능, 내구도, 한도 등 전체 프로필과 가방(최대 1,000마리), 수집 도감을 확인합니다.</div>
+                    <div class="command-example">[예시]<br>/낚시 프로필<br>/낚시 프로필 @닉네임<br>/낚시 가방<br>/낚시 도감</div>
                 </div>
+
                 <div class="command-card">
-                    <div class="command-title"><span class="command-code">프로필</span> 관련</div>
-                    <div class="command-desc">프로필을 확인합니다.</div>
-                    <div class="command-example">[예시]<br>/낚시 프로필<br>/낚시 프로필 @닉네임</div>
+                    <div class="command-title"><span class="command-code">판매 및 거래소</span></div>
+                    <div class="command-desc">가방의 물고기를 골드로 판매하거나, 유저 간 거래소에서 보석을 사고팝니다.</div>
+                    <div class="command-example">[예시]<br>/낚시 판매<br>/낚시 자동 판매 활성화 <b>[VIP]</b><br>/낚시 거래소리스트<br>/낚시 거래소 등록 [보석] [개수] [가격]<br>/낚시 거래소 구매 [보석] [번호] [개수]<br>/낚시 거래소 수정/취소 [보석]</div>
                 </div>
+
                 <div class="command-card">
-                    <div class="command-title"><span class="command-code">가방 & 도감</span> 관련</div>
-                    <div class="command-desc">물고기 가방 또는 물고기 도감을 확인합니다.</div>
-                    <div class="command-example">[예시]<br>/낚시 가방 @닉네임<br>/낚시 도감 @닉네임</div>
+                    <div class="command-title"><span class="command-code">상점 및 식사</span></div>
+                    <div class="command-desc">골드로 미끼, 음식, 버프 아이템을 구매하거나 비축 식량으로 배고픔을 채웁니다.</div>
+                    <div class="command-example">[예시]<br>/낚시 미끼구매 [개수]<br>/낚시 아이템 구매 [번호] [개수]<br>/낚시 식사 [개수]<br><br><b>[VIP 전용 일괄 처리]</b><br>/낚시 일괄 미끼구매, /낚시 일괄 식사<br>/낚시 일괄 아이템 구매 [번호]</div>
                 </div>
+
                 <div class="command-card">
-                    <div class="command-title"><span class="command-code">판매</span> 관련</div>
-                    <div class="command-desc">가방에 있는 모든 물고기를 판매하여 골드를 획득합니다.</div>
-                    <div class="command-example">[예시]<br>/낚시 판매</div>
+                    <div class="command-title"><span class="command-code">장비 강화 및 수리</span></div>
+                    <div class="command-desc">골드를 소모하여 낚싯대, 미끼통, 내구도 및 배고픔 한도를 강화하고 낚싯대를 수리합니다.</div>
+                    <div class="command-example">[예시]<br>/낚시 수리 [횟수]<br>/낚시 강화 [횟수]<br>/낚시 내구도/미끼통/배고픔 강화 [횟수]<br><br><b>[VIP 전용 일괄 처리]</b><br>/낚시 일괄 수리<br>/낚시 일괄 강화</div>
                 </div>
+
                 <div class="command-card">
-                    <div class="command-title"><span class="command-code">낚시</span> 관련</div>
-                    <div class="command-desc">미끼 구매 및 낚싯대 강화/수리 관련 명령어입니다.</div>
-                    <div class="command-example">[예시]<br>/낚시 미끼구매 [개수]<br>/낚시 수리 [횟수]<br>/낚시 강화 [횟수]<br>/낚시 미끼통/내구도 강화<br><br><b>[VIP]</b> /낚시 일괄 미끼구매, /낚시 일괄 강화, /낚시 일괄 수리</div>
+                    <div class="command-title"><span class="command-code">성장 (인챈트 및 재능)</span></div>
+                    <div class="command-desc">보석을 소모해 영구적인 버프(인챈트)를 얻거나, 레벨업으로 얻은 TP로 재능 레벨을 올립니다.</div>
+                    <div class="command-example">[예시]<br>/낚시 보석<br>/낚시 인챈트 [보석] [횟수]<br>/낚시 재능 강화 [번호] [횟수]<br><br><b>[VIP 전용 일괄 처리]</b><br>/낚시 일괄 인챈트 [보석]<br>/낚시 일괄 재능 강화 [번호]</div>
                 </div>
+
                 <div class="command-card">
-                    <div class="command-title"><span class="command-code">아이템</span> 관련</div>
-                    <div class="command-desc">상점에서 각종 아이템들을 구매합니다.</div>
-                    <div class="command-example">[예시]<br>/낚시 아이템 구매 3 100000<br>/낚시 아이템리스트</div>
+                    <div class="command-title"><span class="command-code">퀘스트</span></div>
+                    <div class="command-desc">랜덤하게 주어지는 목표(낚시, 판매, 강화 등)를 달성하고 보상을 받습니다.</div>
+                    <div class="command-example">[예시]<br>/낚시 퀘스트<br>/낚시 퀘스트 스킵 [번호]<br>/낚시 퀘스트 수집 [번호]<br><br><b>[VIP 전용]</b><br>/낚시 자동 퀘스트 수집 활성화</div>
                 </div>
+
                 <div class="command-card">
-                    <div class="command-title"><span class="command-code">식사</span> 관련</div>
-                    <div class="command-desc">내가 가진 식량으로 배고픔을 회복합니다.</div>
-                    <div class="command-example">[예시]<br>/낚시 식사 999<br>/낚시 일괄 식사</div>
+                    <div class="command-title"><span class="command-code">클랜 시스템</span></div>
+                    <div class="command-desc">1억 골드로 클랜을 창설하고 클랜원들과 모인 경험치로 레벨을 올려 추가 버프를 받습니다.</div>
+                    <div class="command-example">[예시]<br>/낚시 클랜 창설 [클랜명]<br>/낚시 클랜 가입 [클랜명]<br>/낚시 클랜 승인/거절/추방 @닉네임<br>/낚시 클랜 탈퇴/삭제<br>/낚시 클랜정보 [클랜명]</div>
                 </div>
+
                 <div class="command-card">
-                    <div class="command-title"><span class="command-code">인챈트</span> 관련</div>
-                    <div class="command-desc">보석을 사용하여 인챈트를 합니다.</div>
-                    <div class="command-example">[예시]<br>/낚시 인챈트 루비 1<br>/낚시 보석</div>
+                    <div class="command-title"><span class="command-code">소셜 및 랭킹</span></div>
+                    <div class="command-desc">다른 유저에게 자원을 선물하거나 전체 랭킹 현황을 확인합니다.</div>
+                    <div class="command-example">[예시]<br>/낚시 송금 @닉네임 [금액]<br>/낚시 미끼선물 @닉네임 [개수]<br>/낚시 랭킹<br>/낚시 기부 랭킹 골드/미끼<br>/낚시 출석부</div>
                 </div>
+
                 <div class="command-card">
-                    <div class="command-title"><span class="command-code">거래소</span> 관련</div>
-                    <div class="command-desc">유저들끼리 서로 거래소에서 보석을 사고팝니다.</div>
-                    <div class="command-example">[예시]<br>/낚시 거래소리스트<br>/낚시 거래소 등록 [보석] [개수] [가격]<br>/낚시 거래소 구매 [보석] [번호] [개수]<br>/낚시 거래소 취소 [보석]</div>
+                    <div class="command-title"><span class="command-code">자동 편의 설정</span> <span class="badge vip">VIP</span></div>
+                    <div class="command-desc">황금 낚시 시 부족한 수치를 자동으로 채우거나 아이템을 자동 구매하도록 설정합니다.</div>
+                    <div class="command-example">[예시]<br>/낚시 자동 [수리/식사] 활성화<br>/낚시 자동 [미끼구매/식량 구매] 활성화<br>/낚시 자동 아이템 구매 활성화</div>
                 </div>
+                
                 <div class="command-card">
-                    <div class="command-title"><span class="command-code">클랜</span> 관련</div>
-                    <div class="command-desc">클랜을 창설하고, 클랜끼리 서로 경쟁하며, 클랜 레벨에 따라 버프를 받습니다.</div>
-                    <div class="command-example">[예시]<br>/낚시 클랜 창설 [클랜명] (비용 1억G)<br>/낚시 클랜 가입 [클랜명]<br>/낚시 클랜 승인/거절 @[닉네임]<br>/낚시 클랜정보 [클랜명]</div>
+                    <div class="command-title"><span class="command-code">기타 정보 조회</span></div>
+                    <div class="command-desc">아이템 리스트, 확률표 등 게임 진행에 필요한 데이터와 가이드를 확인합니다.</div>
+                    <div class="command-example">[예시]<br>/낚시 명령어<br>/낚시 보석<br>/낚시 확률표<br>/낚시 아이템리스트</div>
                 </div>
-                <div class="command-card">
-                    <div class="command-title"><span class="command-code">자동 기능</span> 관련 <span class="badge vip">VIP</span></div>
-                    <div class="command-desc">명령어를 귀찮게 칠 필요없이, 알아서 자동화하는 명령어입니다.</div>
-                    <div class="command-example">[예시]<br>/낚시 자동 판매 활성화<br>/낚시 자동 퀘스트 수집 활성화</div>
-                </div>
+
             </div>
         </section>
 
