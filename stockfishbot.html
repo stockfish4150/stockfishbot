@@ -1258,7 +1258,16 @@
                         targetSection.classList.remove('collapsed');
                         
                         const bottomSpacer = document.getElementById('bottom-spacer');
-                        const neededHeight = window.innerHeight - targetSection.scrollHeight - 150;
+                        
+                        let elementsBelowHeight = 0;
+                        let nextSec = targetSection.nextElementSibling;
+                        while(nextSec && nextSec.tagName === 'SECTION') {
+                            const style = window.getComputedStyle(nextSec);
+                            elementsBelowHeight += nextSec.offsetHeight + (parseFloat(style.marginTop) || 0) + (parseFloat(style.marginBottom) || 0);
+                            nextSec = nextSec.nextElementSibling;
+                        }
+                        
+                        const neededHeight = window.innerHeight - targetSection.scrollHeight - elementsBelowHeight - 150;
                         bottomSpacer.style.height = Math.max(200, neededHeight) + 'px';
                         
                         window.scrollTo({
@@ -1334,7 +1343,16 @@
                     currentSection.classList.remove('collapsed');
                     
                     const bottomSpacer = document.getElementById('bottom-spacer');
-                    const neededHeight = window.innerHeight - currentSection.scrollHeight - 150;
+                    
+                    let elementsBelowHeight = 0;
+                    let nextSec = currentSection.nextElementSibling;
+                    while(nextSec && nextSec.tagName === 'SECTION') {
+                        const style = window.getComputedStyle(nextSec);
+                        elementsBelowHeight += nextSec.offsetHeight + (parseFloat(style.marginTop) || 0) + (parseFloat(style.marginBottom) || 0);
+                        nextSec = nextSec.nextElementSibling;
+                    }
+                    
+                    const neededHeight = window.innerHeight - currentSection.scrollHeight - elementsBelowHeight - 150;
                     bottomSpacer.style.height = Math.max(200, neededHeight) + 'px';
                     
                     window.scrollTo({
