@@ -1261,18 +1261,19 @@
                         
                         const targetScrollY = targetSection.offsetTop - 150;
                         const requiredDocHeight = targetScrollY + window.innerHeight;
+
+                        targetSection.classList.add('collapsed');
+                        void targetSection.offsetWidth; 
+
                         const currentDocHeight = document.documentElement.scrollHeight;
                         let extraNeeded = 0;
                         if (requiredDocHeight > currentDocHeight) {
                             extraNeeded = requiredDocHeight - currentDocHeight;
                         }
-
-                        targetSection.classList.add('collapsed');
-                        void targetSection.offsetWidth; 
-
+                        
                         targetSection.classList.remove('instant-collapse');
                         targetSection.classList.remove('collapsed');
-
+                        
                         bottomSpacer.style.height = (200 + extraNeeded) + 'px';
 
                         setTimeout(() => {
@@ -1354,18 +1355,19 @@
                     
                     const targetScrollY = currentSection.offsetTop - 150;
                     const requiredDocHeight = targetScrollY + window.innerHeight;
+
+                    currentSection.classList.add('collapsed');
+                    void currentSection.offsetWidth; 
+
                     const currentDocHeight = document.documentElement.scrollHeight;
                     let extraNeeded = 0;
                     if (requiredDocHeight > currentDocHeight) {
                         extraNeeded = requiredDocHeight - currentDocHeight;
                     }
-
-                    currentSection.classList.add('collapsed');
-                    void currentSection.offsetWidth; 
-
+                    
                     currentSection.classList.remove('instant-collapse');
                     currentSection.classList.remove('collapsed');
-
+                    
                     bottomSpacer.style.height = (200 + extraNeeded) + 'px';
 
                     setTimeout(() => {
