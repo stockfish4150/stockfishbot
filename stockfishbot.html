@@ -582,6 +582,7 @@
             <li><a href="#game-semantle">[게임] 🧩 꼬맨틀</a></li>
             <li><a href="#game-mafia">[게임] 🕵️ 마피아</a></li>
             <li><a href="#game-sword">[게임] ⚔️ 검 강화</a></li>
+            <li><a href="#chatlog">[관리] 📜 채팅 로그</a></li>
             <li><a href="#admin">[관리] 👑 관리자</a></li>
             <li><a href="#bot-utility">[유틸리티] 🛠️ 유틸리티</a></li>
             <li><a href="#utility">[기타] 🛠️ 시스템</a></li>
@@ -913,6 +914,44 @@
                     <div class="command-title"><span class="command-code">관리자 기능</span> <span class="badge admin">관리자</span></div>
                     <div class="command-desc">관리자 전용 기능으로 특정 유저에게 골드를 지급하거나 설정하고, 악성 유저에게 경고 및 정지를 부여합니다.</div>
                     <div class="command-example">[예시]<br>/검 골드 [추가/설정] @닉네임 [금액]<br>/검 [경고/정지/해제] @닉네임<br>/검 정지리스트<br>/검 관리자리스트</div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="chatlog">
+            <h2 class="section-title">📜 채팅 로그</h2>
+            <p style="margin-bottom: 1.5rem; color: var(--text-muted);">채팅방 내 특정 유저의 대화 기록을 조회하고 관리하는 시스템입니다.</p>
+            <div class="command-grid">
+                
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">채팅 로그 조회</span></div>
+                    <div class="command-desc">특정 유저의 최근 대화 기록을 복호화하여 조회합니다. (동명이인이 있을 경우 안내에 따라 유저 ID를 직접 입력해 조회할 수 있습니다.)</div>
+                    <div class="command-example">[예시]<br>/chatlog @닉네임<br>/chatlog @닉네임 [유저ID]</div>
+                </div>
+
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">로그 표시 줄 설정</span> <span class="badge admin">방 관리자</span></div>
+                    <div class="command-desc">채팅 로그를 조회할 때 한 번에 표시할 메시지(줄)의 최대 개수를 설정합니다.</div>
+                    <div class="command-example">[예시]<br>/chatlog setmark 100</div>
+                </div>
+
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">채팅 로그 삭제</span> <span class="badge admin">방 관리자</span></div>
+                    <div class="command-desc">특정 유저의 채팅 로그 기록을 삭제(초기화) 처리합니다. 이후 작성된 기록부터 새롭게 조회됩니다.</div>
+                    <div class="command-example">[예시]<br>/chatlog delete @닉네임</div>
+                </div>
+
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">관리자 전용 모드</span> <span class="badge admin">방 관리자</span></div>
+                    <div class="command-desc">일반 유저가 타인의 채팅 로그를 임의로 열람하지 못하도록 제한하는 모드를 켜거나 끕니다.</div>
+                    <div class="command-example">[예시]<br>/chatlog admin on<br>/chatlog admin off</div>
+                </div>
+
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">방 관리자 지정</span> <span class="badge admin">최고 관리자</span></div>
+                    <div class="command-desc">해당 채팅방에서 채팅 로그 시스템을 관리할 수 있는 권한을 특정 유저에게 부여합니다.</div>
+                    <div class="command-example">[예시]<br>/chatlog admin appoint @닉네임</div>
                 </div>
 
             </div>
