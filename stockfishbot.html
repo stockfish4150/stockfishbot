@@ -583,6 +583,7 @@
             <li><a href="#game-mafia">[게임] 🕵️ 마피아</a></li>
             <li><a href="#game-sword">[게임] ⚔️ 검 강화</a></li>
             <li><a href="#admin">[관리] 👑 관리자</a></li>
+            <li><a href="#bot-weather">[유틸리티] 🌤️ 날씨</a></li>
             <li><a href="#utility">[기타] 🛠️ 시스템</a></li>
         </ul>
     </aside>
@@ -951,6 +952,32 @@
                     <div class="command-desc">관리자를 제외한 모든 유저의 굴비봇 사용을 중지합니다.</div>
                     <div class="command-example">[예시]<br>!shutdown</div>
                 </div>
+            </div>
+        </section>
+
+        <section id="bot-weather">
+            <h2 class="section-title">🌤️ 날씨</h2>
+            <p style="margin-bottom: 1.5rem; color: var(--text-muted);">실시간 기상 정보 및 대기질, 단기 예보를 한 번에 조회할 수 있는 시스템입니다.</p>
+            <div class="command-grid">
+                
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">실시간 날씨 조회</span></div>
+                    <div class="command-desc">특정 지역명을 입력하면 현재 온도, 습도, 풍속 정보를 즉시 확인합니다.[cite: 6]</div>
+                    <div class="command-example">[예시]<br>/날씨 강남구<br>/날씨 부산</div>
+                </div>
+
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">상세 대기질 정보</span></div>
+                    <div class="command-desc">날씨 조회 시 종합 대기 질 상태와 함께 미세먼지(PM10), 초미세먼지(PM2.5), 오존(O3), 이산화황(SO2), 일산화탄소(CO), 이산화질소(NO2) 수치가 함께 출력됩니다.[cite: 6]</div>
+                    <div class="command-example">[예시]<br>/날씨 제주</div>
+                </div>
+
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">3일 단기 일기예보</span></div>
+                    <div class="command-desc">오늘, 내일, 모레에 해당하는 주간 날씨 정보가 함께 제공됩니다.[cite: 6] 오전/오후의 강수 확률, 하늘 상태(☀️, ⛅, ☁️, 🌧️), 최저 및 최고 온도를 요약해서 보여줍니다.[cite: 6]</div>
+                    <div class="command-example">[예시]<br>/날씨 대전</div>
+                </div>
+
             </div>
         </section>
 
