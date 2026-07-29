@@ -307,6 +307,7 @@
             background-clip: text;
             color: transparent;
             font-family: 'Montserrat', sans-serif;
+            cursor: pointer;
         }
 
         .bottom-spacer {
@@ -1426,6 +1427,30 @@
                         });
                     }, 10);
                 }
+            });
+        });
+
+        document.querySelector('.top-header-title').addEventListener('click', () => {
+            document.getElementById('intro-page').classList.remove('intro-hidden');
+            document.body.classList.remove('started');
+
+            document.querySelectorAll('section').forEach(sec => {
+                if (!sec.classList.contains('collapsed')) {
+                    sec.classList.add('instant-collapse');
+                    sec.classList.add('collapsed');
+                    setTimeout(() => sec.classList.remove('instant-collapse'), 50);
+                }
+            });
+
+            document.querySelectorAll('.sidebar-nav li a').forEach(nav => nav.classList.remove('active'));
+            const introNavLink = document.querySelector('.sidebar-nav li a[href="#intro"]');
+            if (introNavLink) {
+                introNavLink.classList.add('active');
+            }
+
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
             });
         });
 
