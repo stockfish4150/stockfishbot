@@ -105,11 +105,12 @@
             position: sticky;
             top: calc(60px + 1rem);
             z-index: 10;
+            position: relative;
         }
 
         .search-input {
             width: 100%;
-            padding: 1rem 1.5rem;
+            padding: 1rem 3rem 1rem 1.5rem;
             font-size: 1.1rem;
             border: 2px solid var(--border-color);
             border-radius: 12px;
@@ -122,6 +123,21 @@
         .search-input:focus {
             outline: none;
             border-color: var(--primary-color);
+        }
+
+        .clear-search-btn {
+            position: absolute;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            display: none;
+            padding: 0;
+            line-height: 1;
         }
 
         .section-title {
@@ -626,6 +642,7 @@
     <main class="main-content">
         <div class="search-container">
             <input type="text" id="searchInput" class="search-input" placeholder="명령어 또는 기능 검색">
+            <button type="button" id="clearSearchBtn" class="clear-search-btn">&times;</button>
         </div>
 
         <section id="intro">
@@ -1298,11 +1315,18 @@
         });
 
         const searchInput = document.getElementById('searchInput');
+        const clearSearchBtn = document.getElementById('clearSearchBtn');
         const commandCards = document.querySelectorAll('.command-card');
         const sectionElements = document.querySelectorAll('section');
 
         searchInput.addEventListener('input', function(e) {
             const term = e.target.value.toLowerCase();
+
+            if (term.length > 0) {
+                clearSearchBtn.style.display = 'block';
+            } else {
+                clearSearchBtn.style.display = 'none';
+            }
 
             sectionElements.forEach(section => {
                 let hasVisibleCard = false;
@@ -1324,6 +1348,13 @@
                     section.style.display = 'block';
                 }
             });
+        });
+
+        clearSearchBtn.addEventListener('click', function() {
+            searchInput.value = '';
+            clearSearchBtn.style.display = 'none';
+            searchInput.dispatchEvent(new Event('input'));
+            searchInput.focus();
         });
 
         document.querySelectorAll('.section-title').forEach(title => {
