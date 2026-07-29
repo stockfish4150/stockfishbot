@@ -77,26 +77,84 @@
             list-style: none;
         }
 
-        .sidebar-nav li a {
-            display: block;
+        .sidebar-category > a {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             padding: 0.8rem 1.5rem;
-            color: rgba(255,255,255,0.7);
+            color: rgba(255,255,255,0.85);
             text-decoration: none;
             transition: background-color 0.2s ease, color 0.2s ease;
-            font-weight: 500;
+            font-weight: 700;
+            cursor: pointer;
+            border-left: 4px solid transparent;
         }
 
-        .sidebar-nav li a:hover, .sidebar-nav li a.active {
+        .sidebar-category > a:hover {
+            background-color: var(--sidebar-hover);
+            color: var(--sidebar-text);
+            border-left: 4px solid transparent;
+            padding-left: 1.5rem;
+        }
+
+        .sidebar-submenu {
+            list-style: none;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-in-out, opacity 0.3s ease-in-out;
+            background-color: rgba(0,0,0,0.15);
+        }
+
+        .sidebar-category.open .sidebar-submenu {
+            max-height: 250px;
+            opacity: 1;
+        }
+
+        .sidebar-submenu li a {
+            display: block;
+            padding: 0.6rem 1.5rem 0.6rem 2.5rem;
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            font-size: 0.95rem;
+            font-weight: 500;
+            border-left: 4px solid transparent;
+        }
+
+        .sidebar-submenu li a:hover, .sidebar-submenu li a.active {
             background-color: var(--sidebar-hover);
             color: var(--sidebar-text);
             border-left: 4px solid var(--primary-color);
-            padding-left: calc(1.5rem - 4px);
+            padding-left: calc(2.5rem - 4px);
+        }
+
+        .toggle-arrow {
+            font-family: inherit;
+            font-size: 0.9rem;
         }
 
         .sidebar-links {
             margin-top: 2rem;
             padding-top: 1rem;
             border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-links .sidebar-nav li a {
+            display: block;
+            padding: 0.8rem 1.5rem;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            font-weight: 500;
+            border-left: 4px solid transparent;
+        }
+
+        .sidebar-links .sidebar-nav li a:hover {
+            background-color: var(--sidebar-hover);
+            color: var(--sidebar-text);
+            border-left: 4px solid var(--primary-color);
+            padding-left: calc(1.5rem - 4px);
         }
 
         .main-content {
@@ -423,11 +481,20 @@
                 overflow-x: hidden;
                 white-space: normal;
             }
-            .sidebar-nav li a {
+            .sidebar-submenu li a {
                 border-left: 4px solid transparent;
                 border-bottom: none;
             }
-            .sidebar-nav li a:hover, .sidebar-nav li a.active {
+            .sidebar-submenu li a:hover, .sidebar-submenu li a.active {
+                border-left: 4px solid var(--primary-color);
+                border-bottom: none;
+                padding-left: calc(2.5rem - 4px);
+            }
+            .sidebar-links .sidebar-nav li a {
+                border-left: 4px solid transparent;
+                border-bottom: none;
+            }
+            .sidebar-links .sidebar-nav li a:hover {
                 border-left: 4px solid var(--primary-color);
                 border-bottom: none;
                 padding-left: calc(1.5rem - 4px);
@@ -644,17 +711,42 @@
             <p style="color: rgba(255,255,255,0.5); font-size: 0.85rem; margin-top: 0.3rem;">stockfishbot 명령어</p>
         </div>
         <ul class="sidebar-nav">
-            <li><a href="#intro" class="active">[튜토리얼] <i data-lucide="pin"></i> 시작하기</a></li>
-            <li><a href="#gulbi-bot">[AI] <i data-lucide="bot"></i> 굴비봇</a></li>
-            <li><a href="#game-fishing">[게임] <i data-lucide="fishing-rod"></i> 낚시</a></li>
-            <li><a href="#game-fishing-lite">[게임] <i data-lucide="fishing-rod"></i> 낚시 (라이트)</a></li>
-            <li><a href="#game-semantle">[게임] <i data-lucide="puzzle"></i> 꼬맨틀</a></li>
-            <li><a href="#game-mafia">[게임] <i data-lucide="hat-glasses"></i> 마피아</a></li>
-            <li><a href="#game-sword">[게임] <i data-lucide="swords"></i> 검 강화</a></li>
-            <li><a href="#chatlog">[관리] <i data-lucide="message-square-text"></i> 채팅 로그</a></li>
-            <li><a href="#admin">[관리] <i data-lucide="user-shield"></i> 관리자</a></li>
-            <li><a href="#tool">[기타] <i data-lucide="toolbox"></i> 도구</a></li>
-            <li><a href="#system">[기타] <i data-lucide="settings"></i> 시스템</a></li>
+            <li class="sidebar-category open">
+                <a href="javascript:void(0)">[튜토리얼] <span class="toggle-arrow">^</span></a>
+                <ul class="sidebar-submenu">
+                    <li><a href="#intro" class="active"><i data-lucide="pin"></i> 시작하기</a></li>
+                </ul>
+            </li>
+            <li class="sidebar-category">
+                <a href="javascript:void(0)">[AI] <span class="toggle-arrow">v</span></a>
+                <ul class="sidebar-submenu">
+                    <li><a href="#gulbi-bot"><i data-lucide="bot"></i> 굴비봇</a></li>
+                </ul>
+            </li>
+            <li class="sidebar-category">
+                <a href="javascript:void(0)">[게임] <span class="toggle-arrow">v</span></a>
+                <ul class="sidebar-submenu">
+                    <li><a href="#game-fishing"><i data-lucide="fishing-rod"></i> 낚시</a></li>
+                    <li><a href="#game-fishing-lite"><i data-lucide="fishing-rod"></i> 낚시 (라이트)</a></li>
+                    <li><a href="#game-semantle"><i data-lucide="puzzle"></i> 꼬맨틀</a></li>
+                    <li><a href="#game-mafia"><i data-lucide="hat-glasses"></i> 마피아</a></li>
+                    <li><a href="#game-sword"><i data-lucide="swords"></i> 검 강화</a></li>
+                </ul>
+            </li>
+            <li class="sidebar-category">
+                <a href="javascript:void(0)">[관리] <span class="toggle-arrow">v</span></a>
+                <ul class="sidebar-submenu">
+                    <li><a href="#chatlog"><i data-lucide="message-square-text"></i> 채팅 로그</a></li>
+                    <li><a href="#admin"><i data-lucide="user-shield"></i> 관리자</a></li>
+                </ul>
+            </li>
+            <li class="sidebar-category">
+                <a href="javascript:void(0)">[기타] <span class="toggle-arrow">v</span></a>
+                <ul class="sidebar-submenu">
+                    <li><a href="#tool"><i data-lucide="toolbox"></i> 도구</a></li>
+                    <li><a href="#system"><i data-lucide="settings"></i> 시스템</a></li>
+                </ul>
+            </li>
         </ul>
 
         <div class="sidebar-links">
@@ -1231,10 +1323,16 @@
                 introSection.classList.remove('collapsed');
             }
 
-            document.querySelectorAll('.sidebar-nav li a').forEach(nav => nav.classList.remove('active'));
-            const introNavLink = document.querySelector('.sidebar-nav li a[href="#intro"]');
+            document.querySelectorAll('.sidebar-submenu li a').forEach(nav => nav.classList.remove('active'));
+            const introNavLink = document.querySelector('.sidebar-submenu li a[href="#intro"]');
             if (introNavLink) {
                 introNavLink.classList.add('active');
+                const parentCategory = introNavLink.closest('.sidebar-category');
+                if (parentCategory) {
+                    parentCategory.classList.add('open');
+                    const arrow = parentCategory.querySelector('.toggle-arrow');
+                    if (arrow) arrow.textContent = '^';
+                }
             }
 
             window.scrollTo({
@@ -1257,9 +1355,20 @@
                 });
 
                 const targetSelector = this.getAttribute('data-target');
-                const navLink = document.querySelector(`.sidebar-nav li a[href="${targetSelector}"]`);
+                const navLink = document.querySelector(`.sidebar-submenu li a[href="${targetSelector}"]`);
                 
                 if (navLink) {
+                    document.querySelectorAll('.sidebar-category').forEach(cat => {
+                        cat.classList.remove('open');
+                        const otherArrow = cat.querySelector('.toggle-arrow');
+                        if (otherArrow) otherArrow.textContent = 'v';
+                    });
+                    const parentCategory = navLink.closest('.sidebar-category');
+                    if (parentCategory) {
+                        parentCategory.classList.add('open');
+                        const arrow = parentCategory.querySelector('.toggle-arrow');
+                        if (arrow) arrow.textContent = '^';
+                    }
                     setTimeout(() => {
                         navLink.click();
                     }, 100);
@@ -1279,6 +1388,36 @@
         sidebarOverlay.addEventListener('click', () => {
             sidebar.classList.remove('open');
             sidebarOverlay.classList.remove('show');
+        });
+
+        document.querySelectorAll('.sidebar-category > a').forEach(categoryToggle => {
+            categoryToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                const parentLi = this.parentElement;
+                const arrow = this.querySelector('.toggle-arrow');
+                const isOpen = parentLi.classList.contains('open');
+
+                document.querySelectorAll('.sidebar-category').forEach(cat => {
+                    if (cat !== parentLi && cat.classList.contains('open')) {
+                        cat.classList.remove('open');
+                        const otherArrow = cat.querySelector('.toggle-arrow');
+                        if (otherArrow) otherArrow.textContent = 'v';
+                        const otherSub = cat.querySelector('.sidebar-submenu');
+                        if (otherSub) otherSub.style.maxHeight = '0px';
+                    }
+                });
+
+                const subMenu = parentLi.querySelector('.sidebar-submenu');
+                if (isOpen) {
+                    parentLi.classList.remove('open');
+                    if (arrow) arrow.textContent = 'v';
+                    if (subMenu) subMenu.style.maxHeight = '0px';
+                } else {
+                    parentLi.classList.add('open');
+                    if (arrow) arrow.textContent = '^';
+                    if (subMenu) subMenu.style.maxHeight = subMenu.scrollHeight + 'px';
+                }
+            });
         });
 
         const sections = document.querySelectorAll('section');
@@ -1407,7 +1546,7 @@
                 const isCollapsed = currentSection.classList.contains('collapsed');
                 
                 const sectionId = currentSection.getAttribute('id');
-                const targetNavLink = document.querySelector(`.sidebar-nav li a[href="#${sectionId}"]`);
+                const targetNavLink = document.querySelector(`.sidebar-submenu li a[href="#${sectionId}"]`);
 
                 if (!isCollapsed) {
                     currentSection.classList.remove('instant-collapse');
@@ -1418,7 +1557,20 @@
                     document.getElementById('bottom-spacer').style.height = '200px';
                 } else {
                     navLinks.forEach(nav => nav.classList.remove('active'));
-                    if (targetNavLink) targetNavLink.classList.add('active');
+                    if (targetNavLink) {
+                        targetNavLink.classList.add('active');
+                        document.querySelectorAll('.sidebar-category').forEach(cat => {
+                            cat.classList.remove('open');
+                            const otherArrow = cat.querySelector('.toggle-arrow');
+                            if (otherArrow) otherArrow.textContent = 'v';
+                        });
+                        const parentCategory = targetNavLink.closest('.sidebar-category');
+                        if (parentCategory) {
+                            parentCategory.classList.add('open');
+                            const arrow = parentCategory.querySelector('.toggle-arrow');
+                            if (arrow) arrow.textContent = '^';
+                        }
+                    }
 
                     document.querySelectorAll('section').forEach(sec => {
                         if (sec !== currentSection && !sec.classList.contains('collapsed')) {
@@ -1473,10 +1625,16 @@
                 }
             });
 
-            document.querySelectorAll('.sidebar-nav li a').forEach(nav => nav.classList.remove('active'));
-            const introNavLink = document.querySelector('.sidebar-nav li a[href="#intro"]');
+            document.querySelectorAll('.sidebar-submenu li a').forEach(nav => nav.classList.remove('active'));
+            const introNavLink = document.querySelector('.sidebar-submenu li a[href="#intro"]');
             if (introNavLink) {
                 introNavLink.classList.add('active');
+                const parentCategory = introNavLink.closest('.sidebar-category');
+                if (parentCategory) {
+                    parentCategory.classList.add('open');
+                    const arrow = parentCategory.querySelector('.toggle-arrow');
+                    if (arrow) arrow.textContent = '^';
+                }
             }
 
             window.scrollTo({
