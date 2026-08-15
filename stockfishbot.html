@@ -171,6 +171,13 @@
             z-index: 10;
         }
 
+        .event-search-container {
+            margin-bottom: 2rem;
+            position: sticky;
+            top: calc(60px + 1rem);
+            z-index: 10;
+        }
+
         .search-input {
             width: 100%;
             padding: 1rem 3rem 1rem 1.5rem;
@@ -1268,7 +1275,7 @@
         </section>
 
         <div id="eventView">
-            <div class="search-container">
+            <div class="event-search-container">
                 <input type="text" id="eventSearchInput" class="search-input" placeholder="궁금한 이벤트를 검색해보세요">
                 <button type="button" id="clearEventSearchBtn" class="clear-search-btn">&times;</button>
             </div>
