@@ -810,91 +810,91 @@
 
         <section id="gulbi-bot">
             <h2 class="section-title"><i data-lucide="bot"></i> 굴비봇 (AI)</h2>
-            <p style="margin-bottom: 1.5rem; color: var(--text-muted);">Chat GPT, Gemini, Claude, Grok, DeepSeek 등 91 개의 AI 모델을 지원하는 AI 봇입니다.</p>
+            <p style="margin-bottom: 1.5rem; color: var(--text-muted);">Chat GPT, Gemini, Claude, Grok, DeepSeek 등 110 개의 AI 모델을 지원하는 AI 봇입니다.</p>
             <div class="command-grid">
                 
                 <div class="command-card">
-                    <div class="command-title"><span class="command-code">기본 질문</span></div>
-                    <div class="command-desc">기본 모델로 AI에게 질문합니다.<br>[모델] Gemini 3.1 Flash Lite</div>
+                    <div class="command-title"><span class="command-code">기본적인 질문</span> <span class="badge admin">일반</span></div>
+                    <div class="command-desc">굴비에게 질문합니다.<br>[모델] Gemini 3.5 Flash Lite</div>
                     <div class="command-example">[예시]<br>굴비야 파이썬이 뭐야?<br>hey gulbi hello!</div>
                 </div>
 
                 <div class="command-card">
-                    <div class="command-title"><span class="command-code">웹 검색 질문</span></div>
-                    <div class="command-desc">명령어 뒤에 <code>-s</code>를 붙이면 <strong>웹 검색</strong>을 기반으로 최신 정보를 답변합니다.</div>
-                    <div class="command-example">[예시]<br>굴비야-s 오늘 서울 날씨 어때?<br>hey gulbi-s latest news</div>
+                    <div class="command-title"><span class="command-code">웹 검색</span> <span class="badge admin">도구</span></div>
+                    <div class="command-desc">모델명 뒤에 <code>-s</code>를 붙이면 <strong>웹 검색</strong>을 통해 답변합니다.</div>
+                    <div class="command-example">[예시]<br>굴비야-s 오늘 서울 날씨 어때?<br>/g5.6sol-s,최신 핫한 AI 뉴스 기사 3개를 알려줘.</div>
                 </div>
 
                 <div class="command-card">
-                    <div class="command-title"><span class="command-code">모델 지정 질문</span></div>
-                    <div class="command-desc">AI 모델을 지정하여 질문합니다. 웹 검색이 필요하면 모델명 뒤에 <code>-s</code>를 붙입니다.</div>
-                    <div class="command-example">[예시]<br>/g4o, 파이썬 코드 짜줘<br>/dsc, 안녕 넌 누구니? (딥시크)<br>/g5.5-s, 최신 IT 기사 찾아줘</div>
+                    <div class="command-title"><span class="command-code">파일 분석</span> <span class="badge admin">일반</span></div>
+                    <div class="command-desc">텍스트, 이미지, 동영상, 음원, 문서 등의 파일을 분석합니다.<br><b>※ 꼭 분석할 파일에 답장해주세요.</b></div>
+                    <div class="command-example">[예시]<br>/굴비 분석,g5.6sol-s,이 사진에 있는 문장을 한국어로 번역해줘.<br>/굴비 분석,g3.7f,이 문서를 요약해줘.</div>
                 </div>
 
                 <div class="command-card">
-                    <div class="command-title"><span class="command-code">페르소나 (나만의 역할)</span></div>
-                    <div class="command-desc">AI에게 특정한 역할이나 말투를 부여하여 대화합니다.</div>
-                    <div class="command-example">[예시]<br>코딩굴비야 이 코드 에러 왜 나?<br>/상담,g4o,나 오늘 너무 우울해</div>
+                    <div class="command-title"><span class="command-code">대화 & 상호작용 요약</span> <span class="badge admin">일반</span></div>
+                    <div class="command-desc">대화 또는 상호작용을 요약합니다.</div>
+                    <div class="command-example">[예시]<br>/굴비 대화요약 지금까지의 대화 내용을 바탕으로 토론할만한 주제들을 3가지 추천해줘.(선택)<br>/굴비 상호작용요약 사람들 간의 친밀도를 분석해줘.(선택)</div>
                 </div>
 
                 <div class="command-card">
-                    <div class="command-title"><span class="command-code">기본 설정 변경</span></div>
-                    <div class="command-desc">'굴비야' 호출 시 기본으로 사용될 AI 모델과 페르소나를 변경합니다.</div>
-                    <div class="command-example">[예시]<br>/굴비 모델 설정 g4o<br>/굴비 페르소나 설정 코딩</div>
+                    <div class="command-title"><span class="command-code">이미지 생성</span> <span class="badge admin">일반</span></div>
+                    <div class="command-desc">이미지를 생성합니다.</div>
+                    <div class="command-example">[예시]<br>/굴비 그려줘 은하수가 내리는 아름다운 밤하늘<br>/gi2,맑은 하늘</div>
                 </div>
 
                 <div class="command-card">
-                    <div class="command-title"><span class="command-code">파일 및 미디어 분석</span></div>
-                    <div class="command-desc">텍스트, 이미지, 동영상, 음원, PDF, 엑셀 등 다양한 파일을 분석합니다.<br><b>※ 꼭 파일/사진에 답장해주세요.</b></div>
-                    <div class="command-example">[예시]<br>/굴비 분석,g4o,이 사진에 있는 문장을 한국어로 번역해줘.<br>/굴비 분석,g3.1fl,이 문서를 요약해줘.</div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-title"><span class="command-code">이미지 생성</span></div>
-                    <div class="command-desc">나의 요청에 따라 새로운 이미지를 생성합니다.</div>
-                    <div class="command-example">[예시]<br>/굴비 그려줘 달에서 코딩하는 고양이<br>/gi2,사이버펑크 도시 풍경</div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-title"><span class="command-code">이미지 수정</span></div>
-                    <div class="command-desc">기존 이미지를 원하는 대로 편집 및 수정합니다.<br><b>※ 꼭 수정할 이미지에 답장해주세요.</b></div>
+                    <div class="command-title"><span class="command-code">이미지 수정</span> <span class="badge admin">일반</span></div>
+                    <div class="command-desc">이미지를 수정합니다.<br><b>※ 꼭 수정할 이미지에 답장해주세요.</b></div>
                     <div class="command-example">[예시]<br>/굴비 수정,gi2,배경을 우주로 바꿔줘</div>
                 </div>
 
                 <div class="command-card">
-                    <div class="command-title"><span class="command-code">프리셋 (간편 명령어)</span></div>
-                    <div class="command-desc">자주 쓰는 기능과 애니메이션/게임 캐릭터 페르소나가 봇이 내장되어 있습니다.</div>
+                    <div class="command-title"><span class="command-code">페르소나</span> <span class="badge admin">기능</span></div>
+                    <div class="command-desc">페르소나를 설정하여 질문합니다.</div>
+                    <div class="command-example">[예시]<br>코딩굴비야-s irispy-client 기본 구조 예제 코드를 알려줘.<br>/g5.6sol,메뉴,오늘 야식으로 좋은 거 5개만 알려줘.</div>
+                </div>
+
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">모델/페르소나 설정</span> <span class="badge admin">기능</span></div>
+                    <div class="command-desc">'굴비야'라고 부를 때 사용할 모델/페르소나를 설정합니다.</div>
+                    <div class="command-example">[예시]<br>/굴비 모델 설정 g5.6sol<br>/굴비 페르소나 설정 애교</div>
+                </div>
+
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">프리셋</span> <span class="badge admin">기능</span></div>
+                    <div class="command-desc">명령어를 일일이 입력하기 귀찮을 때 씁니다.</div>
                     <div class="command-example">[예시]<br>/오늘운세, /해몽 [내용], /오늘타로<br>/날씨 [지역], /번역 [문장], /요약 [내용]<br>/맞춤법 [문장], /메뉴 [점심/저녁]<br>/천체이미지 [천체]</div>
                 </div>
 
                 <div class="command-card">
-                    <div class="command-title"><span class="command-code">감쓰통 (감정 쓰레기통)</span></div>
-                    <div class="command-desc">원할 때 언제든지 내 감정을 털어놓을 수 있습니다.<br>감쓰통을 킨 상태에서는 내가 하는 모든 말에 자동으로 답장합니다.</div>
-                    <div class="command-example">[예시]<br>/감쓰통 on<br>/감쓰통 off<br>/감쓰통 초기화</div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-title"><span class="command-code">계정 연동 및 관리</span></div>
-                    <div class="command-desc">나의 이전 계정을 연동 후, 다른 곳에서도 굴비봇을 사용할 수 있습니다.</div>
-                    <div class="command-example">[예시]<br>/굴비 등록 @닉네임<br>/굴비 연동 @닉네임<br>/굴비 연동 확인 [코드]<br>/굴비 로그아웃 @닉네임</div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-title"><span class="command-code">AI 커스텀 채팅</span></div>
-                    <div class="command-desc">원하는 채팅방에서 내가 원하는 페르소나로 AI와 채팅을 시작합니다.</div>
+                    <div class="command-title"><span class="command-code">커스텀 채팅</span> <span class="badge admin">기능</span></div>
+                    <div class="command-desc">언제든지 원하는 곳에서 채팅을 시작할 수 있습니다.</div>
                     <div class="command-example">[예시]<br>/굴비 채팅시작 [방이름]====[페르소나]<br>/굴비 채팅종료<br>/굴비 채팅리스트<br>/굴비 채팅삭제 [방이름]</div>
                 </div>
 
                 <div class="command-card">
-                    <div class="command-title"><span class="command-code">내 정보 확인</span></div>
-                    <div class="command-desc">나의 남은 텍스트/이미지 한도, 기억력, 현재 설정된 모델 등을 확인합니다.</div>
+                    <div class="command-title"><span class="command-code">내 정보 확인</span> <span class="badge admin">정보</span></div>
+                    <div class="command-desc">나의 남은 텍스트/이미지 한도, 기억력, 기본 모델 등을 확인합니다.</div>
                     <div class="command-example">[예시]<br>/굴비 내정보<br>/gulbi myinfo</div>
                 </div>
-                
+
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">감정쓰레기통</span> <span class="badge admin">기타</span></div>
+                    <div class="command-desc">내 말에 공감해주고 다 들어주는 감정쓰레기통입니다.<br>감쓰통을 킨 상태에서는 내가 하는 모든 말에 답장합니다.</div>
+                    <div class="command-example">[예시]<br>/감쓰통 on<br>/감쓰통 off<br>/감쓰통 초기화</div>
+                </div>
+
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">계정 연동/관리</span> <span class="badge admin">기타</span></div>
+                    <div class="command-desc">계정을 연동/관리합니다.</div>
+                    <div class="command-example">[예시]<br>/굴비 등록 @닉네임<br>/굴비 연동 @닉네임<br>/굴비 연동 확인 [코드]<br>/굴비 로그아웃 @닉네임</div>
+                </div>
+
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">LLM 백화점</span> <span class="badge admin">관리자</span></div>
-                    <div class="command-desc">하나의 질문을 여러 AI 모델(GPT, Gemini, Claude 등)에게 동시에 물어보고 답변을 비교합니다.</div>
-                    <div class="command-example">[예시]<br>/llm,기본,인공지능의 미래는?</div>
+                    <div class="command-desc">내가 한 질문에 대해서 여러 모델이 답변합니다.</div>
+                    <div class="command-example">[예시]<br>/llm,기본,AI의 미래는?</div>
                 </div>
 
                 <div class="command-card">
