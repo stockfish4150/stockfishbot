@@ -246,12 +246,15 @@
             transition: transform 0.4s ease;
         }
 
-        section.collapsed .section-title::after {
+        section.collapsed .section-title::after,
+        #eventView.collapsed .section-title::after {
             transform: rotate(180deg);
         }
 
         section p,
-        section .command-grid {
+        section .command-grid,
+        #eventView p,
+        #eventView .command-grid {
             max-height: 5000px;
             opacity: 1;
             overflow: hidden;
@@ -259,7 +262,9 @@
         }
 
         section.collapsed p,
-        section.collapsed .command-grid {
+        section.collapsed .command-grid,
+        #eventView.collapsed p,
+        #eventView.collapsed .command-grid {
             max-height: 0;
             opacity: 0;
             margin-top: 0;
@@ -267,7 +272,9 @@
         }
 
         section.instant-collapse p,
-        section.instant-collapse .command-grid {
+        section.instant-collapse .command-grid,
+        #eventView.instant-collapse p,
+        #eventView.instant-collapse .command-grid {
             transition: none !important;
         }
 
