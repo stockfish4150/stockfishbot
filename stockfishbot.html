@@ -666,6 +666,28 @@
         [data-lucide="user-shield"] { stroke: #3b82f6; }
         [data-lucide="toolbox"] { stroke: #ef4444; }
         [data-lucide="settings"] { stroke: #64748b; }
+        [data-lucide="gift"] { stroke: #f59e0b; }
+
+        .sidebar-divider {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        #eventView {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        main.mode-event .search-container,
+        main.mode-event section,
+        main.mode-event .bottom-spacer {
+            display: none !important;
+        }
+
+        main.mode-event #eventView {
+            display: block !important;
+        }
     </style>
 </head>
 <body>
@@ -754,6 +776,17 @@
                 </ul>
             </li>
         </ul>
+
+        <div class="sidebar-divider">
+            <ul class="sidebar-nav">
+                <li class="sidebar-category">
+                    <a href="javascript:void(0)">이벤트 안내 <span class="toggle-arrow">v</span></a>
+                    <ul class="sidebar-submenu">
+                        <li><a href="#eventView"><i data-lucide="gift"></i> 이벤트</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
 
         <div class="sidebar-links">
             <ul class="sidebar-nav">
@@ -1234,6 +1267,17 @@
             </div>
         </section>
 
+        <div id="eventView">
+            <h2 class="section-title"><i data-lucide="gift"></i> 이벤트</h2>
+            <p style="color: var(--text-muted); margin-bottom: 2rem;">현재 진행 중인 이벤트를 확인하세요.</p>
+            <div class="command-grid">
+                <div class="command-card">
+                    <div class="command-title">진행 중인 이벤트가 없습니다.</div>
+                    <div class="command-desc">새로운 이벤트가 시작되면 이곳에 표시됩니다.</div>
+                </div>
+            </div>
+        </div>
+
         <div id="bottom-spacer" class="bottom-spacer">
             <span class="bottom-logo">Stockfishbot</span>
         </div>
@@ -1245,6 +1289,7 @@
         document.getElementById('start-btn').addEventListener('click', () => {
             document.getElementById('intro-page').classList.add('intro-hidden');
             document.body.classList.add('started');
+            document.querySelector('.main-content').classList.remove('mode-event');
 
             document.querySelectorAll('section').forEach(sec => {
                 if (!sec.classList.contains('collapsed')) {
@@ -1290,6 +1335,7 @@
             card.addEventListener('click', function() {
                 document.getElementById('intro-page').classList.add('intro-hidden');
                 document.body.classList.add('started');
+                document.querySelector('.main-content').classList.remove('mode-event');
 
                 document.querySelectorAll('section').forEach(sec => {
                     if (!sec.classList.contains('collapsed')) {
@@ -1386,6 +1432,17 @@
                 }
 
                 const targetId = this.getAttribute('href').substring(1);
+
+                if (targetId === 'eventView') {
+                    document.querySelector('.main-content').classList.add('mode-event');
+                    navLinks.forEach(nav => nav.classList.remove('active'));
+                    this.classList.add('active');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    return;
+                } else {
+                    document.querySelector('.main-content').classList.remove('mode-event');
+                }
+
                 const targetSection = document.getElementById(targetId);
 
                 if (targetSection) {
@@ -1569,6 +1626,7 @@
         document.querySelector('.top-header-title').addEventListener('click', () => {
             document.getElementById('intro-page').classList.remove('intro-hidden');
             document.body.classList.remove('started');
+            document.querySelector('.main-content').classList.remove('mode-event');
 
             document.querySelectorAll('section').forEach(sec => {
                 if (!sec.classList.contains('collapsed')) {
