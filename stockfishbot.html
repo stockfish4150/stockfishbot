@@ -1159,24 +1159,9 @@
             <p style="margin-bottom: 1.5rem; color: var(--text-muted);">스톡피시봇을 관리합니다.</p>
             <div class="command-grid">
                 <div class="command-card">
-                    <div class="command-title"><span class="command-code">정지/해제</span> 관련</div>
-                    <div class="command-desc">악성 유저들을 정지시키거나 해제합니다.</div>
-                    <div class="command-example">[예시]<br>/굴비 정지 @어그로꾼<br>/낚시 해제 @닉네임</div>
-                </div>
-                <div class="command-card">
-                    <div class="command-title"><span class="command-code">동기화</span> 관련</div>
-                    <div class="command-desc">유저 데이터를 백업합니다.</div>
-                    <div class="command-example">[예시]<br>/굴비 전체동기화</div>
-                </div>
-                <div class="command-card">
-                    <div class="command-title"><span class="command-code">불러오기</span> 관련</div>
-                    <div class="command-desc">유저 데이터를 불러옵니다.</div>
-                    <div class="command-example">[예시]<br>/굴비 전체동기화</div>
-                </div>
-                <div class="command-card">
-                    <div class="command-title"><span class="command-code">유저 데이터</span> 관련</div>
-                    <div class="command-desc">유저 데이터를 관리합니다.</div>
-                    <div class="command-example">[예시]<br>/굴비 텍스트한도 추가 @닉네임 100</div>
+                    <div class="command-title"><span class="command-code">정보</span></div>
+                    <div class="command-desc">정보를 확인합니다.</div>
+                    <div class="command-example">[예시]<br>/hi</div>
                 </div>
             </div>
         </section>
@@ -1187,45 +1172,33 @@
             <div class="command-grid">
                 
                 <div class="command-card">
-                    <div class="command-title"><span class="command-code">실시간 날씨 조회</span></div>
-                    <div class="command-desc">특정 지역명을 입력하면 현재 온도, 습도, 풍속 정보를 즉시 확인합니다.</div>
-                    <div class="command-example">[예시]<br>/날씨 강남구<br>/날씨 부산</div>
+                    <div class="command-title"><span class="command-code">날씨</span></div>
+                    <div class="command-desc">기상청 제공 정보를 기반으로 날씨를 확인합니다.</div>
+                    <div class="command-example">[예시]<br>/오늘날씨 서울</div>
                 </div>
 
                 <div class="command-card">
-                    <div class="command-title"><span class="command-code">상세 대기질 정보</span></div>
-                    <div class="command-desc">날씨 조회 시 종합 대기 질 상태와 함께 미세먼지(PM10), 초미세먼지(PM2.5), 오존(O3), 이산화황(SO2), 일산화탄소(CO), 이산화질소(NO2) 수치가 함께 출력됩니다.</div>
-                    <div class="command-example">[예시]<br>/날씨 제주</div>
+                    <div class="command-title"><span class="command-code">영한 변환</span></div>
+                    <div class="command-desc">영어로 입력된 한국어 타자를 한국어로 변환합니다.</div>
+                    <div class="command-example">[예시]<br>/영한 gksrmf qusghks</div>
                 </div>
 
                 <div class="command-card">
-                    <div class="command-title"><span class="command-code">3일 단기 일기예보</span></div>
-                    <div class="command-desc">오늘, 내일, 모레에 해당하는 주간 날씨 정보가 함께 제공됩니다. 오전/오후의 강수 확률, 하늘 상태, 최저 및 최고 온도를 요약해서 보여줍니다.</div>
-                    <div class="command-example">[예시]<br>/날씨 대전</div>
+                    <div class="command-title"><span class="command-code">국기</span></div>
+                    <div class="command-desc">이모티콘을 보내서 국기 이름을 확인합니다.</div>
+                    <div class="command-example">[예시]<br>🇰🇷</div>
                 </div>
 
                 <div class="command-card">
-                    <div class="command-title"><span class="command-code">영타 → 한타 변환</span></div>
-                    <div class="command-desc">한/영 키를 누르지 않고 영어 자판 상태로 잘못 입력한 글자를 정상적인 한글로 변환해 줍니다.</div>
-                    <div class="command-example">[예시]<br>/영한 [오타내용]<br>(예: /영한 gksrmf → 한글)</div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-title"><span class="command-code">국기 검색</span></div>
-                    <div class="command-desc">DB에 등록된 국가 이름을 입력하면 해당 국가의 국기 등 저장된 정보를 출력합니다.</div>
-                    <div class="command-example">[예시]<br>대한민국<br>미국</div>
-                </div>
-
-                <div class="command-card">
-                    <div class="command-title"><span class="command-code">주가 검색</span></div>
-                    <div class="command-desc">특정 기업의 종목명을 입력하면 포털 검색 결과를 기반으로 실시간 현재 주가 정보를 조회합니다.</div>
+                    <div class="command-title"><span class="command-code">주가</span></div>
+                    <div class="command-desc">네이터 검색을 기반으로 주가를 확인합니다.</div>
                     <div class="command-example">[예시]<br>/주가 삼성전자<br>/주가 카카오</div>
                 </div>
 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">닉네임 변경 감지</span> <span class="badge info">자동</span></div>
-                    <div class="command-desc">지정된 채팅방에서 유저가 닉네임을 변경할 경우, 이를 봇이 3초 단위로 자동 감지하여 전체 닉네임 변경 히스토리와 함께 알려줍니다.</div>
-                    <div class="command-example">[예시]<br>(자동 감지)<br>닉네임 변경 감지<br>이전닉네임 -> 새닉네임</div>
+                    <div class="command-desc">닉네임이 변경을 알려줍니다.</div>
+                    <div class="command-example">[예시]<br>닉네임 변경 감지<br>이전닉네임 -> 새닉네임</div>
                 </div>
 
             </div>
@@ -1236,22 +1209,22 @@
             <p style="margin-bottom: 1.5rem; color: var(--text-muted);">스톡피시봇 시스템 상태를 확인합니다.</p>
             <div class="command-grid">
                 <div class="command-card">
-                    <div class="command-title"><span class="command-code">프로필 사진 확인</span></div>
-                    <div class="command-desc">원하는 유저의 프로필 사진을 확인합니다.</div>
-                    <div class="command-example">[예시]<br>!profile<br>!profile @닉네임</div>
+                    <div class="command-title"><span class="command-code">프로필 사진</span></div>
+                    <div class="command-desc">프로필 사진을 확인합니다.</div>
+                    <div class="command-example">[예시]<br>!profile (답장으로)<br>!profile @닉네임</div>
                 </div>
                 <div class="command-card">
-                    <div class="command-title"><span class="command-code">봇 상태 확인</span></div>
-                    <div class="command-desc">봇의 CPU, RAM, 배터리 상태, 업타임, 네트워크 속도 등 현재 상태를 확인합니다.</div>
+                    <div class="command-title"><span class="command-code">봇 상태</span></div>
+                    <div class="command-desc">봇의 상태를 확인합니다.</div>
                     <div class="command-example">[예시]<br>/봇</div>
                 </div>
                 <div class="command-card">
-                    <div class="command-title"><span class="command-code">핑 확인</span></div>
+                    <div class="command-title"><span class="command-code">반응 속도</span></div>
                     <div class="command-desc">봇의 반응 속도를 확인합니다.</div>
                     <div class="command-example">[예시]<br>!ping</div>
                 </div>
                 <div class="command-card">
-                    <div class="command-title"><span class="command-code">식별자 코드 확인</span></div>
+                    <div class="command-title"><span class="command-code">해시값 확인</span></div>
                     <div class="command-desc">유저 아이디 또는 채팅방 아이디를 확인합니다.</div>
                     <div class="command-example">[예시]<br>!userid @닉네임<br>!chatid</div>
                 </div>
