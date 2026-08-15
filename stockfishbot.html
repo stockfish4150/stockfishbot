@@ -1030,6 +1030,20 @@
             </div>
         </section>
 
+        <section id="game-quiz">
+            <h2 class="section-title"><i data-lucide="clipboard-check"></i> 퀴즈</h2>
+            <p style="margin-bottom: 1.5rem; color: var(--text-muted);">낚시에만 집중할 수 있는 낚시 게임입니다.</p>
+            <div class="command-grid">
+
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">도움말</span></div>
+                    <div class="command-desc">퀴즈 게임에 대한 도움말을 확인합니다.</div>
+                    <div class="command-example">[예시]<br>/퀴즈 도움말</div>
+                </div>
+
+            </div>
+        </section>
+
         <section id="game-semantle">
             <h2 class="section-title"><i data-lucide="puzzle"></i> 꼬맨틀</h2>
             <p style="margin-bottom: 1.5rem; color: var(--text-muted);">단어의 의미(유사도)를 기반으로 비밀 단어를 추리하는 게임입니다.</p>
@@ -1037,37 +1051,37 @@
                 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">단어 제출</span></div>
-                    <div class="command-desc">AI가 분석한 단어 간의 의미 유사도를 바탕으로 정답을 유추합니다. (100점에 가까울수록 정답과 일치)</div>
-                    <div class="command-example">[예시]<br>ㅐ 사과 (로컬 게임)<br>ㅂ 우주 (글로벌 게임)</div>
+                    <div class="command-desc">의미적 유사도를 기반으로 정답을 추측합니다.</div>
+                    <div class="command-example">[예시]<br>ㅐ 사과 (로컬)<br>ㅂ 우주 (글로벌)</div>
                 </div>
 
                 <div class="command-card">
-                    <div class="command-title"><span class="command-code">계정 등록 및 연동</span></div>
-                    <div class="command-desc">꼬맨틀 게임 기록을 저장하기 위해 계정을 등록하거나, 다른 방에서도 이어서 하기 위해 연동합니다.</div>
+                    <div class="command-title"><span class="command-code">계정 등록 & 연동</span></div>
+                    <div class="command-desc">계정을 등록 & 연동합니다.</div>
                     <div class="command-example">[예시]<br>/꼬맨틀 등록 @닉네임<br>/꼬맨틀 연동 @닉네임<br>/꼬맨틀 연동 확인 @닉네임</div>
                 </div>
 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">출석</span></div>
-                    <div class="command-desc">매일 출석하여 코인과 경험치(EXP)를 받습니다. 연속 출석 일수 및 랭킹에 따라 보상이 증가합니다.</div>
+                    <div class="command-desc">매일 출석하여 코인과 경험치를 받습니다. 연속 출석 일수 및 랭킹에 따라 보상이 증가합니다.</div>
                     <div class="command-example">[예시]<br>/ㄲㅁㅌ<br>/꼬맨틀 출석<br>/꼬맨틀 출석부</div>
                 </div>
 
                 <div class="command-card">
-                    <div class="command-title"><span class="command-code">프로필 및 랭킹</span></div>
+                    <div class="command-title"><span class="command-code">프로필 & 랭킹</span></div>
                     <div class="command-desc">나의 레벨, 남은 코인, 획득한 경험치 및 승리 횟수를 확인하거나 정답자 랭킹을 조회합니다.</div>
                     <div class="command-example">[예시]<br>/꼬맨틀 프로필<br>/꼬맨틀 프로필 @닉네임<br>/정답자랭킹</div>
                 </div>
 
                 <div class="command-card">
-                    <div class="command-title"><span class="command-code">힌트 제공</span></div>
-                    <div class="command-desc">모은 코인을 사용하여 정답에 대한 결정적인 힌트를 확인합니다.</div>
-                    <div class="command-example">[예시]<br>/꼬맨틀 힌트 유사도 [글로벌] (15 coin 소모)<br>/꼬맨틀 힌트 초성 [글로벌] (20 coin 소모)</div>
+                    <div class="command-title"><span class="command-code">힌트</span></div>
+                    <div class="command-desc">힌트를 확인합니다.<br>유사도 힌트는 15 코인, 초성 힌트는 20 코인입니다.</div>
+                    <div class="command-example">[예시]<br>/꼬맨틀 힌트 유사도<br>/꼬맨틀 힌트 초성 글로벌</div>
                 </div>
 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">관리자 기능</span> <span class="badge admin">관리자</span></div>
-                    <div class="command-desc">관리자 전용 기능으로, 솔버(Solver)를 이용해 오차를 계산하거나 유저 데이터를 수정합니다.</div>
+                    <div class="command-desc">관리자 전용 기능입니다.</div>
                     <div class="command-example">[예시]<br>/솔버 (줄바꿈 후 [단어, 유사도] 입력)<br>/정답확인 [글로벌]<br>/꼬맨틀 [코인/경험치/승리] [추가/설정] @닉네임 값</div>
                 </div>
 
