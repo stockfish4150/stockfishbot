@@ -1551,6 +1551,36 @@
             searchInput.focus();
         });
 
+        const eventSearchInput = document.getElementById('eventSearchInput');
+        const clearEventSearchBtn = document.getElementById('clearEventSearchBtn');
+        
+        eventSearchInput.addEventListener('input', function(e) {
+            const term = e.target.value.toLowerCase();
+
+            if (term.length > 0) {
+                clearEventSearchBtn.style.display = 'block';
+            } else {
+                clearEventSearchBtn.style.display = 'none';
+            }
+
+            const eventCards = document.querySelectorAll('#eventView .command-card');
+            eventCards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                if (text.includes(term)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        clearEventSearchBtn.addEventListener('click', function() {
+            eventSearchInput.value = '';
+            clearEventSearchBtn.style.display = 'none';
+            eventSearchInput.dispatchEvent(new Event('input'));
+            eventSearchInput.focus();
+        });
+
         document.querySelectorAll('.section-title').forEach(title => {
             title.addEventListener('click', () => {
                 const currentSection = title.parentElement;
