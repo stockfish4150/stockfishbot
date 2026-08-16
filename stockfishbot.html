@@ -1702,10 +1702,6 @@
 
                 if (targetId === 'eventView') {
                     document.querySelector('.main-content').classList.add('mode-event');
-                    navLinks.forEach(nav => nav.classList.remove('active'));
-                    this.classList.add('active');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                    return;
                 } else {
                     document.querySelector('.main-content').classList.remove('mode-event');
                 }
@@ -1731,6 +1727,13 @@
                                 setTimeout(() => sec.classList.remove('instant-collapse'), 50);
                             }
                         });
+
+                        const eView = document.getElementById('eventView');
+                        if (eView && targetSection !== eView && !eView.classList.contains('collapsed')) {
+                            eView.classList.add('instant-collapse');
+                            eView.classList.add('collapsed');
+                            setTimeout(() => eView.classList.remove('instant-collapse'), 50);
+                        }
 
                         const bottomSpacer = document.getElementById('bottom-spacer');
                         bottomSpacer.style.height = '200px';
@@ -1886,6 +1889,13 @@
                             setTimeout(() => sec.classList.remove('instant-collapse'), 50); 
                         }
                     });
+
+                    const eViewTitle = document.getElementById('eventView');
+                    if (eViewTitle && currentSection !== eViewTitle && !eViewTitle.classList.contains('collapsed')) {
+                        eViewTitle.classList.add('instant-collapse');
+                        eViewTitle.classList.add('collapsed');
+                        setTimeout(() => eViewTitle.classList.remove('instant-collapse'), 50);
+                    }
                     
                     const bottomSpacer = document.getElementById('bottom-spacer');
                     bottomSpacer.style.height = '200px';
