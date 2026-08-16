@@ -29,6 +29,19 @@
             --sidebar-header: #1d1d1f;
             --sidebar-sub-bg: rgba(0,0,0,0.02);
             --arrow-svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2386868b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='18 15 12 9 6 15'%3E%3C/polyline%3E%3C/svg%3E");
+
+            --badge-vip-bg: rgba(217, 119, 6, 0.1);
+            --badge-vip-text: #d97706;
+            --badge-vip-border: rgba(217, 119, 6, 0.2);
+            --badge-admin-bg: rgba(90, 103, 216, 0.1);
+            --badge-admin-text: #5a67d8;
+            --badge-admin-border: rgba(90, 103, 216, 0.2);
+            --badge-info-bg: rgba(134, 134, 139, 0.1);
+            --badge-info-text: #86868b;
+            --badge-info-border: rgba(134, 134, 139, 0.2);
+            --badge-tool-bg: rgba(40, 167, 69, 0.1);
+            --badge-tool-text: #28a745;
+            --badge-tool-border: rgba(40, 167, 69, 0.2);
         }
 
         body.dark-mode {
@@ -50,6 +63,19 @@
             --sidebar-header: #ffffff;
             --sidebar-sub-bg: rgba(255,255,255,0.03);
             --arrow-svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a1a1a6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='18 15 12 9 6 15'%3E%3C/polyline%3E%3C/svg%3E");
+
+            --badge-vip-bg: rgba(251, 191, 36, 0.15);
+            --badge-vip-text: #fbd38d;
+            --badge-vip-border: rgba(251, 191, 36, 0.25);
+            --badge-admin-bg: rgba(127, 156, 245, 0.15);
+            --badge-admin-text: #a3bffa;
+            --badge-admin-border: rgba(127, 156, 245, 0.25);
+            --badge-info-bg: rgba(161, 161, 166, 0.15);
+            --badge-info-text: #a1a1a6;
+            --badge-info-border: rgba(161, 161, 166, 0.25);
+            --badge-tool-bg: rgba(74, 222, 128, 0.15);
+            --badge-tool-text: #86efac;
+            --badge-tool-border: rgba(74, 222, 128, 0.25);
         }
 
         body.dark-mode .about-container,
@@ -412,20 +438,20 @@
         }
 
         .badge {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 600;
-            padding: 0.3rem 0.7rem;
-            border-radius: 20px;
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
             display: inline-flex;
             align-items: center;
             letter-spacing: 0.02em;
             border: 1px solid transparent;
         }
 
-        .badge.vip { background-color: #fffbeb; color: #b45309; border-color: #fde68a; }
-        .badge.admin { background-color: #f0f9ff; color: #0284c7; border-color: #bae6fd; }
-        .badge.info { background-color: #f8fafc; color: #475569; border-color: #cbd5e1; }
-        .badge.tool { background-color: #ecfdf5; color: #059669; border-color: #a7f3d0; }
+        .badge.vip { background-color: var(--badge-vip-bg); color: var(--badge-vip-text); border-color: var(--badge-vip-border); }
+        .badge.admin { background-color: var(--badge-admin-bg); color: var(--badge-admin-text); border-color: var(--badge-admin-border); }
+        .badge.info { background-color: var(--badge-info-bg); color: var(--badge-info-text); border-color: var(--badge-info-border); }
+        .badge.tool { background-color: var(--badge-tool-bg); color: var(--badge-tool-text); border-color: var(--badge-tool-border); }
 
         .top-header {
             display: none;
