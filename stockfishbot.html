@@ -9,18 +9,18 @@
         @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap');
 
         :root {
-            --primary-color: #4f46e5;
-            --primary-hover: #4338ca;
+            --primary-color: #0284c7;
+            --primary-hover: #0369a1;
             --secondary-color: #f8fafc;
             --text-main: #334155;
             --text-muted: #64748b;
-            --sidebar-bg: #0f172a;
+            --sidebar-bg: #0b1121;
             --sidebar-text: #f8fafc;
-            --sidebar-hover: #1e293b;
+            --sidebar-hover: #151e32;
             --card-bg: #ffffff;
             --border-color: rgba(226, 232, 240, 0.8);
-            --code-bg: #f1f5f9;
-            --code-text: #ea580c;
+            --code-bg: #f0f9ff;
+            --code-text: #0284c7;
             --vip-bg: #fef08a;
             --vip-text: #854d0e;
         }
@@ -260,10 +260,14 @@
 
         section p, section .command-grid,
         #eventView p, #eventView .command-grid {
-            max-height: 5000px;
+            max-height: 2500px;
             opacity: 1;
+            transform: translateY(0);
             overflow: hidden;
-            transition: max-height 0.4s ease-in-out, opacity 0.3s ease-in-out, margin 0.4s ease-in-out;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+                        opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+                        margin 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                        transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         section.collapsed p, section.collapsed .command-grid,
@@ -272,6 +276,7 @@
             opacity: 0;
             margin-top: 0;
             margin-bottom: 0;
+            transform: translateY(-10px);
         }
 
         section.instant-collapse p, section.instant-collapse .command-grid,
@@ -352,12 +357,13 @@
             display: inline-flex;
             align-items: center;
             letter-spacing: 0.02em;
+            border: 1px solid transparent;
         }
 
-        .badge.vip { background-color: #fef3c7; color: #b45309; }
-        .badge.admin { background-color: #e0e7ff; color: #4338ca; }
-        .badge.info { background-color: #f1f5f9; color: #475569; }
-        .badge.tool { background-color: #dcfce7; color: #166534; }
+        .badge.vip { background-color: #fffbeb; color: #b45309; border-color: #fde68a; }
+        .badge.admin { background-color: #f0f9ff; color: #0284c7; border-color: #bae6fd; }
+        .badge.info { background-color: #f8fafc; color: #475569; border-color: #cbd5e1; }
+        .badge.tool { background-color: #ecfdf5; color: #059669; border-color: #a7f3d0; }
 
         .top-header {
             display: none;
@@ -528,18 +534,7 @@
         
         .sidebar [data-lucide] { stroke: currentColor; }
         
-        section [data-lucide="pin"], .intro-card [data-lucide="pin"] { stroke: #ef4444; }
-        section [data-lucide="bot"], .intro-card [data-lucide="bot"] { stroke: #8b5cf6; }
-        section [data-lucide="gamepad-2"], .intro-card [data-lucide="gamepad-2"] { stroke: #10b981; }
-        section [data-lucide="fishing-rod"], .intro-card [data-lucide="fishing-rod"] { stroke: #3b82f6; }
-        section [data-lucide="puzzle"], .intro-card [data-lucide="puzzle"] { stroke: #10b981; }
-        section [data-lucide="hat-glasses"], .intro-card [data-lucide="hat-glasses"] { stroke: #f59e0b; }
-        section [data-lucide="swords"], .intro-card [data-lucide="swords"] { stroke: #64748b; }
-        section [data-lucide="message-square-text"], .intro-card [data-lucide="message-square-text"] { stroke: #d97706; }
-        section [data-lucide="user-shield"], .intro-card [data-lucide="user-shield"] { stroke: #3b82f6; }
-        section [data-lucide="toolbox"], .intro-card [data-lucide="toolbox"] { stroke: #ec4899; }
-        section [data-lucide="settings"], .intro-card [data-lucide="settings"] { stroke: #64748b; }
-        section [data-lucide="gift"], .intro-card [data-lucide="gift"] { stroke: #f43f5e; }
+        section [data-lucide], .intro-card [data-lucide] { stroke: var(--primary-color); }
 
         .sidebar-divider {
             margin-top: 1rem;
