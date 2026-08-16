@@ -2033,7 +2033,7 @@
                         setTimeout(() => {
                             window.scrollTo({
                                 top: targetScrollY,
-                                behavior: 'smooth'
+                                behavior: 'auto'
                             });
                         }, 10);
                     }
@@ -2198,7 +2198,7 @@
                     setTimeout(() => {
                         window.scrollTo({
                             top: targetScrollY,
-                            behavior: 'smooth'
+                            behavior: 'auto'
                         });
                     }, 10);
                 }
@@ -2208,7 +2208,7 @@
         document.querySelector('.top-header-title').addEventListener('click', () => {
             document.body.classList.remove('mode-support', 'mode-policy');
             document.body.classList.add('mode-about');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({ top: 0, behavior: 'auto' });
 
             if (window.innerWidth <= 768) {
                 sidebar.classList.remove('open');
@@ -2312,7 +2312,7 @@
                 const targetScrollY = targetSection.offsetTop - 150;
                 window.scrollTo({
                     top: targetScrollY > 0 ? targetScrollY : 0,
-                    behavior: 'smooth'
+                    behavior: 'auto'
                 });
             }, 50);
         }
@@ -2333,7 +2333,7 @@
                 e.preventDefault();
                 document.body.classList.remove('mode-support', 'mode-policy');
                 document.body.classList.add('mode-about');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                window.scrollTo({ top: 0, behavior: 'auto' });
             });
         });
 
@@ -2342,7 +2342,7 @@
                 e.preventDefault();
                 document.body.classList.remove('mode-about', 'mode-policy');
                 document.body.classList.add('mode-support');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                window.scrollTo({ top: 0, behavior: 'auto' });
             });
         });
 
@@ -2351,7 +2351,7 @@
                 e.preventDefault();
                 document.body.classList.remove('mode-about', 'mode-support');
                 document.body.classList.add('mode-policy');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                window.scrollTo({ top: 0, behavior: 'auto' });
             });
         });
 
@@ -2433,7 +2433,7 @@
             }
         });
         scrollTopBtn.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({ top: 0, behavior: 'auto' });
         });
 
         document.querySelectorAll('.command-example').forEach(example => {
