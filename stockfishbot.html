@@ -25,6 +25,18 @@
             --vip-text: #854d0e;
         }
 
+        body.dark-mode {
+            --primary-color: #38bdf8;
+            --primary-hover: #7dd3fc;
+            --secondary-color: #0f172a;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --card-bg: #1e293b;
+            --border-color: rgba(51, 65, 85, 0.8);
+            --code-bg: #0f172a;
+            --code-text: #38bdf8;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -336,7 +348,7 @@
         }
 
         .command-example {
-            margin-top: auto;
+            margin-top: 0.5rem;
             background-color: #1e293b;
             color: #f8fafc;
             padding: 1.2rem 1.4rem;
@@ -877,6 +889,16 @@
             .policy-title { font-size: 2.2rem; }
             .policy-card { padding: 1.8rem; }
         }
+
+        .command-example { position: relative; padding-right: 3rem; }
+        .copy-btn { position: absolute; top: 0.8rem; right: 0.8rem; background: rgba(255,255,255,0.1); border: none; color: #f8fafc; border-radius: 6px; padding: 0.4rem; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; }
+        .copy-btn:hover { background: rgba(255,255,255,0.2); transform: scale(1.05); }
+        .scroll-top-btn { position: fixed; bottom: 2rem; right: 2rem; background: var(--primary-color); color: #ffffff; border: none; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 1000; opacity: 0; visibility: hidden; transition: all 0.3s ease; transform: translateY(20px); }
+        .scroll-top-btn.show { opacity: 1; visibility: visible; transform: translateY(0); }
+        .scroll-top-btn:hover { background: var(--primary-hover); transform: translateY(-3px); }
+        .dark-mode-toggle { background: transparent; border: none; color: var(--text-main); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0.5rem; border-radius: 50%; transition: all 0.2s ease; margin-left: 1rem; }
+        .dark-mode-toggle:hover { background-color: rgba(0,0,0,0.05); }
+        body.dark-mode .dark-mode-toggle:hover { background-color: rgba(255,255,255,0.1); }
     </style>
 </head>
 <body class="started mode-about">
@@ -1081,6 +1103,7 @@
                 <ul class="sidebar-submenu">
                     <li><a href="#tool"><i data-lucide="toolbox"></i> 도구</a></li>
                     <li><a href="#system"><i data-lucide="settings"></i> 시스템</a></li>
+                    <li><a href="#faq"><i data-lucide="help-circle"></i> FAQ</a></li>
                 </ul>
             </li>
         </ul>
@@ -1129,6 +1152,7 @@
 
     <header id="top-header" class="top-header">
         <span class="top-header-title">Stockfishbot</span>
+        <button id="darkModeToggle" class="dark-mode-toggle" title="다크 모드"><i data-lucide="moon"></i></button>
         
         <div class="search-container header-search-container main-search-container">
             <input type="text" id="searchInput" class="search-input" placeholder="궁금한 기능을 검색해보세요">
@@ -1157,7 +1181,10 @@
                     <div class="command-desc">스톡피시봇은 대표적으로 AI, 게임, 도구, 관리 기능이 있습니다. 이외에도 기타 기능들이 많으며, 궁금한 기능은 개발자가 알려줍니다.</div>
                     <div class="command-example">그럼 무엇을 해야 되나요?<br>아래의 기능들을 바로 사용할 수 있습니다.</div>
                     <div class="command-desc"><br></div>
-                    <div class="command-example">[AI] 굴비야 안녕?<br>[게임] /낚시 시작<br>[도구] /오늘날씨 서울<br>[관리] /hi</div>
+                    <div class="command-example">굴비야 안녕?</div>
+                    <div class="command-example">/퀴즈 국기</div>
+                    <div class="command-example">/오늘날씨 서울</div>
+                    <div class="command-example">/hi</div>
                 </div>
 
                 <div class="command-card">
@@ -1179,31 +1206,36 @@
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">기본적인 질문</span> <span class="badge admin">일반</span></div>
                     <div class="command-desc">굴비에게 질문합니다.<br>[모델] Gemini 3.5 Flash Lite</div>
-                    <div class="command-example">[예시]<br>굴비야 파이썬이 뭐야?<br>hey gulbi hello!</div>
+                    <div class="command-example">[예시]<br>굴비야 파이썬이 뭐야?</div>
+                    <div class="command-example">hey gulbi hello!</div>
                 </div>
 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">웹 검색</span> <span class="badge admin">도구</span></div>
                     <div class="command-desc">모델명 뒤에 <code>-s</code>를 붙이면 웹 검색을 통해 답변합니다.</div>
-                    <div class="command-example">[예시]<br>굴비야-s 오늘 서울 날씨 어때?<br>/g5.6sol-s,최신 핫한 AI 뉴스 기사 3개를 알려줘.</div>
+                    <div class="command-example">[예시]<br>굴비야-s 오늘 서울 날씨 어때?</div>
+                    <div class="command-example">/g5.6sol-s,최신 핫한 AI 뉴스 기사 3개를 알려줘.</div>
                 </div>
 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">파일 분석</span> <span class="badge admin">일반</span></div>
                     <div class="command-desc">텍스트, 이미지, 동영상, 음원, 문서 등의 파일을 분석합니다.<br><b>※ 꼭 분석할 파일에 답장해주세요.</b></div>
-                    <div class="command-example">[예시]<br>/굴비 분석,g5.6sol-s,이 사진에 있는 문장을 한국어로 번역해줘.<br>/굴비 분석,g3.7f,이 문서를 요약해줘.</div>
+                    <div class="command-example">[예시]<br>/굴비 분석,g5.6sol-s,이 사진에 있는 문장을 한국어로 번역해줘.</div>
+                    <div class="command-example">/굴비 분석,g3.7f,이 문서를 요약해줘.</div>
                 </div>
 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">대화 & 상호작용 요약</span> <span class="badge admin">일반</span></div>
                     <div class="command-desc">대화 또는 상호작용을 요약합니다.</div>
-                    <div class="command-example">[예시]<br>/굴비 대화요약 지금까지의 대화 내용을 바탕으로 토론할만한 주제들을 3가지 추천해줘.(선택)<br>/굴비 상호작용요약 사람들 간의 친밀도를 분석해줘.(선택)</div>
+                    <div class="command-example">[예시]<br>/굴비 대화요약 지금까지의 대화 내용을 바탕으로 토론할만한 주제들을 3가지 추천해줘.(선택)</div>
+                    <div class="command-example">/굴비 상호작용요약 사람들 간의 친밀도를 분석해줘.(선택)</div>
                 </div>
 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">이미지 생성</span> <span class="badge admin">일반</span></div>
                     <div class="command-desc">이미지를 생성합니다.</div>
-                    <div class="command-example">[예시]<br>/굴비 그려줘 은하수가 내리는 아름다운 밤하늘<br>/gi2,맑은 하늘</div>
+                    <div class="command-example">[예시]<br>/굴비 그려줘 은하수가 내리는 아름다운 밤하늘</div>
+                    <div class="command-example">/gi2,맑은 하늘</div>
                 </div>
 
                 <div class="command-card">
@@ -1215,43 +1247,57 @@
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">페르소나</span> <span class="badge admin">기능</span></div>
                     <div class="command-desc">페르소나를 설정하여 질문합니다.</div>
-                    <div class="command-example">[예시]<br>코딩굴비야-s irispy-client 기본 구조 예제 코드를 알려줘.<br>/g5.6sol,메뉴,오늘 야식으로 좋은 거 5개만 알려줘.</div>
+                    <div class="command-example">[예시]<br>코딩굴비야-s irispy-client 기본 구조 예제 코드를 알려줘.</div>
+                    <div class="command-example">/g5.6sol,메뉴,오늘 야식으로 좋은 거 5개만 알려줘.</div>
                 </div>
 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">모델/페르소나 설정</span> <span class="badge admin">기능</span></div>
                     <div class="command-desc">'굴비야'라고 부를 때 사용할 모델/페르소나를 설정합니다.</div>
-                    <div class="command-example">[예시]<br>/굴비 모델 설정 g5.6sol<br>/굴비 페르소나 설정 애교</div>
+                    <div class="command-example">[예시]<br>/굴비 모델 설정 g5.6sol</div>
+                    <div class="command-example">/굴비 페르소나 설정 애교</div>
                 </div>
 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">프리셋</span> <span class="badge admin">기능</span></div>
                     <div class="command-desc">명령어를 일일이 입력하기 귀찮을 때 씁니다.</div>
-                    <div class="command-example">[예시]<br>/오늘운세, /해몽 [내용], /오늘타로<br>/날씨 [지역], /번역 [문장], /요약 [내용]<br>/맞춤법 [문장], /메뉴 [점심/저녁]<br>/천체이미지 [천체]</div>
+                    <div class="command-example">[예시]<br>/오늘운세, /해몽 [내용], /오늘타로</div>
+                    <div class="command-example">/날씨 [지역], /번역 [문장], /요약 [내용]</div>
+                    <div class="command-example">/맞춤법 [문장], /메뉴 [점심/저녁]</div>
+                    <div class="command-example">/천체이미지 [천체]</div>
                 </div>
 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">커스텀 채팅</span> <span class="badge admin">기능</span></div>
                     <div class="command-desc">언제든지 원하는 곳에서 채팅을 시작할 수 있습니다.</div>
-                    <div class="command-example">[예시]<br>/굴비 채팅시작 [방이름]====[페르소나]<br>/굴비 채팅종료<br>/굴비 채팅리스트<br>/굴비 채팅삭제 [방이름]</div>
+                    <div class="command-example">[예시]<br>/굴비 채팅시작 [방이름]====[페르소나]</div>
+                    <div class="command-example">/굴비 채팅종료</div>
+                    <div class="command-example">/굴비 채팅리스트</div>
+                    <div class="command-example">/굴비 채팅삭제 [방이름]</div>
                 </div>
 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">내 정보 확인</span> <span class="badge admin">정보</span></div>
                     <div class="command-desc">나의 남은 텍스트/이미지 한도, 기억력, 기본 모델 등을 확인합니다.</div>
-                    <div class="command-example">[예시]<br>/굴비 내정보<br>/gulbi myinfo</div>
+                    <div class="command-example">[예시]<br>/굴비 내정보</div>
+                    <div class="command-example">/gulbi myinfo</div>
                 </div>
 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">감정쓰레기통</span> <span class="badge admin">기타</span></div>
                     <div class="command-desc">내 말에 공감해주고 다 들어주는 감정쓰레기통입니다.<br>감쓰통을 킨 상태에서는 내가 하는 모든 말에 답장합니다.</div>
-                    <div class="command-example">[예시]<br>/감쓰통 on<br>/감쓰통 off<br>/감쓰통 초기화</div>
+                    <div class="command-example">[예시]<br>/감쓰통 on</div>
+                    <div class="command-example">/감쓰통 off</div>
+                    <div class="command-example">/감쓰통 초기화</div>
                 </div>
 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">계정 연동/관리</span> <span class="badge admin">기타</span></div>
                     <div class="command-desc">계정을 연동/관리합니다.</div>
-                    <div class="command-example">[예시]<br>/굴비 등록 @닉네임<br>/굴비 연동 @닉네임<br>/굴비 연동 확인 [코드]<br>/굴비 로그아웃 @닉네임</div>
+                    <div class="command-example">[예시]<br>/굴비 등록 @닉네임</div>
+                    <div class="command-example">/굴비 연동 @닉네임</div>
+                    <div class="command-example">/굴비 연동 확인 [코드]</div>
+                    <div class="command-example">/굴비 로그아웃 @닉네임</div>
                 </div>
 
                 <div class="command-card">
@@ -1277,79 +1323,123 @@
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">출석</span></div>
                     <div class="command-desc">매일 출석하여 다양한 보상을 받습니다.</div>
-                    <div class="command-example">[예시]<br>/ㅊㅊ<br>/출석<br>/낚시 출석</div>
+                    <div class="command-example">[예시]<br>/ㅊㅊ</div>
+                    <div class="command-example">/출석</div>
+                    <div class="command-example">/낚시 출석</div>
                 </div>
 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">낚시</span></div>
                     <div class="command-desc">낚시를 하여 보상을 획득합니다.</div>
-                    <div class="command-example">[예시]<br>/낚시 시작<br><br><b>VIP는 아래의 명령어를 사용할 수 있습니다: </b><br>/황금 낚시 시작 (최대 100번)</div>
+                    <div class="command-example">[예시]<br>/낚시 시작</div>
+                    <div class="command-desc" style="margin-bottom: 0.5rem; margin-top: 1rem;"><b>VIP는 아래의 명령어를 사용할 수 있습니다: </b></div>
+                    <div class="command-example">/황금 낚시 시작 (최대 100번)</div>
                 </div>
 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">가방, 도감 & 프로필</span></div>
                     <div class="command-desc">나의 모든 정보가 담긴 낚시 프로필 또는 물고기 가방 & 도감을 확인합니다.</div>
-                    <div class="command-example">[예시]<br>/낚시 프로필<br>/낚시 프로필 @닉네임<br>/낚시 가방<br>/낚시 도감</div>
+                    <div class="command-example">[예시]<br>/낚시 프로필</div>
+                    <div class="command-example">/낚시 프로필 @닉네임</div>
+                    <div class="command-example">/낚시 가방</div>
+                    <div class="command-example">/낚시 도감</div>
                 </div>
 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">판매 및 거래소</span></div>
                     <div class="command-desc">나의 가방에 있는 모든 물고기를 판매하거나, 유저들끼리 서로 거래합니다.</div>
-                    <div class="command-example">[예시]<br>/낚시 판매<br>/낚시 거래소리스트<br>/낚시 거래소 등록 [보석] [개수] [가격]<br>/낚시 거래소 구매 [보석] [번호] [개수]<br>/낚시 거래소 수정/취소 [보석]</div>
+                    <div class="command-example">[예시]<br>/낚시 판매</div>
+                    <div class="command-example">/낚시 거래소리스트</div>
+                    <div class="command-example">/낚시 거래소 등록 [보석] [개수] [가격]</div>
+                    <div class="command-example">/낚시 거래소 구매 [보석] [번호] [개수]</div>
+                    <div class="command-example">/낚시 거래소 수정/취소 [보석]</div>
                 </div>
 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">상점 및 식사</span></div>
                     <div class="command-desc">상점에서 아이템 혹은 식량을 구매하고 사용합니다.</div>
-                    <div class="command-example">[예시]<br>/낚시 미끼구매 [개수]<br>/낚시 아이템 구매 [번호] [개수]<br>/낚시 식사 [개수]<br><br><b>VIP는 아래의 명령어를 사용할 수 있습니다: </b><br>/낚시 일괄 미끼구매, /낚시 일괄 식사<br>/낚시 일괄 아이템 구매 [번호]</div>
+                    <div class="command-example">[예시]<br>/낚시 미끼구매 [개수]</div>
+                    <div class="command-example">/낚시 아이템 구매 [번호] [개수]</div>
+                    <div class="command-example">/낚시 식사 [개수]</div>
+                    <div class="command-desc" style="margin-bottom: 0.5rem; margin-top: 1rem;"><b>VIP는 아래의 명령어를 사용할 수 있습니다: </b></div>
+                    <div class="command-example">/낚시 일괄 미끼구매</div>
+                    <div class="command-example">/낚시 일괄 식사</div>
+                    <div class="command-example">/낚시 일괄 아이템 구매 [번호]</div>
                 </div>
 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">강화 및 수리 & 회복</span></div>
                     <div class="command-desc">낚싯대를 강화하거나 수리하고, 배고픔을 회복합니다.</div>
-                    <div class="command-example">[예시]<br>/낚시 수리 [횟수]<br>/낚시 강화 [횟수]<br>/낚시 내구도/미끼통/배고픔 강화 [횟수]<br><br><b>VIP는 아래의 명령어를 사용할 수 있습니다: </b><br>/낚시 일괄 수리<br>/낚시 일괄 강화</div>
+                    <div class="command-example">[예시]<br>/낚시 수리 [횟수]</div>
+                    <div class="command-example">/낚시 강화 [횟수]</div>
+                    <div class="command-example">/낚시 내구도/미끼통/배고픔 강화 [횟수]</div>
+                    <div class="command-desc" style="margin-bottom: 0.5rem; margin-top: 1rem;"><b>VIP는 아래의 명령어를 사용할 수 있습니다: </b></div>
+                    <div class="command-example">/낚시 일괄 수리</div>
+                    <div class="command-example">/낚시 일괄 강화</div>
                 </div>
 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">인챈트 & 재능</span></div>
                     <div class="command-desc">보석으로 인챈트를 하거나 재능 점수로 재능을 강화해 영구 버프 시너지를 얻습니다.</div>
-                    <div class="command-example">[예시]<br>/낚시 인챈트 [보석] [횟수]<br>/낚시 재능 강화 [번호] [횟수]<br><br><b>VIP는 아래의 명령어를 사용할 수 있습니다: </b><br>/낚시 일괄 인챈트 [보석]<br>/낚시 일괄 재능 강화 [번호]</div>
+                    <div class="command-example">[예시]<br>/낚시 인챈트 [보석] [횟수]</div>
+                    <div class="command-example">/낚시 재능 강화 [번호] [횟수]</div>
+                    <div class="command-desc" style="margin-bottom: 0.5rem; margin-top: 1rem;"><b>VIP는 아래의 명령어를 사용할 수 있습니다: </b></div>
+                    <div class="command-example">/낚시 일괄 인챈트 [보석]</div>
+                    <div class="command-example">/낚시 일괄 재능 강화 [번호]</div>
                 </div>
 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">퀘스트</span></div>
                     <div class="command-desc">퀘스트를 확인하고, 수집 & 스킵합니다.</div>
-                    <div class="command-example">[예시]<br>/낚시 퀘스트<br>/낚시 퀘스트 @닉네임<br>/낚시 퀘스트 스킵 [번호]<br>/낚시 퀘스트 수집 [번호]</div>
+                    <div class="command-example">[예시]<br>/낚시 퀘스트</div>
+                    <div class="command-example">/낚시 퀘스트 @닉네임</div>
+                    <div class="command-example">/낚시 퀘스트 스킵 [번호]</div>
+                    <div class="command-example">/낚시 퀘스트 수집 [번호]</div>
                 </div>
 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">클랜</span></div>
                     <div class="command-desc">클랜을 창설하고, 서로 경쟁하며, 함께 성장합니다.</div>
-                    <div class="command-example">[예시]<br>/낚시 클랜 창설 [클랜명]<br>/낚시 클랜 가입 [클랜명]<br>/낚시 클랜 승인/거절/추방 @닉네임<br>/낚시 클랜 탈퇴/삭제<br>/낚시 클랜정보 [클랜명]</div>
+                    <div class="command-example">[예시]<br>/낚시 클랜 창설 [클랜명]</div>
+                    <div class="command-example">/낚시 클랜 가입 [클랜명]</div>
+                    <div class="command-example">/낚시 클랜 승인/거절/추방 @닉네임</div>
+                    <div class="command-example">/낚시 클랜 탈퇴/삭제</div>
+                    <div class="command-example">/낚시 클랜정보 [클랜명]</div>
                 </div>
 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">랭킹</span></div>
                     <div class="command-desc">낚시 게임의 다양한 랭킹을 확인합니다.</div>
-                    <div class="command-example">[예시]<br>/낚시 송금 @닉네임 [금액]<br>/낚시 미끼선물 @닉네임 [개수]<br>/낚시 랭킹<br>/낚시 기부 랭킹 골드/미끼</div>
+                    <div class="command-example">[예시]<br>/낚시 송금 @닉네임 [금액]</div>
+                    <div class="command-example">/낚시 미끼선물 @닉네임 [개수]</div>
+                    <div class="command-example">/낚시 랭킹</div>
+                    <div class="command-example">/낚시 기부 랭킹 골드/미끼</div>
                 </div>
 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">선물</span></div>
                     <div class="command-desc">유저 간 서로 자원을 선물하고 공유합니다.</div>
-                    <div class="command-example">[예시]<br>/낚시 송금 @닉네임 [금액]<br>/낚시 미끼선물 @닉네임 [개수]</div>
+                    <div class="command-example">[예시]<br>/낚시 송금 @닉네임 [금액]</div>
+                    <div class="command-example">/낚시 미끼선물 @닉네임 [개수]</div>
                 </div>
 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">자동 명령어</span> <span class="badge vip">VIP</span></div>
                     <div class="command-desc">낚시에만 집중할 수 있도록 귀찮은 명령어들을 자동화합니다.</div>
-                    <div class="command-example">[예시]<br>/낚시 자동 [수리/식사] 활성화<br>/낚시 자동 [미끼구매/식량 구매] 활성화<br>/낚시 자동 아이템 구매 활성화<br>/낚시 자동 퀘스트 수집 활성화<br>/낚시 자동 판매 활성화</div>
+                    <div class="command-example">[예시]<br>/낚시 자동 [수리/식사] 활성화</div>
+                    <div class="command-example">/낚시 자동 [미끼구매/식량 구매] 활성화</div>
+                    <div class="command-example">/낚시 자동 아이템 구매 활성화</div>
+                    <div class="command-example">/낚시 자동 퀘스트 수집 활성화</div>
+                    <div class="command-example">/낚시 자동 판매 활성화</div>
                 </div>
                 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">정보</span></div>
                     <div class="command-desc">낚시 게임에 대한 다양한 정보를 확인합니다..</div>
-                    <div class="command-example">[예시]<br>/낚시 명령어<br>/낚시 보석<br>/낚시 확률표<br>/낚시 아이템리스트</div>
+                    <div class="command-example">[예시]<br>/낚시 명령어</div>
+                    <div class="command-example">/낚시 보석</div>
+                    <div class="command-example">/낚시 확률표</div>
+                    <div class="command-example">/낚시 아이템리스트</div>
                 </div>
 
             </div>
@@ -1363,7 +1453,10 @@
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">계정 등록 및 연동</span></div>
                     <div class="command-desc">계정을 등록하거나 연동하여 이전 데이터를 불러옵니다.</div>
-                    <div class="command-example">[예시]<br>/낚시 등록 @닉네임<br>/낚시 연동 @닉네임<br>/낚시 연동 확인 [ID]<br>/낚시 로그아웃 @닉네임</div>
+                    <div class="command-example">[예시]<br>/낚시 등록 @닉네임</div>
+                    <div class="command-example">/낚시 연동 @닉네임</div>
+                    <div class="command-example">/낚시 연동 확인 [ID]</div>
+                    <div class="command-example">/낚시 로그아웃 @닉네임</div>
                 </div>
 
                 <div class="command-card">
@@ -1375,7 +1468,8 @@
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">가방</span></div>
                     <div class="command-desc">나의 물고기 가방을 확인합니다.</div>
-                    <div class="command-example">[예시]<br>/낚시 가방<br>/낚시 가방 @닉네임</div>
+                    <div class="command-example">[예시]<br>/낚시 가방</div>
+                    <div class="command-example">/낚시 가방 @닉네임</div>
                 </div>
 
                 <div class="command-card">
@@ -1415,37 +1509,47 @@
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">단어 제출</span></div>
                     <div class="command-desc">의미적 유사도를 기반으로 정답을 추측합니다.</div>
-                    <div class="command-example">[예시]<br>ㅐ 사과 (로컬)<br>ㅂ 우주 (글로벌)</div>
+                    <div class="command-example">[예시]<br>ㅐ 사과</div>
+                    <div class="command-example">ㅂ 우주</div>
                 </div>
 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">계정 등록 & 연동</span></div>
                     <div class="command-desc">계정을 등록 & 연동합니다.</div>
-                    <div class="command-example">[예시]<br>/꼬맨틀 등록 @닉네임<br>/꼬맨틀 연동 @닉네임<br>/꼬맨틀 연동 확인 @닉네임</div>
+                    <div class="command-example">[예시]<br>/꼬맨틀 등록 @닉네임</div>
+                    <div class="command-example">/꼬맨틀 연동 @닉네임</div>
+                    <div class="command-example">/꼬맨틀 연동 확인 @닉네임</div>
                 </div>
 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">출석</span></div>
                     <div class="command-desc">매일 출석합니다.</div>
-                    <div class="command-example">[예시]<br>/ㄲㅁㅌ<br>/꼬맨틀 출석<br>/꼬맨틀 출석부</div>
+                    <div class="command-example">[예시]<br>/ㄲㅁㅌ</div>
+                    <div class="command-example">/꼬맨틀 출석</div>
+                    <div class="command-example">/꼬맨틀 출석부</div>
                 </div>
 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">프로필 & 랭킹</span></div>
                     <div class="command-desc">나의 레벨, 남은 코인, 획득한 경험치 및 승리 횟수를 확인하거나 정답자 랭킹을 조회합니다.</div>
-                    <div class="command-example">[예시]<br>/꼬맨틀 프로필<br>/꼬맨틀 프로필 @닉네임<br>/정답자랭킹</div>
+                    <div class="command-example">[예시]<br>/꼬맨틀 프로필</div>
+                    <div class="command-example">/꼬맨틀 프로필 @닉네임</div>
+                    <div class="command-example">/정답자랭킹</div>
                 </div>
 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">힌트</span></div>
                     <div class="command-desc">힌트를 확인합니다.<br>유사도 힌트는 15 코인, 초성 힌트는 20 코인입니다.</div>
-                    <div class="command-example">[예시]<br>/꼬맨틀 힌트 유사도<br>/꼬맨틀 힌트 초성 글로벌</div>
+                    <div class="command-example">[예시]<br>/꼬맨틀 힌트 유사도</div>
+                    <div class="command-example">/꼬맨틀 힌트 초성 글로벌</div>
                 </div>
 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">관리자 기능</span> <span class="badge admin">관리자</span></div>
                     <div class="command-desc">관리자 전용 기능입니다.</div>
-                    <div class="command-example">[예시]<br>/솔버 사과, 13.65<br>바나나, 10.34<br>...<br>/정답확인 [글로벌]<br>/꼬맨틀 [코인/경험치/승리] [추가/설정] @닉네임 값</div>
+                    <div class="command-example">[예시]<br>/솔버 사과, 13.65<br>바나나, 10.34</div>
+                    <div class="command-example">/정답확인</div>
+                    <div class="command-example">/꼬맨틀 [코인/경험치/승리] [추가/설정] @닉네임 값</div>
                 </div>
 
             </div>
@@ -1459,7 +1563,8 @@
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">방 만들기 & 참가</span></div>
                     <div class="command-desc">방을 만들거나, 원하는 게임에 참가합니다.</div>
-                    <div class="command-example">[예시]<br>/마피아개최 [방이름]<br>/마피아참가 [방이름]_[방번호] @[닉네임]</div>
+                    <div class="command-example">[예시]<br>/마피아개최 [방이름]</div>
+                    <div class="command-example">/마피아참가 [방이름]_[방번호] @[닉네임]</div>
                 </div>
 
                 <div class="command-card">
@@ -1471,13 +1576,16 @@
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">능력</span></div>
                     <div class="command-desc">능력을 사용합니다.</div>
-                    <div class="command-example">[마피아] /마피아지목 @닉네임<br>[의사] /의사치료 @닉네임<br>[경찰] /경찰조사 @닉네임</div>
+                    <div class="command-example">[예시]<br>[마피아] /마피아지목 @닉네임</div>
+                    <div class="command-example">[의사] /의사치료 @닉네임</div>
+                    <div class="command-example">[경찰] /경찰조사 @닉네임</div>
                 </div>
 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">회의 & 투표</span></div>
                     <div class="command-desc">회의 & 투표를 진행합니다.<br></div>
-                    <div class="command-example">[예시]<br>/투표 @닉네임<br>/투표 패스</div>
+                    <div class="command-example">[예시]<br>/투표 @닉네임</div>
+                    <div class="command-example">/투표 패스</div>
                 </div>
 
             </div>
@@ -1555,7 +1663,7 @@
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">주가</span></div>
                     <div class="command-desc">네이터 검색을 기반으로 주가를 확인합니다.</div>
-                    <div class="command-example">[예시]<br>/주가 삼성전자<br>/주가 카카오</div>
+                    <div class="command-example">[예시]<br>/주가 삼성전자</div>
                 </div>
 
                 <div class="command-card">
@@ -1574,7 +1682,8 @@
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">프로필 사진</span></div>
                     <div class="command-desc">프로필 사진을 확인합니다.</div>
-                    <div class="command-example">[예시]<br>!profile (답장으로)<br>!profile @닉네임</div>
+                    <div class="command-example">[예시]<br>!profile</div>
+                    <div class="command-example">!profile @닉네임</div>
                 </div>
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">봇 상태</span></div>
@@ -1589,7 +1698,23 @@
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">해시값 확인</span></div>
                     <div class="command-desc">유저 아이디 또는 채팅방 아이디를 확인합니다.</div>
-                    <div class="command-example">[예시]<br>!userid @닉네임<br>!chatid</div>
+                    <div class="command-example">[예시]<br>!userid @닉네임</div>
+                    <div class="command-example">!chatid</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="faq">
+            <h2 class="section-title"><i data-lucide="help-circle"></i> FAQ</h2>
+            <p style="margin-bottom: 1.5rem; color: var(--text-muted);">자주 묻는 질문과 답변입니다.</p>
+            <div class="command-grid">
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">봇 추가는 어떻게 하나요?</span></div>
+                    <div class="command-desc">카카오톡 오픈채팅방이나 디스코드 서버에 봇을 초대하려면 메뉴 하단의 후원/문의 탭을 통해 개발자에게 1대1로 문의해주세요.</div>
+                </div>
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">데이터가 초기화되었어요.</span></div>
+                    <div class="command-desc">카카오톡 프로필이나 닉네임을 변경한 경우 연동이 풀릴 수 있습니다. '/[기능] 연동 @이전닉네임' 명령어를 채팅방에 입력하여 기존 데이터를 불러올 수 있습니다.</div>
                 </div>
             </div>
         </section>
@@ -1626,6 +1751,8 @@
         </div>
 
     </main>
+
+    <button id="scrollTopBtn" class="scroll-top-btn" title="위로 가기"><i data-lucide="arrow-up"></i></button>
 
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
@@ -2111,6 +2238,59 @@
                 }
             });
         });
+
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const iconElement = darkModeToggle.querySelector('i');
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                iconElement.setAttribute('data-lucide', 'sun');
+            } else {
+                iconElement.setAttribute('data-lucide', 'moon');
+            }
+            lucide.createIcons();
+        });
+
+        const scrollTopBtn = document.getElementById('scrollTopBtn');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                scrollTopBtn.classList.add('show');
+            } else {
+                scrollTopBtn.classList.remove('show');
+            }
+        });
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        document.querySelectorAll('.command-example').forEach(example => {
+            const copyBtn = document.createElement('button');
+            copyBtn.className = 'copy-btn';
+            copyBtn.title = '명령어 복사';
+            copyBtn.innerHTML = '<i data-lucide="copy" style="width:16px;height:16px;"></i>';
+            
+            copyBtn.addEventListener('click', () => {
+                let textToCopy = example.innerHTML
+                    .replace(/<button.*?>.*?<\/button>/g, '')
+                    .replace(/<br\s*[\/]?>/gi, '\n')
+                    .replace(/<[^>]*>?/gm, '')
+                    .replace(/\[예시\]\n/g, '')
+                    .trim();
+                
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    copyBtn.innerHTML = '<i data-lucide="check" style="width:16px;height:16px;color:#4ade80;"></i>';
+                    lucide.createIcons();
+                    setTimeout(() => {
+                        copyBtn.innerHTML = '<i data-lucide="copy" style="width:16px;height:16px;"></i>';
+                        lucide.createIcons();
+                    }, 2000);
+                });
+            });
+            
+            example.appendChild(copyBtn);
+        });
+        
+        lucide.createIcons();
     </script>
 </body>
 </html>
