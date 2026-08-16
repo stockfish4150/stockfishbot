@@ -1629,6 +1629,15 @@
 
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
+        document.querySelectorAll('section').forEach(sec => {
+            if (sec.id !== 'intro') {
+                sec.classList.add('collapsed');
+            }
+        });
+        if (document.getElementById('eventView')) {
+            document.getElementById('eventView').classList.add('collapsed');
+        }
+
         const menuToggleBtn = document.getElementById('menu-toggle-btn');
         const sidebar = document.querySelector('.sidebar');
         const sidebarOverlay = document.getElementById('sidebar-overlay');
