@@ -270,14 +270,29 @@
         .main-content {
             margin-left: 280px;
             flex: 1;
-            padding: calc(3rem + 60px) 4rem 4rem 4rem;
+            padding: calc(3rem + 120px) 4rem 4rem 4rem;
             max-width: 1400px;
             margin-right: auto;
         }
 
+        .search-bar-wrapper {
+            position: absolute;
+            top: 100%;
+            left: 280px;
+            width: calc(100% - 280px);
+            padding: 0.8rem 4rem;
+            background-color: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
         .header-search-container {
             position: relative;
-            flex: 1; max-width: 400px; margin-right: 2rem; margin-left: 0;
+            flex: 1; max-width: 600px; margin: 0;
             display: flex; align-items: center;
         }
 
@@ -729,15 +744,16 @@
             .main-content {
                 margin-left: 0;
                 padding: 1.5rem;
-                padding-top: calc(60px + 1.5rem);
+                padding-top: calc(120px + 1.5rem);
                 padding-bottom: 3.5rem;
             }
             .command-grid { grid-template-columns: 1fr; }
             .section-title { font-size: 1.5rem; margin-top: 2rem;}
 
             .top-header {
-                flex-wrap: nowrap; height: auto; padding: 0.8rem 1.5rem; gap: 1rem;
+                flex-wrap: nowrap; height: 60px; padding: 0 1.5rem; gap: 1rem;
                 justify-content: flex-start;
+                align-items: center;
             }
             .menu-toggle-btn {
                 display: block; order: 0; margin-right: 0.5rem; margin-left: 0;
@@ -748,8 +764,13 @@
             .top-header-title {
                 order: 2; margin-right: auto;
             }
+            .search-bar-wrapper {
+                left: 0;
+                width: 100%;
+                padding: 0.8rem 1.5rem;
+            }
             .header-search-container {
-                margin: 0; max-width: 100%; order: 3; flex: 1;
+                margin: 0; max-width: 100%; flex: 1;
             }
             
             .bottom-spacer {
@@ -1394,14 +1415,16 @@
         <span class="top-header-title">Stockfishbot</span>
         <button id="darkModeToggle" class="dark-mode-toggle" title="다크 모드"><i data-lucide="moon"></i></button>
         
-        <div class="search-container header-search-container main-search-container">
-            <input type="text" id="searchInput" class="search-input" placeholder="궁금한 기능을 검색해보세요">
-            <button type="button" id="clearSearchBtn" class="clear-search-btn">&times;</button>
-        </div>
+        <div class="search-bar-wrapper">
+            <div class="search-container header-search-container main-search-container">
+                <input type="text" id="searchInput" class="search-input" placeholder="궁금한 기능을 검색해보세요">
+                <button type="button" id="clearSearchBtn" class="clear-search-btn">&times;</button>
+            </div>
 
-        <div class="search-container header-search-container event-search-container">
-            <input type="text" id="eventSearchInput" class="search-input" placeholder="궁금한 이벤트를 검색해보세요">
-            <button type="button" id="clearEventSearchBtn" class="clear-search-btn">&times;</button>
+            <div class="search-container header-search-container event-search-container">
+                <input type="text" id="eventSearchInput" class="search-input" placeholder="궁금한 이벤트를 검색해보세요">
+                <button type="button" id="clearEventSearchBtn" class="clear-search-btn">&times;</button>
+            </div>
         </div>
 
         <button id="menu-toggle-btn" class="menu-toggle-btn">☰</button>
