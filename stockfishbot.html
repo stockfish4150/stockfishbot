@@ -2210,6 +2210,11 @@
             document.body.classList.add('mode-about');
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
+            if (window.innerWidth <= 768) {
+                sidebar.classList.remove('open');
+                sidebarOverlay.classList.remove('show');
+            }
+
             document.querySelector('.main-content').classList.remove('mode-event');
             
             document.querySelectorAll('section').forEach(sec => {
