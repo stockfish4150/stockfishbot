@@ -42,6 +42,8 @@
             word-break: keep-all;
         }
 
+        body:not(.started) { overflow: hidden; }
+
         .sidebar {
             width: 280px;
             background-color: var(--sidebar-bg);
@@ -388,18 +390,66 @@
         .bottom-spacer {
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
             height: 200px;
             margin-top: 4rem;
+            padding-top: 3rem;
+            border-top: 1px solid var(--border-color);
         }
 
-        .bottom-logo {
-            font-weight: 900;
-            font-size: 3rem;
-            color: #e2e8f0;
-            user-select: none;
+        .footer-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .footer-icon {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-title {
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: var(--text-main);
             font-family: 'Montserrat', sans-serif;
-            letter-spacing: -1px;
+            margin-bottom: 0.3rem;
+        }
+
+        .footer-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .footer-social a {
+            color: var(--text-muted);
+            display: inline-flex;
+            transition: color 0.2s ease;
+        }
+
+        .footer-social a:hover {
+            color: #ef4444;
         }
 
         .menu-toggle-btn {
@@ -549,8 +599,7 @@
         body:has(main.mode-event) .main-search-container { display: none !important; }
         body:has(main.mode-event) .event-search-container { display: flex !important; }
 
-        main.mode-event section,
-        main.mode-event .bottom-spacer { display: none !important; }
+        main.mode-event section { display: none !important; }
         main.mode-event #eventView { display: block !important; }
 
         @media (max-width: 768px) {
@@ -598,6 +647,230 @@
                 margin: 0; max-width: 100%; order: 3; flex: 1;
             }
         }
+
+        .about-container {
+            display: none;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #fdfbfb 0%, #f1f5f9 100%);
+            padding: 6rem 2rem;
+            position: absolute;
+            top: 0; left: 0; width: 100%;
+            z-index: 2000;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        body.mode-about .sidebar,
+        body.mode-about .top-header,
+        body.mode-about .main-content,
+        body.mode-about .intro-container { display: none !important; }
+        body.mode-about .about-container { display: flex; }
+
+        .about-content-wrapper {
+            max-width: 1100px; width: 100%; margin: 0 auto;
+            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .about-label {
+            color: #4f46e5; font-weight: 700; font-size: 1.1rem; margin-bottom: 1rem;
+        }
+
+        .about-title {
+            font-size: 3.2rem; font-weight: 800; color: #0f172a;
+            line-height: 1.3; margin-bottom: 1.5rem; letter-spacing: -0.03em;
+        }
+
+        .about-title span { color: #b45309; }
+
+        .about-desc {
+            font-size: 1.1rem; color: #64748b; margin-bottom: 3.5rem; line-height: 1.6;
+        }
+
+        .about-features {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem; margin-bottom: 3.5rem;
+        }
+
+        .about-feature-card {
+            background: #ffffff; border-radius: 16px; padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        }
+
+        .about-feature-icon { margin-bottom: 1.5rem; display: inline-flex; }
+        .about-feature-title { font-size: 1.25rem; font-weight: 700; color: #1e293b; margin-bottom: 0.75rem; }
+        .about-feature-desc { font-size: 0.95rem; color: #64748b; line-height: 1.6; word-break: keep-all; }
+
+        .about-buttons-row { display: flex; gap: 1rem; flex-wrap: wrap; }
+        
+        .about-btn {
+            padding: 0.9rem 2rem; border-radius: 8px; font-weight: 700; font-size: 1rem;
+            cursor: pointer; transition: all 0.2s; text-decoration: none;
+            display: inline-flex; align-items: center; gap: 0.5rem; font-family: inherit;
+        }
+
+        .about-btn-primary { background-color: #581c87; color: #ffffff; border: none; }
+        .about-btn-primary:hover { background-color: #4c1d95; transform: translateY(-2px); }
+
+        .about-btn-outline { background-color: transparent; color: #1e293b; border: 1px solid #cbd5e1; }
+        .about-btn-outline:hover { background-color: #ffffff; transform: translateY(-2px); }
+
+        @media (max-width: 768px) {
+            .about-title { font-size: 2.2rem; }
+        }
+
+        .support-container {
+            display: none;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #fdfbfb 0%, #f1f5f9 100%);
+            padding: 6rem 2rem;
+            position: absolute;
+            top: 0; left: 0; width: 100%;
+            z-index: 2000;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        body.mode-support .sidebar,
+        body.mode-support .top-header,
+        body.mode-support .main-content,
+        body.mode-support .intro-container,
+        body.mode-support .about-container { display: none !important; }
+        body.mode-support .support-container { display: flex; }
+
+        .support-content-wrapper {
+            max-width: 1100px; width: 100%; margin: 0 auto;
+            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .support-label {
+            color: #3b82f6; font-weight: 700; font-size: 1.1rem; margin-bottom: 1rem;
+        }
+
+        .support-title {
+            font-size: 3.2rem; font-weight: 800; color: #0f172a;
+            line-height: 1.3; margin-bottom: 1.5rem; letter-spacing: -0.03em;
+        }
+
+        .support-desc {
+            font-size: 1.1rem; color: #64748b; margin-bottom: 3.5rem; line-height: 1.6;
+        }
+
+        .support-features {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem; margin-bottom: 1.5rem;
+        }
+
+        .support-feature-card {
+            background: #ffffff; border-radius: 16px; padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            text-decoration: none; display: block;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .support-feature-card:hover {
+            transform: translateY(-4px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+        }
+
+        .support-feature-icon { margin-bottom: 1.5rem; display: inline-flex; }
+        .support-feature-title { font-size: 1.25rem; font-weight: 700; color: #1e293b; margin-bottom: 0.75rem; }
+        .support-feature-desc { font-size: 0.95rem; color: #64748b; line-height: 1.6; word-break: keep-all; }
+
+        .support-wide-card {
+            background: #ffffff; border-radius: 16px; padding: 2.5rem 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            margin-bottom: 3.5rem;
+        }
+        
+        .support-wide-card-title {
+            font-size: 1.25rem; font-weight: 700; color: #1e293b; margin-bottom: 1rem;
+        }
+        
+        .support-wide-card-desc {
+            font-size: 1rem; color: #64748b; line-height: 1.6; word-break: keep-all;
+        }
+        
+        .support-btn-back {
+            padding: 0.9rem 2rem; border-radius: 8px; font-weight: 700; font-size: 1rem;
+            cursor: pointer; transition: all 0.2s; text-decoration: none;
+            display: inline-flex; align-items: center; gap: 0.5rem; font-family: inherit;
+            background-color: transparent; color: #1e293b; border: 1px solid #cbd5e1;
+        }
+        
+        .support-btn-back:hover {
+            background-color: #ffffff; transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .support-title { font-size: 2.2rem; }
+            .support-features { grid-template-columns: 1fr; }
+        }
+
+        .policy-container {
+            display: none;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #fdfbfb 0%, #f1f5f9 100%);
+            padding: 6rem 2rem;
+            position: absolute;
+            top: 0; left: 0; width: 100%;
+            z-index: 2000;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        body.mode-policy .sidebar,
+        body.mode-policy .top-header,
+        body.mode-policy .main-content,
+        body.mode-policy .intro-container,
+        body.mode-policy .about-container,
+        body.mode-policy .support-container { display: none !important; }
+        body.mode-policy .policy-container { display: flex; }
+
+        .policy-content-wrapper {
+            max-width: 900px; width: 100%; margin: 0 auto;
+            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .policy-label {
+            color: #2563eb; font-weight: 700; font-size: 1.1rem; margin-bottom: 0.8rem;
+        }
+
+        .policy-title {
+            font-size: 3.2rem; font-weight: 800; color: #0f172a;
+            line-height: 1.3; margin-bottom: 3.5rem; letter-spacing: -0.03em;
+        }
+
+        .policy-cards {
+            display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 3.5rem;
+        }
+
+        .policy-card {
+            background: #ffffff; border-radius: 16px; padding: 2.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        }
+
+        .policy-card-title {
+            font-size: 1.3rem; font-weight: 800; color: #1e293b; margin-bottom: 1.2rem;
+        }
+
+        .policy-card-desc {
+            font-size: 1rem; color: #64748b; line-height: 1.7; word-break: keep-all;
+        }
+
+        .policy-btn-back {
+            padding: 0.9rem 2rem; border-radius: 8px; font-weight: 700; font-size: 1rem;
+            cursor: pointer; transition: all 0.2s; text-decoration: none;
+            display: inline-flex; align-items: center; gap: 0.5rem; font-family: inherit;
+            background-color: transparent; color: #1e293b; border: 1px solid #cbd5e1;
+        }
+        
+        .policy-btn-back:hover {
+            background-color: #ffffff; transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .policy-title { font-size: 2.2rem; }
+            .policy-card { padding: 1.8rem; }
+        }
     </style>
 </head>
 <body>
@@ -632,6 +905,168 @@
             </div>
 
             <button id="start-btn" class="start-button">사용 설명서 보기</button>
+        </div>
+    </div>
+
+    <div id="about-page" class="about-container">
+        <div class="about-content-wrapper">
+            <div class="about-label">About Stockfishbot</div>
+            <h1 class="about-title">오픈채팅방 운영에 필요한 기능을<br>카카오톡 <span>안에서 바로 실행</span></h1>
+            <p class="about-desc">Stockfishbot은 커뮤니티 운영, 게임, 포인트, AI 생성, 요약, 번역, 통계, 관리자 도구를 하나의 카카오톡 챗봇으로 묶은<br>운영형 자동화 봇입니다.</p>
+            
+            <div class="about-features">
+                <div class="about-feature-card">
+                    <div class="about-feature-icon"><i data-lucide="sparkles" style="color:#3b82f6; width:28px; height:28px;"></i></div>
+                    <div class="about-feature-title">AI 생성/분석</div>
+                    <div class="about-feature-desc">이미지 생성, 사진 분석, Gemini 대화, 요약.</div>
+                </div>
+                <div class="about-feature-card">
+                    <div class="about-feature-icon"><i data-lucide="bar-chart-2" style="color:#10b981; width:28px; height:28px;"></i></div>
+                    <div class="about-feature-title">랭킹/통계</div>
+                    <div class="about-feature-desc">출석, 채팅순위, 포인트, 키워드 집계.</div>
+                </div>
+                <div class="about-feature-card">
+                    <div class="about-feature-icon"><i data-lucide="gamepad-2" style="color:#ef4444; width:28px; height:28px;"></i></div>
+                    <div class="about-feature-title">게임/포인트</div>
+                    <div class="about-feature-desc">낚시, 꼬맨틀, 퀴즈, 마피아, 상점, 송금.</div>
+                </div>
+                <div class="about-feature-card">
+                    <div class="about-feature-icon"><i data-lucide="briefcase" style="color:#d97706; width:28px; height:28px;"></i></div>
+                    <div class="about-feature-title">운영 도구</div>
+                    <div class="about-feature-desc">번역, 일상생활 도구, 관리자 전용 기능.</div>
+                </div>
+            </div>
+
+            <div class="about-buttons-row">
+                <button id="about-back-btn" class="about-btn about-btn-primary"><i data-lucide="message-circle"></i> 기능 안내 보기</button>
+                <a href="https://open.kakao.com/o/suOL4d2h" target="_blank" class="about-btn about-btn-outline"><i data-lucide="send"></i> 신청하기</a>
+            </div>
+        </div>
+
+        <div class="bottom-spacer" style="width: 100%;">
+            <div class="footer-container">
+                <div class="footer-icon">
+                    <i data-lucide="bot" style="width: 42px; height: 42px; fill: #facc15; stroke: var(--text-main);"></i>
+                </div>
+                <div class="footer-title">Stockfishbot</div>
+                <div class="footer-subtitle">카카오톡 & 디스코드 동시 지원 무료봇</div>
+                <div class="footer-links">
+                    <a href="#about" class="link-about">소개</a>
+                    <a href="#intro" class="link-features">기능 안내</a>
+                    <a href="#support" class="link-support">후원/문의</a>
+                    <a href="#policy" class="link-policy">운영방침</a>
+                </div>
+                <div class="footer-social">
+                    <a href="#"><i data-lucide="youtube" style="width: 24px; height: 24px;"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="support-page" class="support-container">
+        <div class="support-content-wrapper">
+            <div class="support-label">Support</div>
+            <h1 class="support-title">후원 및 문의</h1>
+            <p class="support-desc">기능 오류, 개선 사항 건의, 맞춤 기능 추가, 또는 기타 문의는 오픈채팅으로 연락해주세요.</p>
+            
+            <div class="support-features">
+                <a href="https://gift.kakao.com/home" target="_blank" class="support-feature-card">
+                    <div class="support-feature-icon"><i data-lucide="gift" style="color:#eab308; width:32px; height:32px;"></i></div>
+                    <div class="support-feature-title">카카오 기프티콘</div>
+                    <div class="support-feature-desc">개발자에게 응원의 선물을 보냅니다.</div>
+                </a>
+                <a href="https://qr.kakaopay.com/FU43svaLj" target="_blank" class="support-feature-card">
+                    <div class="support-feature-icon"><i data-lucide="circle-dollar-sign" style="color:#eab308; width:32px; height:32px;"></i></div>
+                    <div class="support-feature-title">카카오페이 송금</div>
+                    <div class="support-feature-desc">스마트폰으로 간편하게 후원합니다.</div>
+                </a>
+                <a href="https://open.kakao.com/o/suOL4d2h" target="_blank" class="support-feature-card">
+                    <div class="support-feature-icon"><i data-lucide="headset" style="color:#3b82f6; width:32px; height:32px;"></i></div>
+                    <div class="support-feature-title">문의하기</div>
+                    <div class="support-feature-desc">기능 추가, 오류 상담 등을 진행합니다.</div>
+                </a>
+            </div>
+
+            <div class="support-wide-card">
+                <div class="support-wide-card-title">후원 및 혜택 안내</div>
+                <div class="support-wide-card-desc">스톡피시봇은 기본적으로 <b>무료</b>로 제공됩니다. 후원해주신 금액은 전액 AI API 사용 및 서버 유지 비용으로 사용되며, 후원자 분들께는 감사한 마음을 담아 낚시 게임 내 <b>황금 낚시, 일괄 처리 명령어</b> 등 소정의 VIP 혜택을 제공해 드립니다.</div>
+            </div>
+
+            <button id="support-back-btn" class="support-btn-back"><i data-lucide="arrow-left"></i> 돌아가기</button>
+        </div>
+
+        <div class="bottom-spacer" style="width: 100%;">
+            <div class="footer-container">
+                <div class="footer-icon">
+                    <i data-lucide="bot" style="width: 42px; height: 42px; fill: #facc15; stroke: var(--text-main);"></i>
+                </div>
+                <div class="footer-title">Stockfishbot</div>
+                <div class="footer-subtitle">카카오톡 & 디스코드 동시 지원 무료봇</div>
+                <div class="footer-links">
+                    <a href="#about" class="link-about">소개</a>
+                    <a href="#intro" class="link-features">기능 안내</a>
+                    <a href="#support" class="link-support">후원/문의</a>
+                    <a href="#policy" class="link-policy">운영방침</a>
+                </div>
+                <div class="footer-social">
+                    <a href="#"><i data-lucide="youtube" style="width: 24px; height: 24px;"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="policy-page" class="policy-container">
+        <div class="policy-content-wrapper">
+            <div class="policy-label">Policy</div>
+            <h1 class="policy-title">운영방침</h1>
+            
+            <div class="policy-cards">
+                <div class="policy-card">
+                    <div class="policy-card-title">서비스 범위</div>
+                    <div class="policy-card-desc">Stockfishbot은 카카오톡 및 디스코드 오픈채팅/개인채팅 운영 보조와 유저 편의를 위한 챗봇입니다. 방 성격과 요청 기능에 따라 제공 가능 범위가 달라질 수 있습니다.</div>
+                </div>
+                
+                <div class="policy-card">
+                    <div class="policy-card-title">운영 정책</div>
+                    <div class="policy-card-desc">기본 서비스는 <b>무료</b>로 제공됩니다. API 사용량, 맞춤 기능, 외부 서비스 연동, 생성형 AI 사용량이 큰 기능은 안정적인 봇 운영을 위해 부득이하게 제한이 있을 수 있으며, 후원 시 소정의 VIP 혜택(자동 명령어, 일괄 처리 등)이 제공됩니다.</div>
+                </div>
+                
+                <div class="policy-card">
+                    <div class="policy-card-title">개인정보 처리</div>
+                    <div class="policy-card-desc">봇 사용 과정에서 닉네임, 카카오톡/디스코드 고유 ID, 채팅 해시값, 게임 데이터 등을 수집합니다. 수집된 정보는 서비스 제공, 게임 통계, 시스템 유지보수 안내 목적으로만 사용합니다.</div>
+                </div>
+                
+                <div class="policy-card">
+                    <div class="policy-card-title">운영 제한</div>
+                    <div class="policy-card-desc">스팸, 불법 행위, 타인 권리 침해, 과도한 API 사용, 카카오톡/디스코드 이용 정책에 위반될 가능성이 있는 악의적인 요청은 사전 안내 없이 봇 사용이 영구 제한될 수 있습니다.</div>
+                </div>
+
+                <div class="policy-card">
+                    <div class="policy-card-title">후원 환불 및 서비스 중단</div>
+                    <div class="policy-card-desc">후원금은 즉시 서버 및 API 유지 비용으로 사용되므로, 단순 변심으로 인한 환불은 원칙적으로 불가합니다. 또한 서버 점검, API 오류 등 불가피한 사정으로 서비스가 일시 중단될 수 있습니다.</div>
+                </div>
+            </div>
+
+            <button id="policy-back-btn" class="policy-btn-back"><i data-lucide="arrow-left"></i> 돌아가기</button>
+        </div>
+
+        <div class="bottom-spacer" style="width: 100%;">
+            <div class="footer-container">
+                <div class="footer-icon">
+                    <i data-lucide="bot" style="width: 42px; height: 42px; fill: #facc15; stroke: var(--text-main);"></i>
+                </div>
+                <div class="footer-title">Stockfishbot</div>
+                <div class="footer-subtitle">카카오톡 & 디스코드 동시 지원 무료봇</div>
+                <div class="footer-links">
+                    <a href="#about" class="link-about">소개</a>
+                    <a href="#intro" class="link-features">기능 안내</a>
+                    <a href="#support" class="link-support">후원/문의</a>
+                    <a href="#policy" class="link-policy">운영방침</a>
+                </div>
+                <div class="footer-social">
+                    <a href="#"><i data-lucide="youtube" style="width: 24px; height: 24px;"></i></a>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1204,7 +1639,22 @@
         </div>
 
         <div id="bottom-spacer" class="bottom-spacer">
-            <span class="bottom-logo">Stockfishbot</span>
+            <div class="footer-container">
+                <div class="footer-icon">
+                    <i data-lucide="bot" style="width: 42px; height: 42px; fill: #facc15; stroke: var(--text-main);"></i>
+                </div>
+                <div class="footer-title">Stockfishbot</div>
+                <div class="footer-subtitle">카카오톡 & 디스코드 동시 지원 무료봇</div>
+                <div class="footer-links">
+                    <a href="#about" class="link-about">소개</a>
+                    <a href="#intro" class="link-features">기능 안내</a>
+                    <a href="#support" class="link-support">후원/문의</a>
+                    <a href="#policy" class="link-policy">운영방침</a>
+                </div>
+                <div class="footer-social">
+                    <a href="#"><i data-lucide="youtube" style="width: 24px; height: 24px;"></i></a>
+                </div>
+            </div>
         </div>
 
     </main>
@@ -1625,6 +2075,60 @@
         });
 
         lucide.createIcons();
+
+        document.getElementById('about-back-btn')?.addEventListener('click', () => {
+            document.body.classList.remove('mode-about');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        document.getElementById('support-back-btn')?.addEventListener('click', () => {
+            document.body.classList.remove('mode-support');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        document.getElementById('policy-back-btn')?.addEventListener('click', () => {
+            document.body.classList.remove('mode-policy');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        document.querySelectorAll('.link-about').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.body.classList.remove('mode-support', 'mode-policy');
+                document.body.classList.add('mode-about');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+
+        document.querySelectorAll('.link-support').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.body.classList.remove('mode-about', 'mode-policy');
+                document.body.classList.add('mode-support');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+
+        document.querySelectorAll('.link-policy').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.body.classList.remove('mode-about', 'mode-support');
+                document.body.classList.add('mode-policy');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+
+        document.querySelectorAll('.link-features').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.body.classList.remove('mode-about', 'mode-support', 'mode-policy');
+                
+                const introNavLink = document.querySelector('.sidebar-submenu li a[href="#intro"]');
+                if (introNavLink) {
+                    introNavLink.click();
+                }
+            });
+        });
     </script>
 </body>
 </html>
