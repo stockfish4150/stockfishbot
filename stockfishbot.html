@@ -14,15 +14,22 @@
             --secondary-color: #f8fafc;
             --text-main: #334155;
             --text-muted: #64748b;
-            --sidebar-bg: #0b1121;
-            --sidebar-text: #f8fafc;
-            --sidebar-hover: #151e32;
             --card-bg: #ffffff;
             --border-color: rgba(226, 232, 240, 0.8);
             --code-bg: #f0f9ff;
             --code-text: #0284c7;
             --vip-bg: #fef08a;
             --vip-text: #854d0e;
+            
+            /* 사이드바 화이트 모드 변수 추가 */
+            --sidebar-bg: #ffffff;
+            --sidebar-text: #334155;
+            --sidebar-text-muted: #64748b;
+            --sidebar-hover: #f1f5f9;
+            --sidebar-border: rgba(0,0,0,0.05);
+            --sidebar-header: #0f172a;
+            --sidebar-sub-bg: rgba(0,0,0,0.03);
+            --arrow-svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='18 15 12 9 6 15'%3E%3C/polyline%3E%3C/svg%3E");
         }
 
         body.dark-mode {
@@ -35,6 +42,49 @@
             --border-color: rgba(51, 65, 85, 0.8);
             --code-bg: #0f172a;
             --code-text: #38bdf8;
+            
+            /* 기존 사이드바 다크 모드 변수 보존 */
+            --sidebar-bg: #0b1121;
+            --sidebar-text: #f8fafc;
+            --sidebar-text-muted: rgba(255,255,255,0.6);
+            --sidebar-hover: #151e32;
+            --sidebar-border: rgba(255,255,255,0.05);
+            --sidebar-header: #ffffff;
+            --sidebar-sub-bg: rgba(0,0,0,0.2);
+            --arrow-svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='18 15 12 9 6 15'%3E%3C/polyline%3E%3C/svg%3E");
+        }
+
+        /* 기타 페이지 다크모드 대응 추가 */
+        body.dark-mode .about-container,
+        body.dark-mode .support-container,
+        body.dark-mode .policy-container {
+            background: var(--secondary-color);
+        }
+        body.dark-mode .about-title, body.dark-mode .support-title, body.dark-mode .policy-title,
+        body.dark-mode .about-feature-title, body.dark-mode .support-feature-title,
+        body.dark-mode .support-wide-card-title, body.dark-mode .policy-card-title {
+            color: var(--text-main);
+        }
+        body.dark-mode .about-desc, body.dark-mode .support-desc, body.dark-mode .policy-desc,
+        body.dark-mode .about-feature-desc, body.dark-mode .support-feature-desc,
+        body.dark-mode .support-wide-card-desc, body.dark-mode .policy-card-desc,
+        body.dark-mode .about-label, body.dark-mode .support-label, body.dark-mode .policy-label {
+            color: var(--text-muted);
+        }
+        body.dark-mode .about-feature-card, body.dark-mode .support-feature-card,
+        body.dark-mode .support-wide-card, body.dark-mode .policy-card {
+            background-color: var(--card-bg);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        body.dark-mode .about-btn-outline, body.dark-mode .support-btn-back, body.dark-mode .policy-btn-back {
+            color: var(--text-main);
+            border-color: var(--border-color);
+        }
+        body.dark-mode .about-btn-outline:hover, body.dark-mode .support-btn-back:hover, body.dark-mode .policy-btn-back:hover {
+            background-color: var(--card-bg);
+        }
+        body.dark-mode .top-header {
+            background-color: rgba(15, 23, 42, 0.85); /* 다크모드 전환 시 상단 불투명 영역 토글 */
         }
 
         * {
@@ -72,12 +122,12 @@
 
         .sidebar::-webkit-scrollbar { width: 6px; }
         .sidebar::-webkit-scrollbar-track { background: transparent; }
-        .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
-        .sidebar::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+        .sidebar::-webkit-scrollbar-thumb { background: var(--sidebar-border); border-radius: 10px; }
+        .sidebar::-webkit-scrollbar-thumb:hover { background: var(--sidebar-text-muted); }
 
         .sidebar-header {
             padding: 0 1.5rem 1.5rem 1.5rem;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid var(--sidebar-border);
             margin-bottom: 1rem;
         }
 
@@ -86,12 +136,13 @@
             font-weight: 700;
             letter-spacing: -0.5px;
             font-family: 'Montserrat', sans-serif;
-            color: #ffffff;
+            color: var(--sidebar-header);
         }
 
         .sidebar-header p {
             font-family: 'Montserrat', sans-serif;
             margin-top: 0.5rem !important;
+            color: var(--sidebar-text-muted) !important;
         }
 
         .sidebar-nav { list-style: none; }
@@ -101,7 +152,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 0.8rem 1.5rem;
-            color: rgba(255,255,255,0.9);
+            color: var(--sidebar-text);
             text-decoration: none;
             transition: all 0.2s ease;
             font-weight: 600;
@@ -111,7 +162,7 @@
 
         .sidebar-category > a:hover {
             background-color: var(--sidebar-hover);
-            color: #ffffff;
+            color: var(--sidebar-header);
         }
 
         .sidebar-submenu {
@@ -120,7 +171,7 @@
             opacity: 0;
             overflow: hidden;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            background-color: rgba(0,0,0,0.2);
+            background-color: var(--sidebar-sub-bg);
         }
 
         .sidebar-category.open .sidebar-submenu {
@@ -133,7 +184,7 @@
             align-items: center;
             gap: 0.75rem;
             padding: 0.7rem 1.5rem 0.7rem 2.5rem;
-            color: rgba(255,255,255,0.6);
+            color: var(--sidebar-text-muted);
             text-decoration: none;
             transition: all 0.2s ease;
             font-size: 0.95rem;
@@ -142,8 +193,8 @@
         }
 
         .sidebar-submenu li a:hover, .sidebar-submenu li a.active {
-            background-color: rgba(255,255,255,0.05);
-            color: #ffffff;
+            background-color: var(--sidebar-border);
+            color: var(--sidebar-header);
             border-left: 3px solid var(--primary-color);
         }
 
@@ -155,7 +206,7 @@
             width: 20px;
             height: 20px;
             font-size: 0;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='18 15 12 9 6 15'%3E%3C/polyline%3E%3C/svg%3E");
+            background-image: var(--arrow-svg);
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
@@ -170,7 +221,7 @@
         .sidebar-links {
             margin-top: 2rem;
             padding-top: 1rem;
-            border-top: 1px solid rgba(255,255,255,0.05);
+            border-top: 1px solid var(--sidebar-border);
         }
 
         .sidebar-links .sidebar-nav li a {
@@ -178,7 +229,7 @@
             align-items: center;
             gap: 0.75rem;
             padding: 0.8rem 1.5rem;
-            color: rgba(255,255,255,0.7);
+            color: var(--sidebar-text-muted);
             text-decoration: none;
             transition: all 0.2s ease;
             font-weight: 500;
@@ -186,8 +237,8 @@
         }
 
         .sidebar-links .sidebar-nav li a:hover {
-            background-color: rgba(255,255,255,0.05);
-            color: #ffffff;
+            background-color: var(--sidebar-border);
+            color: var(--sidebar-header);
         }
 
         .main-content {
@@ -200,7 +251,7 @@
 
         .header-search-container {
             position: relative;
-            flex: 1; max-width: 400px; margin: 0 2rem;
+            flex: 1; max-width: 400px; margin-right: 2rem; margin-left: 0;
             display: flex; align-items: center;
         }
 
@@ -397,6 +448,7 @@
             color: var(--text-main);
             font-family: 'Montserrat', sans-serif;
             cursor: pointer;
+            margin-right: auto;
         }
 
         .bottom-spacer {
@@ -601,7 +653,7 @@
         .sidebar-divider {
             margin-top: 1rem;
             padding-top: 1rem;
-            border-top: 1px solid rgba(255,255,255,0.05);
+            border-top: 1px solid var(--sidebar-border);
         }
 
         #eventView { display: none; animation: fadeIn 0.5s ease-out; }
@@ -650,14 +702,34 @@
                 justify-content: flex-start;
             }
             .menu-toggle-btn {
-                display: block; order: 1; margin-right: 0.5rem;
+                display: block; order: 0; margin-right: 0.5rem; margin-left: 0; /* 다크모드 버튼과 위치 스왑 */
+            }
+            #darkModeToggle {
+                order: 1; margin-left: 0; margin-right: 0.5rem; /* 다크모드 버튼과 위치 스왑 */
             }
             .top-header-title {
-                order: 2;
+                order: 2; margin-right: auto;
             }
             .header-search-container {
                 margin: 0; max-width: 100%; order: 3; flex: 1;
             }
+        }
+
+        .page-dark-mode-toggle-wrap {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            z-index: 2010;
+        }
+
+        .page-dark-mode-btn {
+            background: rgba(0,0,0,0.05);
+            width: 40px; height: 40px;
+            border-radius: 50%;
+        }
+
+        body.dark-mode .page-dark-mode-btn {
+            background: rgba(255,255,255,0.1);
         }
 
         .about-container {
@@ -681,6 +753,7 @@
         .about-content-wrapper {
             max-width: 1100px; width: 100%; margin: 0 auto;
             animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            position: relative;
         }
 
         .about-label {
@@ -758,6 +831,7 @@
         .support-content-wrapper {
             max-width: 1100px; width: 100%; margin: 0 auto;
             animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            position: relative;
         }
 
         .support-label {
@@ -846,6 +920,7 @@
         .policy-content-wrapper {
             max-width: 900px; width: 100%; margin: 0 auto;
             animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            position: relative;
         }
 
         .policy-label {
@@ -896,7 +971,7 @@
         .scroll-top-btn { position: fixed; bottom: 2rem; right: 2rem; background: var(--primary-color); color: #ffffff; border: none; border-radius: 50%; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 1000; opacity: 0; visibility: hidden; transition: all 0.3s ease; transform: translateY(20px); }
         .scroll-top-btn.show { opacity: 1; visibility: visible; transform: translateY(0); }
         .scroll-top-btn:hover { background: var(--primary-hover); transform: translateY(-3px); }
-        .dark-mode-toggle { background: transparent; border: none; color: var(--text-main); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0.5rem; border-radius: 50%; transition: all 0.2s ease; margin-left: 1rem; }
+        .dark-mode-toggle { background: transparent; border: none; color: var(--text-main); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0.5rem; border-radius: 50%; transition: all 0.2s ease; margin-left: auto; margin-right: 0.5rem; }
         .dark-mode-toggle:hover { background-color: rgba(0,0,0,0.05); }
         body.dark-mode .dark-mode-toggle:hover { background-color: rgba(255,255,255,0.1); }
     </style>
@@ -905,6 +980,9 @@
 
     <div id="about-page" class="about-container">
         <div class="about-content-wrapper">
+            <div class="page-dark-mode-toggle-wrap">
+                <button class="dark-mode-toggle page-dark-mode-btn" title="다크 모드"><i data-lucide="moon"></i></button>
+            </div>
             <div class="about-label">Stockfishbot Introduction</div>
             <h1 class="about-title">나만의 AI 비서를 <br><span>지금 바로 단톡방에서</span></h1>
             <p class="about-desc">Stockfishbot은 필요한 기능만 모아놓은 챗봇입니다.</p>
@@ -960,6 +1038,9 @@
 
     <div id="support-page" class="support-container">
         <div class="support-content-wrapper">
+            <div class="page-dark-mode-toggle-wrap">
+                <button class="dark-mode-toggle page-dark-mode-btn" title="다크 모드"><i data-lucide="moon"></i></button>
+            </div>
             <div class="support-label">Support</div>
             <h1 class="support-title">후원 및 문의</h1>
             <p class="support-desc">기능 오류, 개선 사항 건의, 맞춤 기능 추가, 또는 기타 문의는 오픈채팅으로 연락해주세요.</p>
@@ -1012,6 +1093,9 @@
 
     <div id="policy-page" class="policy-container">
         <div class="policy-content-wrapper">
+            <div class="page-dark-mode-toggle-wrap">
+                <button class="dark-mode-toggle page-dark-mode-btn" title="다크 모드"><i data-lucide="moon"></i></button>
+            </div>
             <div class="policy-label">Policy</div>
             <h1 class="policy-title">운영정책</h1>
             
@@ -1537,7 +1621,7 @@
 
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">힌트</span></div>
-                    <div class="command-desc">힌트를 확인합니다.<br>유사도 힌트는 15 코인, 초성 힌트는 20 코인입니다.</div>
+                    <div class="command-desc">힌트를 확인합니다.<br>유사도 힌는 15 코인, 초성 힌트는 20 코인입니다.</div>
                     <div class="command-example">/꼬맨틀 힌트 유사도</div>
                     <div class="command-example">/꼬맨틀 힌트 초성 글로벌</div>
                 </div>
@@ -2237,17 +2321,45 @@
             });
         });
 
-        const darkModeToggle = document.getElementById('darkModeToggle');
-        const iconElement = darkModeToggle.querySelector('i');
-        darkModeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
-            if (document.body.classList.contains('dark-mode')) {
-                iconElement.setAttribute('data-lucide', 'sun');
+        // ================= 다크 모드 통합 로직 ================= //
+        const globalDarkModeToggles = document.querySelectorAll('.dark-mode-toggle');
+
+        function updateDarkModeUI(isDark) {
+            if (isDark) {
+                document.body.classList.add('dark-mode');
+                globalDarkModeToggles.forEach(btn => {
+                    const iconElement = btn.querySelector('i');
+                    if(iconElement) iconElement.setAttribute('data-lucide', 'sun');
+                });
             } else {
-                iconElement.setAttribute('data-lucide', 'moon');
+                document.body.classList.remove('dark-mode');
+                globalDarkModeToggles.forEach(btn => {
+                    const iconElement = btn.querySelector('i');
+                    if(iconElement) iconElement.setAttribute('data-lucide', 'moon');
+                });
             }
             lucide.createIcons();
+        }
+
+        // 시스템 기본값에 따른 다크모드 설정
+        const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
+        if (prefersDarkScheme.matches) {
+            updateDarkModeUI(true);
+        }
+
+        // 각 다크모드 버튼 클릭 시 토글
+        globalDarkModeToggles.forEach(toggle => {
+            toggle.addEventListener('click', () => {
+                const isCurrentlyDark = document.body.classList.contains('dark-mode');
+                updateDarkModeUI(!isCurrentlyDark);
+            });
         });
+
+        // (선택) 시스템 테마 변경 감지
+        prefersDarkScheme.addEventListener('change', (e) => {
+            updateDarkModeUI(e.matches);
+        });
+        // ====================================================== //
 
         const scrollTopBtn = document.getElementById('scrollTopBtn');
         window.addEventListener('scroll', () => {
