@@ -701,6 +701,9 @@
         main.mode-event #eventView { display: block !important; }
 
         @media (max-width: 768px) {
+            :root { --sidebar-bg: rgba(255, 255, 255, 0.85); }
+            body.dark-mode { --sidebar-bg: rgba(17, 17, 17, 0.85); }
+
             .bottom-logo { font-size: 2rem; }
             .menu-toggle-btn { display: block; }
             body { flex-direction: column; }
