@@ -9,17 +9,17 @@
         @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap');
 
         :root {
-            --primary-color: #3b82f6;
-            --primary-hover: #2563eb;
-            --secondary-color: #fafafa;
-            --text-main: #171717;
-            --text-muted: #737373;
-            --sidebar-bg: #0a0a0a;
-            --sidebar-text: #ededed;
-            --sidebar-hover: #262626;
+            --primary-color: #4f46e5;
+            --primary-hover: #4338ca;
+            --secondary-color: #f8fafc;
+            --text-main: #334155;
+            --text-muted: #64748b;
+            --sidebar-bg: #0f172a;
+            --sidebar-text: #f8fafc;
+            --sidebar-hover: #1e293b;
             --card-bg: #ffffff;
-            --border-color: #e5e5e5;
-            --code-bg: #f4f4f5;
+            --border-color: rgba(226, 232, 240, 0.8);
+            --code-bg: #f1f5f9;
             --code-text: #ea580c;
             --vip-bg: #fef08a;
             --vip-text: #854d0e;
@@ -288,17 +288,17 @@
         .command-card {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 1.8rem;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
-            transition: all 0.2s ease;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex; flex-direction: column;
         }
 
         .command-card:hover {
-            border-color: #a3a3a3;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            transform: translateY(-2px);
+            border-color: rgba(79, 70, 229, 0.3);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+            transform: translateY(-4px);
         }
 
         .command-title {
@@ -330,13 +330,13 @@
 
         .command-example {
             margin-top: auto;
-            background-color: #000000;
-            color: #e5e5e5;
-            padding: 1rem 1.2rem;
-            border-radius: 8px;
+            background-color: #1e293b;
+            color: #f8fafc;
+            padding: 1.2rem 1.4rem;
+            border-radius: 12px;
             font-size: 0.9rem;
             font-family: 'Fira Code', 'Courier New', monospace;
-            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1);
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
         }
 
         .command-example b {
@@ -465,22 +465,22 @@
         .intro-card {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2rem; width: 220px; text-align: left;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            transition: all 0.2s ease; cursor: pointer;
+            border-radius: 20px;
+            padding: 2.2rem; width: 220px; text-align: left;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer;
         }
 
         .intro-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--text-main);
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
+            transform: translateY(-6px);
+            border-color: rgba(79, 70, 229, 0.3);
+            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.08);
         }
 
         .intro-card-icon {
-            font-size: 1.8rem; margin-bottom: 1rem; display: inline-block;
-            padding: 0.6rem; background: var(--secondary-color);
-            border: 1px solid var(--border-color); border-radius: 12px;
+            font-size: 1.8rem; margin-bottom: 1.2rem; display: inline-block;
+            padding: 0.8rem; background: #f1f5f9;
+            border: none; border-radius: 16px;
         }
 
         .intro-card-title {
