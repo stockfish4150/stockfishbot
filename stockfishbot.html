@@ -2352,6 +2352,7 @@
             document.body.classList.remove('mode-support', 'mode-policy');
             document.body.classList.add('mode-about');
             window.scrollTo({ top: 0, behavior: 'auto' });
+            sidebar.scrollTop = 0;
 
             if (window.innerWidth <= 768) {
                 sidebar.classList.remove('open');
