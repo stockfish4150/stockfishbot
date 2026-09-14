@@ -1218,90 +1218,90 @@
         }
     </script>
 
-<!-- 로그인 팝업 모달 -->
-<div id="login-modal" style="display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: var(--secondary-color); z-index: 9999; justify-content: center; align-items: center; backdrop-filter: blur(5px);">
-    <div class="command-card" style="width: 350px; text-align: center;">
-        <h2 style="margin-bottom: 1rem; color: var(--title-color);">관리자 패널 접속</h2>
-        <p style="color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.9rem;">카톡방에서 <b>/웹로그인</b>을 입력해<br>발급받은 6자리 코드를 입력하세요.</p>
-        <input type="text" id="otp-input" placeholder="000000" maxlength="6" class="search-input" style="text-align: center; font-size: 1.5rem; margin-bottom: 1rem; width: 100%; letter-spacing: 5px;">
-        <button id="login-btn" class="about-btn about-btn-primary" style="width: 100%; justify-content: center;">접속하기</button>
-    </div>
-</div>
-
-<script>
-document.addEventListener("DOMContentLoaded", async () => {
-    // 1. 페이지 접속 시 로그인 상태 체크 (users API 찔러보기)
-    const checkLogin = await fetch('/api/admin/bot_users');
-    if (checkLogin.status === 401) {
-        document.getElementById('login-modal').style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-    } else {
-        renderAdminDashboard(await checkLogin.json());
-    }
-
-    // 2. OTP 로그인 버튼 클릭 이벤트
-    document.getElementById('login-btn').addEventListener('click', async () => {
-        const otp = document.getElementById('otp-input').value;
-        const res = await fetch('/api/login', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({otp: otp})
-        });
-        
-        if (res.ok) {
-            document.getElementById('login-modal').style.display = 'none';
-            document.body.style.overflow = 'auto';
-            const userData = await fetch('/api/admin/bot_users');
-            renderAdminDashboard(await userData.json());
-        } else {
-            alert("OTP가 올바르지 않거나 만료되었습니다.");
-        }
-    });
-});
-
-// 3. 관리자 데이터 렌더링 함수 (기존 UI 재활용)
-function renderAdminDashboard(data) {
-    // 관리자 섹션(id="admin")을 찾아서 그리드를 초기화
-    const adminGrid = document.querySelector('#admin .command-grid');
-    if(!adminGrid) return;
-    
-    adminGrid.innerHTML = ''; // 기존 튜토리얼 텍스트 지우기
-
-    // 통계 카드 추가
-    const totalUsers = data.users.length;
-    const bannedUsers = data.users.filter(u => u.is_banned === 1).length;
-
-    adminGrid.innerHTML += `
-        <div class="command-card" style="border-color: var(--primary-color);">
-            <div class="command-title">📊 데이터베이스 통계</div>
-            <div class="command-desc">
-                - 누적 등록 유저: <b>${totalUsers}</b> 명<br>
-                - 현재 차단(Ban) 유저: <b>${bannedUsers}</b> 명
-            </div>
+    <!-- 로그인 팝업 모달 -->
+    <div id="login-modal" style="display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: var(--secondary-color); z-index: 9999; justify-content: center; align-items: center; backdrop-filter: blur(5px);">
+        <div class="command-card" style="width: 350px; text-align: center;">
+            <h2 style="margin-bottom: 1rem; color: var(--title-color);">관리자 패널 접속</h2>
+            <p style="color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.9rem;">카톡방에서 <b>/웹로그인</b>을 입력해<br>발급받은 6자리 코드를 입력하세요.</p>
+            <input type="text" id="otp-input" placeholder="000000" maxlength="6" class="search-input" style="text-align: center; font-size: 1.5rem; margin-bottom: 1rem; width: 100%; letter-spacing: 5px;">
+            <button id="login-btn" class="about-btn about-btn-primary" style="width: 100%; justify-content: center;">접속하기</button>
         </div>
-    `;
+    </div>
 
-    // 유저 리스트 카드 렌더링
-    data.users.forEach(user => {
-        let badge = user.is_admin ? '<span class="badge admin">관리자</span>' : '';
-        if (user.is_banned) badge += ' <span class="badge" style="background:red; color:white;">BANNED</span>';
+    <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        // 1. 페이지 접속 시 로그인 상태 체크 (users API 찔러보기)
+        const checkLogin = await fetch('/api/admin/bot_users');
+        if (checkLogin.status === 401) {
+            document.getElementById('login-modal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        } else {
+            renderAdminDashboard(await checkLogin.json());
+        }
+
+        // 2. OTP 로그인 버튼 클릭 이벤트
+        document.getElementById('login-btn').addEventListener('click', async () => {
+            const otp = document.getElementById('otp-input').value;
+            const res = await fetch('/api/login', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({otp: otp})
+            });
+            
+            if (res.ok) {
+                document.getElementById('login-modal').style.display = 'none';
+                document.body.style.overflow = 'auto';
+                const userData = await fetch('/api/admin/bot_users');
+                renderAdminDashboard(await userData.json());
+            } else {
+                alert("OTP가 올바르지 않거나 만료되었습니다.");
+            }
+        });
+    });
+
+    // 3. 관리자 데이터 렌더링 함수 (기존 UI 재활용)
+    function renderAdminDashboard(data) {
+        // 관리자 섹션(id="admin")을 찾아서 그리드를 초기화
+        const adminGrid = document.querySelector('#admin .command-grid');
+        if(!adminGrid) return;
+        
+        adminGrid.innerHTML = ''; // 기존 튜토리얼 텍스트 지우기
+
+        // 통계 카드 추가
+        const totalUsers = data.users.length;
+        const bannedUsers = data.users.filter(u => u.is_banned === 1).length;
 
         adminGrid.innerHTML += `
-            <div class="command-card">
-                <div class="command-title"><span class="command-code">${user.user_id.split('_')[0]}</span> ${badge}</div>
+            <div class="command-card" style="border-color: var(--primary-color);">
+                <div class="command-title">📊 데이터베이스 통계</div>
                 <div class="command-desc">
-                    경고 누적: ${user.warnings}회
-                </div>
-                <div class="command-example" style="cursor:pointer;" onclick="alert('채팅 로그 불러오기 기능 개발 중 (Room ID 필요)')">
-                    <i data-lucide="message-square"></i> 최근 채팅로그 보기
+                    - 누적 등록 유저: <b>${totalUsers}</b> 명<br>
+                    - 현재 차단(Ban) 유저: <b>${bannedUsers}</b> 명
                 </div>
             </div>
         `;
-    });
-    
-    // Lucide 아이콘 리렌더링
-    if(window.lucide) window.lucide.createIcons();
-}
-</script>
+
+        // 유저 리스트 카드 렌더링
+        data.users.forEach(user => {
+            let badge = user.is_admin ? '<span class="badge admin">관리자</span>' : '';
+            if (user.is_banned) badge += ' <span class="badge" style="background:red; color:white;">BANNED</span>';
+
+            adminGrid.innerHTML += `
+                <div class="command-card">
+                    <div class="command-title"><span class="command-code">${user.user_id.split('_')[0]}</span> ${badge}</div>
+                    <div class="command-desc">
+                        경고 누적: ${user.warnings}회
+                    </div>
+                    <div class="command-example" style="cursor:pointer;" onclick="alert('채팅 로그 불러오기 기능 개발 중 (Room ID 필요)')">
+                        <i data-lucide="message-square"></i> 최근 채팅로그 보기
+                    </div>
+                </div>
+            `;
+        });
+        
+        // Lucide 아이콘 리렌더링
+        if(window.lucide) window.lucide.createIcons();
+    }
+    </script>
 </body>
 </html>
