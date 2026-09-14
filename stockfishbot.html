@@ -1256,14 +1256,19 @@
             document.body.style.overflow = 'auto'; // 스크롤 복구
         });
 
-        // 1. 페이지 접속 시 로그인 상태 체크 (users API 찔러보기)
+        // 1. 페이지 접속 시 로그인 상태 체크
         try {
-            const checkLogin = await fetch(`${API_BASE_URL}/api/admin/bot_users`, { 
-                headers: { 'ngrok-skip-browser-warning': 'true' },
-                credentials: 'include' // 타 도메인으로 쿠키(토큰)를 보내기 위해 필수
-            });
-            if (checkLogin.ok) {
-                renderAdminDashboard(await checkLogin.json());
+            const token = localStorage.getItem("admin_token");
+            if (token) {
+                const checkLogin = await fetch(`${API_BASE_URL}/api/admin/bot_users`, { 
+                    headers: { 
+                        'ngrok-skip-browser-warning': 'true',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (checkLogin.ok) {
+                    renderAdminDashboard(await checkLogin.json());
+                }
             }
         } catch (e) {
             console.log("아직 관리자 서버와 연결되지 않았거나 로그인되지 않았습니다.");
@@ -1279,19 +1284,24 @@
                         'Content-Type': 'application/json',
                         'ngrok-skip-browser-warning': 'true'
                     },
-                    body: JSON.stringify({otp: otp}),
-                    credentials: 'include'
+                    body: JSON.stringify({otp: otp})
                 });
                 
                 if (res.ok) {
+                    const data = await res.json();
+                    // 발급받은 토큰을 브라우저에 저장
+                    localStorage.setItem("admin_token", data.token);
+
                     document.getElementById('login-modal').style.display = 'none';
                     document.body.style.overflow = 'auto';
                     alert("관리자 패널 접속 성공!");
                     
-                    // 로그인 성공 후 데이터 다시 불러오기
+                    // 로그인 성공 후 저장된 토큰을 헤더에 실어 데이터 다시 불러오기
                     const userData = await fetch(`${API_BASE_URL}/api/admin/bot_users`, { 
-                        headers: { 'ngrok-skip-browser-warning': 'true' },
-                        credentials: 'include' 
+                        headers: { 
+                            'ngrok-skip-browser-warning': 'true',
+                            'Authorization': `Bearer ${data.token}`
+                        }
                     });
                     renderAdminDashboard(await userData.json());
                     
@@ -1306,7 +1316,7 @@
             }
         });
     });
-
+    
     // 3. 관리자 데이터 렌더링 함수 (기존 튜토리얼 텍스트를 지우고 데이터베이스 카드로 대체)
     function renderAdminDashboard(data) {
         // 관리자 섹션(id="admin")을 찾아서 그리드를 초기화
