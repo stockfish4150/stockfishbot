@@ -1234,6 +1234,27 @@
     <script>
     const API_BASE_URL = "https://dolly-statue-document.ngrok-free.dev"; 
 
+    async function fetchAdminDataAndRender() {
+        const token = localStorage.getItem("admin_token");
+        if (!token) return;
+        try {
+            const res = await fetch(`${API_BASE_URL}/api/admin/bot_users`, {
+                headers: { 
+                    'ngrok-skip-browser-warning': 'true',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            if (res.ok) {
+                renderAdminDashboard(await res.json());
+            } else {
+                localStorage.removeItem("admin_token");
+                alert("세션이 만료되었거나 권한이 없습니다.");
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
     document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById('sidebar-login-btn').addEventListener('click', () => {
             document.getElementById('login-modal').style.display = 'flex';
@@ -1251,18 +1272,7 @@
         });
 
         try {
-            const token = localStorage.getItem("admin_token");
-            if (token) {
-                const checkLogin = await fetch(`${API_BASE_URL}/api/admin/bot_users`, { 
-                    headers: { 
-                        'ngrok-skip-browser-warning': 'true',
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                if (checkLogin.ok) {
-                    renderAdminDashboard(await checkLogin.json());
-                }
-            }
+            await fetchAdminDataAndRender();
         } catch (e) {
             console.log("아직 관리자 서버와 연결되지 않았거나 로그인되지 않았습니다.");
         }
@@ -1287,15 +1297,7 @@
                     document.body.style.overflow = 'auto';
                     alert("관리자 패널 접속 성공!");
                     
-                    const userData = await fetch(`${API_BASE_URL}/api/admin/bot_users`, { 
-                        headers: { 
-                            'ngrok-skip-browser-warning': 'true',
-                            'Authorization': `Bearer ${data.token}`
-                        }
-                    });
-                    renderAdminDashboard(await userData.json());
-                    
-                    document.querySelector('a[href="#admin"]').click();
+                    await fetchAdminDataAndRender();
                 } else {
                     alert("OTP가 올바르지 않거나 만료되었습니다.");
                 }
@@ -1307,7 +1309,95 @@
     });
     
     function renderAdminDashboard(data) {
-        const adminGrid = document.querySelector('#admin .command-grid');
+        let adminMenu = document.getElementById('dynamic-admin-menu');
+        if (!adminMenu) {
+            const sidebarDividerNav = document.querySelector('.sidebar-divider .sidebar-nav');
+            if (sidebarDividerNav) {
+                adminMenu = document.createElement('li');
+                adminMenu.className = 'sidebar-category';
+                adminMenu.id = 'dynamic-admin-menu';
+                adminMenu.innerHTML = `
+                    <a href="javascript:void(0)">관리자 패널 <span class="toggle-arrow">v</span></a>
+                    <ul class="sidebar-submenu">
+                        <li><a href="#adminDashboard"><i data-lucide="layout-dashboard"></i> 대시보드</a></li>
+                    </ul>
+                `;
+                sidebarDividerNav.appendChild(adminMenu);
+
+                const categoryLink = adminMenu.querySelector('a');
+                categoryLink.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    const parentCat = this.parentElement;
+                    const arrow = this.querySelector('.toggle-arrow');
+                    const isOpen = parentCat.classList.contains('open');
+
+                    document.querySelectorAll('.sidebar-category').forEach(otherCat => {
+                        if (otherCat !== parentCat && otherCat.classList.contains('open')) {
+                            otherCat.classList.remove('open');
+                            const otherArrow = otherCat.querySelector('.toggle-arrow');
+                            if (otherArrow) otherArrow.textContent = 'v';
+                            const otherSubmenu = otherCat.querySelector('.sidebar-submenu');
+                            if (otherSubmenu) otherSubmenu.style.maxHeight = '0px';
+                        }
+                    });
+
+                    const submenu = parentCat.querySelector('.sidebar-submenu');
+                    if (isOpen) {
+                        parentCat.classList.remove('open');
+                        if (arrow) arrow.textContent = 'v';
+                        if (submenu) submenu.style.maxHeight = '0px';
+                    } else {
+                        parentCat.classList.add('open');
+                        if (arrow) arrow.textContent = '^';
+                        if (submenu) submenu.style.maxHeight = submenu.scrollHeight + 'px';
+                    }
+                });
+
+                const dashLink = adminMenu.querySelector('.sidebar-submenu li a');
+                dashLink.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    fetchAdminDataAndRender();
+                });
+            }
+        }
+
+        let adminSection = document.getElementById('adminDashboard');
+        if (!adminSection) {
+            adminSection = document.createElement('section');
+            adminSection.id = 'adminDashboard';
+            adminSection.className = 'collapsed instant-collapse';
+            adminSection.innerHTML = `
+                <h2 class="section-title"><i data-lucide="layout-dashboard"></i> 대시보드</h2>
+                <p style="margin-bottom:1.5rem;color:var(--text-muted)">관리자 패널 데이터입니다.</p>
+                <div class="command-grid js-command-grid" data-section="adminDashboard"></div>
+            `;
+            const mainContent = document.querySelector('.main-content');
+            const bottomSpacer = document.getElementById('bottom-spacer');
+            mainContent.insertBefore(adminSection, bottomSpacer);
+
+            adminSection.querySelector('.section-title').addEventListener('click', function() {
+                const parentSection = this.parentElement;
+                const isCollapsed = parentSection.classList.contains("collapsed");
+                const sectionId = parentSection.getAttribute("id");
+
+                if (isCollapsed) {
+                    applyState("guide", sectionId);
+                } else {
+                    parentSection.classList.remove("instant-collapse");
+                    parentSection.classList.add("collapsed");
+                    const activeSidebarLink = document.querySelector(`.sidebar-submenu li a[href="#${sectionId}"]`);
+                    if (activeSidebarLink) {
+                        activeSidebarLink.classList.remove("active");
+                    }
+                    const cachedBottomSpacer = document.getElementById("bottom-spacer");
+                    if (cachedBottomSpacer) {
+                        cachedBottomSpacer.style.height = "200px";
+                    }
+                }
+            });
+        }
+
+        const adminGrid = adminSection.querySelector('.command-grid');
         if(!adminGrid) return;
         
         adminGrid.innerHTML = ''; 
@@ -1343,6 +1433,8 @@
         });
         
         if(window.lucide) window.lucide.createIcons();
+        
+        applyState("guide", "adminDashboard");
     }
     </script>
 </body>
