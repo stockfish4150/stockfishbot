@@ -1379,6 +1379,15 @@
         });
     });
 
+    function escapeHtml(unsafe) {
+        return (unsafe || "").toString()
+             .replace(/&/g, "&amp;")
+             .replace(/</g, "&lt;")
+             .replace(/>/g, "&gt;")
+             .replace(/"/g, "&quot;")
+             .replace(/'/g, "&#039;");
+    }
+
     function renderAdminDashboard(data) {
         let adminMenu = document.getElementById('dynamic-admin-menu');
         if (!adminMenu) {
@@ -1456,10 +1465,12 @@
         data.users.forEach(user => {
             let badge = user.is_admin ? '<span class="badge admin">관리자</span>' : '';
             if (user.is_banned) badge += ' <span class="badge" style="background:red; color:white;">BANNED</span>';
+            
+            const safeUserId = escapeHtml(user.user_id.split('_')[0]);
 
             adminGrid.innerHTML += `
                 <div class="command-card">
-                    <div class="command-title"><span class="command-code">${user.user_id.split('_')[0]}</span> ${badge}</div>
+                    <div class="command-title"><span class="command-code">${safeUserId}</span> ${badge}</div>
                     <div class="command-desc">
                         경고: ${user.warnings}회
                     </div>
