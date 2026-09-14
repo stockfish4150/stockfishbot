@@ -490,7 +490,7 @@
                 <li><a href="https://x.com/stockfishbotdev" target="_blank"><svg style="fill:currentColor;width:1em;height:1em;vertical-align:-.125em" viewBox="0 0 24 24"><use href="#icon-x"></use></svg> X (Twitter) 바로가기</a></li>
                 <li><a href="https://app.notion.com/p/38f32525cd8380a2b04ac3ff1704dc36?v=38f32525cd838011bd19000c6c55e512&source=copy_link" target="_blank"><svg style="fill:currentColor;width:1em;height:1em;vertical-align:-.125em" viewBox="0 0 24 24"><use href="#icon-notion"></use></svg> Notion 바로가기</a></li>
                 
-                <li><a href="javascript:void(0)" id="sidebar-login-btn" style="color: var(--primary-color); font-weight: bold; margin-top: 1rem;"><i data-lucide="lock" style="width:1em;height:1em;vertical-align:-.125em"></i> 관리자 패널 접속</a></li>
+                <li><a href="javascript:void(0)" id="sidebar-login-btn" style="color: var(--primary-color); font-weight: bold; margin-top: 1rem;"><i data-lucide="lock" style="width:1em;height:1em;vertical-align:-.125em"></i> 관리자 로그인</a></li>
 
             </ul>
         </div>
@@ -592,8 +592,8 @@
             <div class="command-grid js-command-grid" data-section="eventView"></div>
         </div>
         <div id="adminView">
-            <h2 class="section-title"><i data-lucide="layout-dashboard"></i> 관리자 대시보드</h2>
-            <p style="color:var(--text-muted);margin-bottom:2rem">관리자 패널 데이터입니다.</p>
+            <h2 class="section-title"><i data-lucide="layout-dashboard"></i> 대시보드</h2>
+            <p style="color:var(--text-muted);margin-bottom:2rem">관리자 패널입니다.</p>
             <div class="command-grid js-command-grid" data-section="adminView"></div>
         </div>
         <div class="bottom-spacer js-footer-area" id="bottom-spacer"></div>
@@ -1272,7 +1272,7 @@
                 renderAdminDashboard(await res.json());
             } else {
                 localStorage.removeItem("admin_token");
-                alert("세션이 만료되었거나 권한이 없습니다.");
+                alert("세션이 만료됐거나 권한이 없습니다.");
             }
         } catch (e) {
             console.error(e);
@@ -1298,7 +1298,7 @@
         try {
             await fetchAdminDataAndRender();
         } catch (e) {
-            console.log("아직 관리자 서버와 연결되지 않았거나 로그인되지 않았습니다.");
+            console.log("관리자로 로그인해주세요.");
         }
 
         document.getElementById('login-btn').addEventListener('click', async () => {
@@ -1319,14 +1319,14 @@
 
                     document.getElementById('login-modal').style.display = 'none';
                     document.body.style.overflow = 'auto';
-                    alert("관리자 패널 접속 성공!");
+                    alert("관리자로 로그인했습니다.");
                     
                     await fetchAdminDataAndRender();
                 } else {
-                    alert("OTP가 올바르지 않거나 만료되었습니다.");
+                    alert("잘못된 OTP이거나 만료됐습니다.");
                 }
             } catch (e) {
-                alert("서버와 통신할 수 없습니다. VM 백엔드 서버 상태를 확인해주세요.");
+                alert("서버와 통신할 수 없습니다.");
                 console.error(e);
             }
         });
@@ -1398,10 +1398,10 @@
 
         adminGrid.innerHTML += `
             <div class="command-card" style="border-color: var(--primary-color);">
-                <div class="command-title">📊 데이터베이스 통계</div>
+                <div class="command-title">📊 통계</div>
                 <div class="command-desc">
-                    - 누적 등록 유저: <b>${totalUsers}</b> 명<br>
-                    - 현재 차단(Ban) 유저: <b>${bannedUsers}</b> 명
+                    - 유저: <b>${totalUsers}</b> 명<br>
+                    - 차단된 유저: <b>${bannedUsers}</b> 명
                 </div>
             </div>
         `;
@@ -1414,10 +1414,10 @@
                 <div class="command-card">
                     <div class="command-title"><span class="command-code">${user.user_id.split('_')[0]}</span> ${badge}</div>
                     <div class="command-desc">
-                        경고 누적: ${user.warnings}회
+                        경고: ${user.warnings}회
                     </div>
                     <div class="command-example" style="cursor:pointer;" onclick="alert('채팅 로그 불러오기 기능 개발 중 (Room ID 필요)')">
-                        <i data-lucide="message-square"></i> 최근 채팅로그 보기
+                        <i data-lucide="message-square"></i> 채팅 기록 보기
                     </div>
                 </div>
             `;
