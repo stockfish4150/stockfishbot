@@ -135,10 +135,10 @@
         .section-title{font-size:1.8rem;font-weight:700;margin-top:4rem;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border-color);color:var(--title-color);scroll-margin-top:8rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
         .section-title i{margin-right:.5rem;color:var(--primary-color)}
         .section-title::after{content:'';width:24px;height:24px;background-image:url("data:image/svg+xml, %3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='18 15 12 9 6 15'%3E%3C/polyline%3E%3C/svg%3E");background-size:contain;background-repeat:no-repeat;transition:transform .5s cubic-bezier(.175, .885, .32, 1.2)}
-        #eventView.collapsed .section-title::after,section.collapsed .section-title::after{transform:rotate(180deg)}
-        #eventView .command-grid,#eventView p,section .command-grid,section p{max-height:10000px;opacity:1;transform:translateY(0);overflow:hidden;transition:max-height .5s cubic-bezier(.175, .885, .32, 1.2),opacity .35s cubic-bezier(.175, .885, .32, 1.2),margin .5s cubic-bezier(.175, .885, .32, 1.2),transform .5s cubic-bezier(.175, .885, .32, 1.2)}
-        #eventView.collapsed .command-grid,#eventView.collapsed p,section.collapsed .command-grid,section.collapsed p{max-height:0;opacity:0;margin-top:0;margin-bottom:0;transform:translateY(-10px)}
-        #eventView.instant-collapse .command-grid,#eventView.instant-collapse p,section.instant-collapse .command-grid,section.instant-collapse p{transition:none!important}
+        #eventView.collapsed .section-title::after,section.collapsed .section-title::after,#adminView.collapsed .section-title::after{transform:rotate(180deg)}
+        #eventView .command-grid,#eventView p,section .command-grid,section p,#adminView .command-grid,#adminView p{max-height:10000px;opacity:1;transform:translateY(0);overflow:hidden;transition:max-height .5s cubic-bezier(.175, .885, .32, 1.2),opacity .35s cubic-bezier(.175, .885, .32, 1.2),margin .5s cubic-bezier(.175, .885, .32, 1.2),transform .5s cubic-bezier(.175, .885, .32, 1.2)}
+        #eventView.collapsed .command-grid,#eventView.collapsed p,section.collapsed .command-grid,section.collapsed p,#adminView.collapsed .command-grid,#adminView.collapsed p{max-height:0;opacity:0;margin-top:0;margin-bottom:0;transform:translateY(-10px)}
+        #eventView.instant-collapse .command-grid,#eventView.instant-collapse p,section.instant-collapse .command-grid,section.instant-collapse p,#adminView.instant-collapse .command-grid,#adminView.instant-collapse p{transition:none!important}
         .command-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:1.5rem}
         .command-card{background-color:var(--card-bg);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--border-color);border-radius:20px;padding:2rem;box-shadow:0 4px 20px rgba(0,0,0,.03);transition:all .5s cubic-bezier(.175, .885, .32, 1.2);display:flex;flex-direction:column}
         .command-card:hover{border-color:var(--hover-border);box-shadow:0 10px 25px -5px rgba(0,0,0,.08);transform:translateY(-4px)}
@@ -173,12 +173,14 @@
         .sidebar [data-lucide]{stroke:currentColor}
         section [data-lucide]{stroke:var(--primary-color)}
         .sidebar-divider{margin-top:1rem;padding-top:1rem;border-top:1px solid var(--sidebar-border)}
-        #eventView{display:none}
+        #eventView, #adminView{display:none}
         .event-search-container{display:none!important}
-        body:has(main.mode-event) .main-search-container{display:none!important}
+        body:has(main.mode-event) .main-search-container, body:has(main.mode-admin-view) .main-search-container{display:none!important}
         body:has(main.mode-event) .event-search-container{display:flex!important}
-        main.mode-event section{display:none!important}
+        main.mode-event section, main.mode-event #adminView{display:none!important}
         main.mode-event #eventView{display:block!important}
+        main.mode-admin-view section, main.mode-admin-view #eventView{display:none!important}
+        main.mode-admin-view #adminView{display:block!important}
         @media (max-width:768px){
             :root{--sidebar-bg:rgba(255, 255, 255, 0.85)}
             body.dark-mode{--sidebar-bg:rgba(17, 17, 17, 0.85)}
@@ -589,6 +591,11 @@
             <p style="color:var(--text-muted);margin-bottom:2rem">진행 중인 이벤트를 확인하세요.</p>
             <div class="command-grid js-command-grid" data-section="eventView"></div>
         </div>
+        <div id="adminView">
+            <h2 class="section-title"><i data-lucide="layout-dashboard"></i> 관리자 대시보드</h2>
+            <p style="color:var(--text-muted);margin-bottom:2rem">관리자 패널 데이터입니다.</p>
+            <div class="command-grid js-command-grid" data-section="adminView"></div>
+        </div>
         <div class="bottom-spacer js-footer-area" id="bottom-spacer"></div>
     </main>
     <button class="scroll-top-btn" id="scrollTopBtn" title="위로 가기"><i data-lucide="arrow-up"></i></button>
@@ -763,11 +770,16 @@
 
                 if (section === "eventView") {
                     mainContentElem.classList.add("mode-event");
+                    mainContentElem.classList.remove("mode-admin-view");
+                } else if (section === "adminView") {
+                    mainContentElem.classList.add("mode-admin-view");
+                    mainContentElem.classList.remove("mode-event");
                 } else {
                     mainContentElem.classList.remove("mode-event");
+                    mainContentElem.classList.remove("mode-admin-view");
                 }
 
-                document.querySelectorAll("section, #eventView").forEach(sectionElem => {
+                document.querySelectorAll("section, #eventView, #adminView").forEach(sectionElem => {
                     if (sectionElem.id === section) {
                         sectionElem.classList.remove("instant-collapse", "collapsed");
                     } else {
@@ -1038,9 +1050,18 @@
         sidebarSearchInput.addEventListener("input", function(event) {
             const query = event.target.value.toLowerCase();
             sidebarClearSearchBtn.style.display = query.length > 0 ? "flex" : "none";
-            
+
             if (mainContentElem.classList.contains("mode-event")) {
                 document.querySelectorAll("#eventView .command-card").forEach(cardElem => {
+                    const cardText = cardElem.textContent.toLowerCase();
+                    if (cardText.includes(query)) {
+                        cardElem.style.display = "block";
+                    } else {
+                        cardElem.style.display = "none";
+                    }
+                });
+            } else if (mainContentElem.classList.contains("mode-admin-view")) {
+                document.querySelectorAll("#adminView .command-card").forEach(cardElem => {
                     const cardText = cardElem.textContent.toLowerCase();
                     if (cardText.includes(query)) {
                         cardElem.style.display = "block";
@@ -1193,6 +1214,9 @@
         if (document.getElementById("eventView")) {
             document.getElementById("eventView").classList.add("collapsed");
         }
+        if (document.getElementById("adminView")) {
+            document.getElementById("adminView").classList.add("collapsed");
+        }
 
         const mobileSearchBtn = document.getElementById("mobileSearchBtn");
         const mobileSearchCloseBtn = document.getElementById("mobileSearchCloseBtn");
@@ -1307,7 +1331,7 @@
             }
         });
     });
-    
+
     function renderAdminDashboard(data) {
         let adminMenu = document.getElementById('dynamic-admin-menu');
         if (!adminMenu) {
@@ -1319,7 +1343,7 @@
                 adminMenu.innerHTML = `
                     <a href="javascript:void(0)">관리자 패널 <span class="toggle-arrow">v</span></a>
                     <ul class="sidebar-submenu">
-                        <li><a href="#adminDashboard"><i data-lucide="layout-dashboard"></i> 대시보드</a></li>
+                        <li><a href="#adminView"><i data-lucide="layout-dashboard"></i> 대시보드</a></li>
                     </ul>
                 `;
                 sidebarDividerNav.appendChild(adminMenu);
@@ -1361,41 +1385,8 @@
             }
         }
 
-        let adminSection = document.getElementById('adminDashboard');
-        if (!adminSection) {
-            adminSection = document.createElement('section');
-            adminSection.id = 'adminDashboard';
-            adminSection.className = 'collapsed instant-collapse';
-            adminSection.innerHTML = `
-                <h2 class="section-title"><i data-lucide="layout-dashboard"></i> 대시보드</h2>
-                <p style="margin-bottom:1.5rem;color:var(--text-muted)">관리자 패널 데이터입니다.</p>
-                <div class="command-grid js-command-grid" data-section="adminDashboard"></div>
-            `;
-            const mainContent = document.querySelector('.main-content');
-            const bottomSpacer = document.getElementById('bottom-spacer');
-            mainContent.insertBefore(adminSection, bottomSpacer);
-
-            adminSection.querySelector('.section-title').addEventListener('click', function() {
-                const parentSection = this.parentElement;
-                const isCollapsed = parentSection.classList.contains("collapsed");
-                const sectionId = parentSection.getAttribute("id");
-
-                if (isCollapsed) {
-                    applyState("guide", sectionId);
-                } else {
-                    parentSection.classList.remove("instant-collapse");
-                    parentSection.classList.add("collapsed");
-                    const activeSidebarLink = document.querySelector(`.sidebar-submenu li a[href="#${sectionId}"]`);
-                    if (activeSidebarLink) {
-                        activeSidebarLink.classList.remove("active");
-                    }
-                    const cachedBottomSpacer = document.getElementById("bottom-spacer");
-                    if (cachedBottomSpacer) {
-                        cachedBottomSpacer.style.height = "200px";
-                    }
-                }
-            });
-        }
+        const adminSection = document.getElementById('adminView');
+        if (!adminSection) return;
 
         const adminGrid = adminSection.querySelector('.command-grid');
         if(!adminGrid) return;
@@ -1434,7 +1425,7 @@
         
         if(window.lucide) window.lucide.createIcons();
         
-        applyState("guide", "adminDashboard");
+        applyState("guide", "adminView");
     }
     </script>
 </body>
