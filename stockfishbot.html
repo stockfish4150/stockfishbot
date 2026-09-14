@@ -1087,7 +1087,7 @@
                 });
             }
             lucide.createIcons();
-            document.body.offsetHeight; // trigger reflow
+            document.body.offsetHeight;
             document.body.classList.remove("disable-transitions");
         }
 
@@ -1221,42 +1221,35 @@
         }
     </script>
 
-    <!-- 로그인 팝업 모달 -->
     <div id="login-modal" style="display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: var(--secondary-color); z-index: 9999; justify-content: center; align-items: center; backdrop-filter: blur(5px);">
         <div class="command-card" style="width: 350px; text-align: center;">
-            <h2 style="margin-bottom: 1rem; color: var(--title-color);">관리자 패널 접속</h2>
-            <p style="color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.9rem;">카톡방에서 <b>/웹로그인</b>을 입력해<br>발급받은 6자리 코드를 입력하세요.</p>
+            <h2 style="margin-bottom: 1rem; color: var(--title-color);">관리자 로그인</h2>
+            <p style="color: var(--text-muted); margin-bottom: 1.5rem; font-size: 0.9rem;">6자리 OTP를 입력하세요.</p>
             <input type="text" id="otp-input" placeholder="000000" maxlength="6" class="search-input" style="text-align: center; font-size: 1.5rem; margin-bottom: 1rem; width: 100%; letter-spacing: 5px;">
-            <button id="login-btn" class="about-btn about-btn-primary" style="width: 100%; justify-content: center;">접속하기</button>
+            <button id="login-btn" class="about-btn about-btn-primary" style="width: 100%; justify-content: center;">로그인</button>
             <button id="close-login-btn" class="about-btn about-btn-outline" style="width: 100%; justify-content: center; margin-top: 0.5rem;">닫기</button>
         </div>
     </div>
 
     <script>
-    // 🔴 중요: 여기에 VM 서버의 도메인(또는 ngrok/클라우드플레어 터널 주소)을 넣어야 합니다!
-    // 주의: 깃허브가 https이므로, 이 주소도 반드시 https:// 로 시작해야 합니다.
     const API_BASE_URL = "https://dolly-statue-document.ngrok-free.dev"; 
 
     document.addEventListener("DOMContentLoaded", async () => {
-        // [추가된 부분] 사이드바 '관리자 패널 접속' 버튼 클릭 시 모달 열기
         document.getElementById('sidebar-login-btn').addEventListener('click', () => {
             document.getElementById('login-modal').style.display = 'flex';
-            document.body.style.overflow = 'hidden'; // 뒤에 스크롤 방지
+            document.body.style.overflow = 'hidden';
             
-            // 모바일 환경이면 모달 띄울 때 사이드바 닫기
             if(window.innerWidth <= 768) { 
                 document.querySelector(".sidebar").classList.remove("open");
                 document.getElementById("sidebar-overlay").classList.remove("show");
             }
         });
 
-        // [추가된 부분] 모달 '닫기' 버튼 클릭 시 모달 닫기
         document.getElementById('close-login-btn').addEventListener('click', () => {
             document.getElementById('login-modal').style.display = 'none';
-            document.body.style.overflow = 'auto'; // 스크롤 복구
+            document.body.style.overflow = 'auto';
         });
 
-        // 1. 페이지 접속 시 로그인 상태 체크
         try {
             const token = localStorage.getItem("admin_token");
             if (token) {
@@ -1274,7 +1267,6 @@
             console.log("아직 관리자 서버와 연결되지 않았거나 로그인되지 않았습니다.");
         }
 
-        // 2. OTP 로그인 버튼 클릭 이벤트
         document.getElementById('login-btn').addEventListener('click', async () => {
             const otp = document.getElementById('otp-input').value;
             try {
@@ -1289,14 +1281,12 @@
                 
                 if (res.ok) {
                     const data = await res.json();
-                    // 발급받은 토큰을 브라우저에 저장
                     localStorage.setItem("admin_token", data.token);
 
                     document.getElementById('login-modal').style.display = 'none';
                     document.body.style.overflow = 'auto';
                     alert("관리자 패널 접속 성공!");
                     
-                    // 로그인 성공 후 저장된 토큰을 헤더에 실어 데이터 다시 불러오기
                     const userData = await fetch(`${API_BASE_URL}/api/admin/bot_users`, { 
                         headers: { 
                             'ngrok-skip-browser-warning': 'true',
@@ -1305,7 +1295,6 @@
                     });
                     renderAdminDashboard(await userData.json());
                     
-                    // 화면을 관리자 섹션으로 이동
                     document.querySelector('a[href="#admin"]').click();
                 } else {
                     alert("OTP가 올바르지 않거나 만료되었습니다.");
@@ -1317,19 +1306,15 @@
         });
     });
     
-    // 3. 관리자 데이터 렌더링 함수 (기존 튜토리얼 텍스트를 지우고 데이터베이스 카드로 대체)
     function renderAdminDashboard(data) {
-        // 관리자 섹션(id="admin")을 찾아서 그리드를 초기화
         const adminGrid = document.querySelector('#admin .command-grid');
         if(!adminGrid) return;
         
         adminGrid.innerHTML = ''; 
 
-        // 통계 계산
         const totalUsers = data.users.length;
         const bannedUsers = data.users.filter(u => u.is_banned === 1).length;
 
-        // 통계 카드 추가
         adminGrid.innerHTML += `
             <div class="command-card" style="border-color: var(--primary-color);">
                 <div class="command-title">📊 데이터베이스 통계</div>
@@ -1340,7 +1325,6 @@
             </div>
         `;
 
-        // 유저 리스트 카드 렌더링
         data.users.forEach(user => {
             let badge = user.is_admin ? '<span class="badge admin">관리자</span>' : '';
             if (user.is_banned) badge += ' <span class="badge" style="background:red; color:white;">BANNED</span>';
@@ -1358,7 +1342,6 @@
             `;
         });
         
-        // Lucide 아이콘 리렌더링
         if(window.lucide) window.lucide.createIcons();
     }
     </script>
