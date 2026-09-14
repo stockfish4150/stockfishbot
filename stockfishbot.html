@@ -1434,9 +1434,10 @@
                 });
 
                 const dashLink = adminMenu.querySelector('.sidebar-submenu li a');
-                dashLink.addEventListener('click', function(event) {
+                dashLink.addEventListener('click', async function(event) {
                     event.preventDefault();
-                    fetchAdminDataAndRender();
+                    await fetchAdminDataAndRender();
+                    applyState("guide", "adminView");
                 });
             }
         }
@@ -1467,24 +1468,21 @@
             if (user.is_banned) badge += ' <span class="badge" style="background:red; color:white;">BANNED</span>';
             
             const safeUserId = escapeHtml(user.user_id.split('_')[0]);
-
             adminGrid.innerHTML += `
-                <div class="command-card">
-                    <div class="command-title"><span class="command-code">${safeUserId}</span> ${badge}</div>
-                    <div class="command-desc">
-                        경고: ${user.warnings}회
+                    <div class="command-card">
+                        <div class="command-title"><span class="command-code">${safeUserId}</span> ${badge}</div>
+                        <div class="command-desc">
+                            경고: ${user.warnings}회
+                        </div>
+                        <div class="command-example" style="cursor:pointer;" onclick="alert('채팅 로그 불러오기 기능 개발 중 (Room ID 필요)')">
+                            <i data-lucide="message-square"></i> 채팅 기록 보기
+                        </div>
                     </div>
-                    <div class="command-example" style="cursor:pointer;" onclick="alert('채팅 로그 불러오기 기능 개발 중 (Room ID 필요)')">
-                        <i data-lucide="message-square"></i> 채팅 기록 보기
-                    </div>
-                </div>
-            `;
-        });
-        
-        if(window.lucide) window.lucide.createIcons();
-        
-        applyState("guide", "adminView");
-    }
+                `;
+            });
+            
+            if(window.lucide) window.lucide.createIcons();
+        }
     </script>
 </body>
 </html>
