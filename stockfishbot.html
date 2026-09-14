@@ -1229,45 +1229,61 @@
     </div>
 
     <script>
+    // 🔴 중요: 여기에 VM 서버의 도메인(또는 ngrok/클라우드플레어 터널 주소)을 넣어야 합니다!
+    // 주의: 깃허브가 https이므로, 이 주소도 반드시 https:// 로 시작해야 합니다.
+    const API_BASE_URL = "https://여기에_VM서버_주소_입력"; 
+
     document.addEventListener("DOMContentLoaded", async () => {
         // 1. 페이지 접속 시 로그인 상태 체크 (users API 찔러보기)
-        const checkLogin = await fetch('/api/admin/bot_users');
-        if (checkLogin.status === 401) {
-            document.getElementById('login-modal').style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        } else {
-            renderAdminDashboard(await checkLogin.json());
+        try {
+            const checkLogin = await fetch(`${API_BASE_URL}/api/admin/bot_users`, {
+                credentials: 'include' // 깃허브와 VM 도메인이 달라도 쿠키를 주고받게 해줌
+            });
+
+            if (checkLogin.status === 401) {
+                document.getElementById('login-modal').style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            } else if (checkLogin.ok) {
+                renderAdminDashboard(await checkLogin.json());
+            }
+        } catch (e) {
+            console.error("서버 통신 에러:", e);
+            // API 서버가 꺼져있거나 CORS/HTTPS 문제가 있을 때 발생
         }
 
         // 2. OTP 로그인 버튼 클릭 이벤트
         document.getElementById('login-btn').addEventListener('click', async () => {
             const otp = document.getElementById('otp-input').value;
-            const res = await fetch('/api/login', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({otp: otp})
-            });
-            
-            if (res.ok) {
-                document.getElementById('login-modal').style.display = 'none';
-                document.body.style.overflow = 'auto';
-                const userData = await fetch('/api/admin/bot_users');
-                renderAdminDashboard(await userData.json());
-            } else {
-                alert("OTP가 올바르지 않거나 만료되었습니다.");
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/login`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({otp: otp}),
+                    credentials: 'include'
+                });
+                
+                if (res.ok) {
+                    document.getElementById('login-modal').style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                    const userData = await fetch(`${API_BASE_URL}/api/admin/bot_users`, { credentials: 'include' });
+                    renderAdminDashboard(await userData.json());
+                } else {
+                    alert("OTP가 올바르지 않거나 만료되었습니다.");
+                }
+            } catch (e) {
+                alert("서버와 통신할 수 없습니다. VM 서버 상태를 확인해주세요.");
+                console.error(e);
             }
         });
     });
 
-    // 3. 관리자 데이터 렌더링 함수 (기존 UI 재활용)
+    // 3. 관리자 데이터 렌더링 함수 (기존과 동일)
     function renderAdminDashboard(data) {
-        // 관리자 섹션(id="admin")을 찾아서 그리드를 초기화
         const adminGrid = document.querySelector('#admin .command-grid');
         if(!adminGrid) return;
         
-        adminGrid.innerHTML = ''; // 기존 튜토리얼 텍스트 지우기
+        adminGrid.innerHTML = '';
 
-        // 통계 카드 추가
         const totalUsers = data.users.length;
         const bannedUsers = data.users.filter(u => u.is_banned === 1).length;
 
@@ -1281,7 +1297,6 @@
             </div>
         `;
 
-        // 유저 리스트 카드 렌더링
         data.users.forEach(user => {
             let badge = user.is_admin ? '<span class="badge admin">관리자</span>' : '';
             if (user.is_banned) badge += ' <span class="badge" style="background:red; color:white;">BANNED</span>';
@@ -1299,7 +1314,6 @@
             `;
         });
         
-        // Lucide 아이콘 리렌더링
         if(window.lucide) window.lucide.createIcons();
     }
     </script>
