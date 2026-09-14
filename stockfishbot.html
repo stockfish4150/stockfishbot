@@ -1285,19 +1285,19 @@
         }
     }
 
-    document.addEventListener("DOMContentLoaded", async () => {
-        function updateAuthUI(isLoggedIn) {
-            const authBtn = document.getElementById('sidebar-login-btn');
-            if (isLoggedIn) {
-                authBtn.innerHTML = '<i data-lucide="log-out" style="width:1em;height:1em;vertical-align:-.125em"></i> 관리자 로그아웃';
-                authBtn.style.color = "#FF4B4B"; 
-            } else {
-                authBtn.innerHTML = '<i data-lucide="lock" style="width:1em;height:1em;vertical-align:-.125em"></i> 관리자 로그인';
-                authBtn.style.color = "var(--primary-color)";
-            }
-            if (window.lucide) window.lucide.createIcons();
+    function updateAuthUI(isLoggedIn) {
+        const authBtn = document.getElementById('sidebar-login-btn');
+        if (isLoggedIn) {
+            authBtn.innerHTML = '<i data-lucide="log-out" style="width:1em;height:1em;vertical-align:-.125em"></i> 관리자 로그아웃';
+            authBtn.style.color = "#FF4B4B"; 
+        } else {
+            authBtn.innerHTML = '<i data-lucide="lock" style="width:1em;height:1em;vertical-align:-.125em"></i> 관리자 로그인';
+            authBtn.style.color = "var(--primary-color)";
         }
+        if (window.lucide) window.lucide.createIcons();
+    }
 
+    document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById('sidebar-login-btn').addEventListener('click', async () => {
             const token = localStorage.getItem("admin_token");
             if (token) {
