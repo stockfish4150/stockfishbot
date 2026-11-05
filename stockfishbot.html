@@ -3091,6 +3091,8 @@
                         if (item.caption) textContent = item.caption;
                     } else if (item.type === "large_text") {
                         textContent = item.text || "";
+                    } else if (item.type === "admin_alert") {
+                        textContent = item.title ? `[${item.title}]\n${item.text || ""}` : (item.text || "");
                     } else {
                         textContent = item.text || "";
                     }
