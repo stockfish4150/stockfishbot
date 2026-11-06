@@ -7,7 +7,7 @@
     <link href="https://cdn.jsdelivr.net/gh/sunnvest/suit@2.1/fonts/variable/woff2/SUIT-Variable.css" rel="stylesheet">
     <style>
         @import url("https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap");
-        .command-card, .about-feature-card, .support-feature-card, .support-wide-card, .policy-card, .sub-page-container { backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px); } .command-card, .about-feature-card, .support-feature-card, .support-wide-card, .policy-card { box-shadow:0 4px 20px rgba(0,0,0,.03); } .command-card, .about-btn, .support-btn-back, .policy-btn-back, .section-title::after, .copy-btn, .scroll-top-btn, .dark-mode-toggle { transition:all .15s ease; } .command-card:hover, .about-feature-card:hover, .support-feature-card:hover { transform:translateY(-2px); box-shadow:0 6px 15px -3px rgba(0,0,0,.06); }
+        .command-card, .about-feature-card, .support-feature-card, .support-wide-card, .policy-card, .sub-page-container { backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px); } .command-card, .about-feature-card, .support-feature-card, .support-wide-card, .policy-card { box-shadow:0 4px 20px rgba(0,0,0,.03); } .command-card, .about-btn, .support-btn-back, .policy-btn-back, .section-title::after, .copy-btn, .scroll-top-btn, .dark-mode-toggle, .bot-chat-toggle-btn { transition:all .15s ease; } .command-card:hover, .about-feature-card:hover, .support-feature-card:hover { transform:translateY(-2px); box-shadow:0 6px 15px -3px rgba(0,0,0,.06); }
         :root {
             --primary-color: #3C1E1E;
             --primary-hover: #241111;
@@ -258,9 +258,9 @@
         .scroll-top-btn{position:fixed;bottom:2rem;right:2rem;background:var(--primary-color);color:var(--on-primary);border:none;border-radius:50%;width:50px;height:50px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.15);z-index:2100;opacity:0;visibility:hidden;transform:translate3d(0,20px,0);-webkit-transform:translate3d(0,20px,0);will-change:transform,opacity;backface-visibility:hidden;-webkit-backface-visibility:hidden}
         .scroll-top-btn.show{opacity:1;visibility:visible;transform:translate3d(0,0,0);-webkit-transform:translate3d(0,0,0)}
         .scroll-top-btn:hover{background:var(--primary-hover);transform:translate3d(0,-3px,0);-webkit-transform:translate3d(0,-3px,0)}
-        .dark-mode-toggle{background:0 0;border:none;color:var(--text-main);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:.5rem;border-radius:50%}
-        .dark-mode-toggle:hover{background-color:rgba(0,0,0,.05)}
-        body.dark-mode .dark-mode-toggle:hover{background-color:rgba(255,255,255,.1)}
+        .dark-mode-toggle, .bot-chat-toggle-btn{background:0 0;border:none;color:var(--text-main);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:.5rem;border-radius:50%}
+        .dark-mode-toggle:hover, .bot-chat-toggle-btn:hover{background-color:rgba(0,0,0,.05)}
+        body.dark-mode .dark-mode-toggle:hover, body.dark-mode .bot-chat-toggle-btn:hover{background-color:rgba(255,255,255,.1)}
         .disable-transitions,.disable-transitions *{transition:none!important}
         .about-feature-card:active,.command-card:active,.policy-card:active,.support-feature-card:active{transition:none !important}
         .about-btn:active,.policy-btn-back:active,.support-btn-back:active{transition:none !important}
@@ -537,7 +537,7 @@
             <symbol id="information"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4m0-4h.01"/></symbol>
             <symbol id="user"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
             <symbol id="room"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></symbol>
-            <symbol id="bot"><path d="M10 5H3m9 14H3M14 3v4m2 10v4m5-9h-9m9 7h-5m5-14h-7M8 10v4m0-2H3"/></symbol>
+            <symbol id="bot"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></symbol>
             <symbol id="message-circle-warning"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719M12 8v4m0 4h.01"/></symbol>
             <symbol id="message-square-warning"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2zM12 15h.01M12 7v4"/></symbol>
             <symbol id="shield-alert"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1zM12 8v4m0 4h.01"/></symbol>
@@ -577,6 +577,7 @@
         <span class="top-header-title">Stockfishbot</span>
         <div class="search-bar-wrapper" id="searchBarWrapper"></div>
         <div class="top-header-actions">
+            <button class="bot-chat-toggle-btn" id="botChatToggleBtn" title="대화창"><svg class="lucide-icon"><use href="#bot"></use></svg></button>
             <button class="dark-mode-toggle" id="darkModeToggle" title="다크 모드"><svg class="lucide-icon"><use href="#moon"></use></svg></button>
             <button class="mobile-search-btn" id="mobileSearchBtn" title="검색"><svg class="lucide-icon"><use href="#search"></use></svg></button>
             <button class="menu-toggle-btn" id="menu-toggle-btn">☰</button>
@@ -3399,6 +3400,9 @@
                 document.documentElement.scrollTop = 0;
                 document.body.scrollTop = 0;
 
+                if (section !== "chatView") {
+                    window.lastNonChatSection = section;
+                }
                 lastActiveSectionId = section;
 
                 const targetElem = document.getElementById(section);
@@ -3653,6 +3657,20 @@
             const featureCard = event.target.closest(".about-feature-card");
             if (featureCard) {
                 applyState("guide", featureCard.getAttribute("data-target").substring(1));
+                return;
+            }
+
+            const botToggle = event.target.closest("#botChatToggleBtn");
+            if (botToggle) {
+                const mainContent = document.querySelector(".main-content");
+                if (mainContent && mainContent.classList.contains("mode-chat-view")) {
+                    applyState("guide", window.lastNonChatSection || "intro");
+                } else {
+                    if (typeof ensureSimulatorReady === "function") {
+                        ensureSimulatorReady();
+                    }
+                    applyState("guide", "chatView");
+                }
                 return;
             }
 
@@ -4274,28 +4292,9 @@
     }
 
     function renderGuestDashboard() {
-        let adminMenu = document.getElementById('dynamic-admin-menu');
-        if (!adminMenu) {
-            const sidebarDividerNav = document.querySelector('.sidebar-divider .sidebar-nav');
-            if (sidebarDividerNav) {
-                adminMenu = document.createElement('li');
-                adminMenu.className = 'sidebar-category';
-                adminMenu.id = 'dynamic-admin-menu';
-                adminMenu.innerHTML = `
-                    <a href="javascript:void(0)">웹 카톡 <span class="badge info" style="font-size:0.7rem;padding:1px 5px;margin-left:4px;">시뮬레이터</span> <span class="toggle-arrow">v</span></a>
-                    <ul class="sidebar-submenu">
-                        <li><a href="#chatView"><svg class="lucide-icon"><use href="#message-circle"></use></svg> 가상 시뮬레이터</a></li>
-                    </ul>
-                `;
-                sidebarDividerNav.appendChild(adminMenu);
-                
-                const chatLink = adminMenu.querySelector('.sidebar-submenu li a[href="#chatView"]');
-                chatLink.addEventListener('click', async function(event) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    applyState("guide", "chatView");
-                });
-            }
+        const adminMenu = document.getElementById('dynamic-admin-menu');
+        if (adminMenu && !localStorage.getItem("admin_token")) {
+            adminMenu.remove();
         }
         initChatUI([]);
 
@@ -5994,7 +5993,8 @@
                     }
                     const room = roomInput ? roomInput.value.trim() : "184029182390192";
 
-                    if (window.sendWebKakaoMessage) {
+                    const token = localStorage.getItem("admin_token");
+                    if (!token && window.sendWebKakaoMessage) {
                         window.sendWebKakaoMessage(msg);
                     }
 
@@ -6013,7 +6013,6 @@
                     const banner = document.getElementById('reply-target-banner');
                     if (banner) banner.style.display = 'none';
 
-                    const token = localStorage.getItem("admin_token");
                     if (!token) return;
 
                     try {
