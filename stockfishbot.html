@@ -2878,6 +2878,12 @@
                             @keyframes miniKakaoFadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
                             #mini-kakao-body::-webkit-scrollbar { width: 5px; }
                             #mini-kakao-body::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 4px; }
+                            .sim-msg-item { flex-shrink: 0 !important; }
+                            .chat-context-menu { position: fixed; background: #ffffff; border: 1px solid rgba(0,0,0,0.12); box-shadow: 0 4px 16px rgba(0,0,0,0.18); border-radius: 8px; padding: 4px; min-width: 120px; z-index: 999999; display: none; }
+                            .chat-context-menu-item { display: flex; align-items: center; gap: 8px; padding: 8px 12px; font-size: 13px; color: #333333; border-radius: 6px; cursor: pointer; transition: background 0.15s; }
+                            .chat-context-menu-item:hover { background: #f2f4f6; }
+                            .chat-context-menu-item.danger { color: #e53e3e; }
+                            .chat-context-menu-item.danger:hover { background: #fff5f5; }
                         </style>
                         <div id="mini-kakao-header" style="background:#a0b9cb; padding:12px 14px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.06); user-select:none;">
                             <div style="display:flex; align-items:center; gap:8px;">
@@ -2925,8 +2931,8 @@
                                 </select>
                             </div>
                         </div>
-                        <div id="mini-kakao-body" style="flex:1; overflow-y:auto; padding:12px; display:flex; flex-direction:column; gap:10px; scroll-behavior:smooth;">
-                            <div style="align-self:center; background:rgba(0,0,0,0.08); color:#4e5968; font-size:11px; padding:4px 10px; border-radius:12px; margin-bottom:4px;">명령어를 클릭하거나 직접 메시지를 전송해보세요!</div>
+                        <div id="mini-kakao-body" style="flex:1 1 0%; min-height:0; overflow-y:auto; padding:12px; display:flex; flex-direction:column; gap:10px; scroll-behavior:smooth;">
+                            <div style="align-self:center; background:rgba(0,0,0,0.08); color:#4e5968; font-size:11px; padding:4px 10px; border-radius:12px; margin-bottom:4px; flex-shrink:0;">명령어를 클릭하거나 직접 메시지를 전송해보세요!</div>
                         </div>
                         <div id="mini-kakao-reply-banner" style="display:none; background:#e4edf5; border-top:1px solid #b8cddc; padding:6px 10px; font-size:11px; color:#2c3e50; justify-content:space-between; align-items:center; border-left:3px solid #fee500;">
                             <span id="mini-kakao-reply-text" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:260px; font-weight:600;"></span>
@@ -2997,6 +3003,30 @@
 
                 const body = document.getElementById("mini-kakao-body");
                 if (body) {
+                    if (!document.getElementById("chat-context-menu")) {
+                        const ctxHtml = `
+                            <div id="chat-context-menu" class="chat-context-menu">
+                                <div class="chat-context-menu-item" id="ctx-reply-btn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 17 4 12 9 7"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/></svg>
+                                    <span>답장</span>
+                                </div>
+                                <div class="chat-context-menu-item" id="ctx-modify-btn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                                    <span>수정</span>
+                                </div>
+                                <div class="chat-context-menu-item danger" id="ctx-hide-btn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                                    <span>가리기</span>
+                                </div>
+                                <div class="chat-context-menu-item" id="ctx-copy-btn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                                    <span>복사</span>
+                                </div>
+                            </div>
+                        `;
+                        document.body.insertAdjacentHTML("beforeend", ctxHtml);
+                    }
+
                     body.addEventListener("contextmenu", (e) => {
                         const target = e.target.closest(".sim-msg-item");
                         if (target && window.openChatContextMenu) {
@@ -3007,6 +3037,8 @@
 
                     let simLongPressTimer = null;
                     let simTouchMoved = false;
+                    let simMouseDownPos = { x: 0, y: 0 };
+
                     body.addEventListener("touchstart", (e) => {
                         const target = e.target.closest(".sim-msg-item");
                         if (!target) return;
@@ -3031,6 +3063,36 @@
                     }, { passive: true });
 
                     body.addEventListener("touchend", () => {
+                        if (simLongPressTimer) {
+                            clearTimeout(simLongPressTimer);
+                            simLongPressTimer = null;
+                        }
+                    });
+
+                    body.addEventListener("mousedown", (e) => {
+                        if (e.button !== 0) return;
+                        const target = e.target.closest(".sim-msg-item");
+                        if (!target) return;
+                        simMouseDownPos = { x: e.clientX, y: e.clientY };
+                        if (simLongPressTimer) clearTimeout(simLongPressTimer);
+                        simLongPressTimer = setTimeout(() => {
+                            if (window.openChatContextMenu) {
+                                window.openChatContextMenu(e.clientX, e.clientY, target);
+                            }
+                        }, 500);
+                    });
+
+                    body.addEventListener("mousemove", (e) => {
+                        if (simLongPressTimer) {
+                            const dist = Math.hypot(e.clientX - simMouseDownPos.x, e.clientY - simMouseDownPos.y);
+                            if (dist > 6) {
+                                clearTimeout(simLongPressTimer);
+                                simLongPressTimer = null;
+                            }
+                        }
+                    });
+
+                    body.addEventListener("mouseup", () => {
                         if (simLongPressTimer) {
                             clearTimeout(simLongPressTimer);
                             simLongPressTimer = null;
@@ -3091,7 +3153,7 @@
 
                 if (miniBody) {
                     const userMsgHtml = `
-                        <div class="sim-msg-item chat-bubble-container" data-msg-id="${userMsgId}" data-sender="${safeEscape(userSender)}" data-msg="${safeEscape(text)}" style="align-self:flex-end; max-width:82%; display:flex; flex-direction:column; align-items:flex-end; cursor:pointer;">
+                        <div class="sim-msg-item chat-bubble-container" data-msg-id="${userMsgId}" data-sender="${safeEscape(userSender)}" data-msg="${safeEscape(text)}" style="align-self:flex-end; max-width:82%; display:flex; flex-direction:column; align-items:flex-end; cursor:pointer; flex-shrink:0;">
                             <div style="background:#fee500; color:#1e1e1e; padding:8px 11px; border-radius:10px; border-top-right-radius:2px; font-size:13px; line-height:1.4; word-break:break-word; box-shadow:0 1px 2px rgba(0,0,0,0.08);">
                                 ${replyQuoteHtml}
                                 <div class="sim-bubble-content">${safeText}</div>
@@ -3130,7 +3192,7 @@
                     const safeReply = safeEscape(textContent).replace(/\n/g, '<br>');
                     const botMsgId = "sim_bot_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
                     const botMsgHtml = `
-                        <div class="sim-msg-item chat-bubble-container" data-msg-id="${botMsgId}" data-sender="Stockfishbot" data-msg="${safeEscape(textContent)}" style="align-self:flex-start; max-width:88%; display:flex; gap:8px; cursor:pointer;">
+                        <div class="sim-msg-item chat-bubble-container" data-msg-id="${botMsgId}" data-sender="Stockfishbot" data-msg="${safeEscape(textContent)}" style="align-self:flex-start; max-width:88%; display:flex; gap:8px; cursor:pointer; flex-shrink:0;">
                             <img src="https://ui-avatars.com/api/?name=Stockfishbot&background=3C1E1E&color=FEE500" style="width:34px; height:34px; border-radius:12px; flex-shrink:0; margin-top:2px;" alt="Bot">
                             <div style="display:flex; flex-direction:column; gap:3px;">
                                 <div style="font-size:11px; font-weight:600; color:#444; display:flex; align-items:center; gap:4px;">
@@ -3277,7 +3339,7 @@
 
                     if (miniBody) {
                         const userMsgHtml = `
-                            <div class="sim-msg-item chat-bubble-container" data-msg-id="${msgId}" data-sender="${safeEscape(userSender)}" data-msg="[FILE:${safeEscape(file.name)}]" style="align-self:flex-end; max-width:82%; display:flex; flex-direction:column; align-items:flex-end; cursor:pointer;">
+                            <div class="sim-msg-item chat-bubble-container" data-msg-id="${msgId}" data-sender="${safeEscape(userSender)}" data-msg="[FILE:${safeEscape(file.name)}]" style="align-self:flex-end; max-width:82%; display:flex; flex-direction:column; align-items:flex-end; cursor:pointer; flex-shrink:0;">
                                 <div style="background:#fee500; color:#1e1e1e; padding:8px 11px; border-radius:10px; border-top-right-radius:2px; font-size:13px; line-height:1.4; word-break:break-word; box-shadow:0 1px 2px rgba(0,0,0,0.08);">
                                     <div class="sim-bubble-content">${previewHtml}</div>
                                 </div>
@@ -3662,14 +3724,15 @@
 
             const botToggle = event.target.closest("#botChatToggleBtn");
             if (botToggle) {
-                const mainContent = document.querySelector(".main-content");
-                if (mainContent && mainContent.classList.contains("mode-chat-view")) {
-                    applyState("guide", window.lastNonChatSection || "intro");
-                } else {
-                    if (typeof ensureSimulatorReady === "function") {
-                        ensureSimulatorReady();
+                const widget = typeof ensureMiniKakaoWidget === "function" ? ensureMiniKakaoWidget() : document.getElementById("mini-kakao-widget");
+                if (widget) {
+                    if (widget.style.display === "none" || !widget.style.display) {
+                        widget.style.display = "flex";
+                        const input = document.getElementById("mini-kakao-input");
+                        if (input) input.focus();
+                    } else {
+                        widget.style.display = "none";
                     }
-                    applyState("guide", "chatView");
                 }
                 return;
             }
@@ -4297,36 +4360,11 @@
             adminMenu.remove();
         }
         initChatUI([]);
-
-        const roomInput = document.getElementById('chat-room-input');
-        if (roomInput && !roomInput.value.trim()) {
-            roomInput.value = "184029182390192";
-            roomInput.placeholder = "가상 방 ID (184029182390192)";
-        }
-        const container = document.getElementById("chat-messages-container");
-        const msgInputElem = document.getElementById("chat-message-input");
-        const sendBtnElem = document.getElementById("send-chat-btn");
-        const enterAreaElem = document.getElementById("enter-to-send-area");
-        if (container) {
-            container.style.display = "block";
-            if (!container.innerHTML.trim() || container.innerHTML.includes("최근 채팅 기록이 없습니다.")) {
-                container.innerHTML = `
-                    <div style="text-align:center; padding:1.5rem 1rem; color:var(--text-muted); font-size:0.9rem;">
-                        <div style="font-weight:700; color:var(--primary-color); margin-bottom:0.4rem;">💬 가상 웹 카톡 시뮬레이터 (게스트 모드 활성)</div>
-                        비로그인 상태에서도 모든 명령어를 가상 DB 환경에서 안전하게 테스트할 수 있습니다.<br>
-                        명령어 카드의 ▶ 버튼을 클릭하거나 직접 메시지를 입력해보세요.
-                    </div>
-                `;
-            }
-        }
-        if (msgInputElem) msgInputElem.style.display = "block";
-        if (sendBtnElem) sendBtnElem.style.display = "flex";
-        if (enterAreaElem) enterAreaElem.style.display = "flex";
     }
     window.renderGuestDashboard = renderGuestDashboard;
     window.ensureSimulatorReady = function() {
-        if (!document.getElementById('customRoomSelectContainer')) {
-            renderGuestDashboard();
+        if (typeof ensureMiniKakaoWidget === "function") {
+            ensureMiniKakaoWidget();
         }
     };
 
@@ -4935,67 +4973,13 @@
                     const enterAreaElem = document.getElementById('enter-to-send-area');
 
                     if (!token) {
-                        if (chatContainerElem) chatContainerElem.style.display = 'block';
-                        if (msgInputElem) msgInputElem.style.display = 'block';
-                        if (sendBtnElem) sendBtnElem.style.display = 'flex';
-                        if (enterAreaElem) enterAreaElem.style.display = 'flex';
                         if (chatContainerElem) {
-                            chatContainerElem.innerHTML = '<div style="text-align:center; padding:2rem; color:var(--text-main); font-weight:bold;">가상 DB 연결 중...</div>';
-                            fetch(`${API_BASE_URL}/api/simulator/logs?room=${encodeURIComponent(room)}`)
-                                .then(res => res.json())
-                                .then(data => {
-                                    chatContainerElem.innerHTML = "";
-                                    const logs = (data && data.logs) || [];
-                                    if (logs.length === 0) {
-                                        chatContainerElem.innerHTML = `
-                                            <div style="text-align:center; padding:1.5rem 1rem; color:var(--text-muted); font-size:0.9rem;">
-                                                <div style="font-weight:700; color:var(--primary-color); margin-bottom:0.4rem;">💬 가상 방 #${escapeHtml(room)} 에 접속했습니다.</div>
-                                                격리된 가상 DB에서 작동 중입니다. 자유롭게 명령어를 입력해 테스트해보세요!
-                                            </div>
-                                        `;
-                                    } else {
-                                        logs.forEach(l => {
-                                            const isBot = l.user_id === "100000000" || l.sender === "Stockfishbot";
-                                            const safeMsg = escapeHtml(l.message).replace(/\n/g, '<br>');
-                                            if (isBot) {
-                                                chatContainerElem.insertAdjacentHTML("beforeend", `
-                                                    <div class="chat-bubble-container received" data-msg-id="${l.id}" data-sender="Stockfishbot" data-msg="${escapeHtml(l.message)}" data-tags='["BOT"]'>
-                                                        <img class="chat-profile-img" src="https://ui-avatars.com/api/?name=Stockfishbot&background=3C1E1E&color=FEE500">
-                                                        <div class="chat-bubble-wrapper received">
-                                                            <div class="chat-sender">Stockfishbot<div class="chat-tags-wrapper"><span class="chat-tag">BOT</span></div></div>
-                                                            <div class="chat-bubble received chat-bubble-padded">
-                                                                ${safeMsg}
-                                                                <button class="copy-btn chat-copy-btn" title="복사"><svg class="lucide-icon chat-copy-icon"><use href="#copy"></use></svg></button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                `);
-                                            } else {
-                                                chatContainerElem.insertAdjacentHTML("beforeend", `
-                                                    <div class="chat-bubble-container sent" data-msg-id="${l.id}" data-sender="${escapeHtml(l.user_id)}" data-msg="${escapeHtml(l.message)}">
-                                                        <div class="chat-bubble-wrapper sent">
-                                                            <div class="chat-sender">${escapeHtml(l.sender || '나')}</div>
-                                                            <div class="chat-bubble sent chat-bubble-padded">
-                                                                ${safeMsg}
-                                                                <button class="copy-btn chat-copy-btn" title="복사"><svg class="lucide-icon chat-copy-icon"><use href="#copy"></use></svg></button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                `);
-                                            }
-                                        });
-                                        chatContainerElem.scrollTop = chatContainerElem.scrollHeight;
-                                    }
-                                })
-                                .catch(() => {
-                                    chatContainerElem.innerHTML = `
-                                        <div style="text-align:center; padding:1.5rem 1rem; color:var(--text-muted); font-size:0.9rem;">
-                                            <div style="font-weight:700; color:var(--primary-color); margin-bottom:0.4rem;">💬 가상 방 #${escapeHtml(room)} (오프라인 모드)</div>
-                                            로컬 모의 패킷 파서로 즉각 반응합니다. 명령어를 입력해보세요!
-                                        </div>
-                                    `;
-                                });
+                            chatContainerElem.style.display = 'block';
+                            chatContainerElem.innerHTML = '<div style="text-align:center; padding:3rem 1rem; color:var(--text-muted); font-size:0.95rem;">로그인이 필요한 서비스입니다.<br><span style="font-size:0.85rem; color:var(--text-muted); margin-top:0.5rem; display:inline-block;">실시간 봇 체험은 우측 하단 미니 카톡을 이용해주세요.</span></div>';
                         }
+                        if (msgInputElem) msgInputElem.style.display = 'none';
+                        if (sendBtnElem) sendBtnElem.style.display = 'none';
+                        if (enterAreaElem) enterAreaElem.style.display = 'none';
                         return;
                     }
 
@@ -5674,10 +5658,6 @@
                     }
                 });
 
-                const ctxMenu = document.getElementById('chat-context-menu');
-                if (ctxMenu && ctxMenu.parentElement !== document.body) {
-                    document.body.appendChild(ctxMenu);
-                }
                 let ctxTargetData = null;
                 let longPressTimer = null;
                 let touchMoved = false;
@@ -5692,19 +5672,20 @@
                         isSimulator: container.classList.contains('sim-msg-item') || !!container.closest('#mini-kakao-body'),
                         elem: container
                     };
-                    if (!ctxMenu) return;
-                    if (ctxMenu.parentElement !== document.body) {
-                        document.body.appendChild(ctxMenu);
+                    const menu = document.getElementById('chat-context-menu');
+                    if (!menu) return;
+                    if (menu.parentElement !== document.body) {
+                        document.body.appendChild(menu);
                     }
-                    ctxMenu.style.position = 'fixed';
-                    ctxMenu.style.zIndex = '999999';
-                    ctxMenu.style.display = 'block';
-                    const menuWidth = ctxMenu.offsetWidth || 140;
-                    const menuHeight = ctxMenu.offsetHeight || 150;
+                    menu.style.position = 'fixed';
+                    menu.style.zIndex = '999999';
+                    menu.style.display = 'block';
+                    const menuWidth = menu.offsetWidth || 140;
+                    const menuHeight = menu.offsetHeight || 150;
                     const posX = (x + menuWidth > window.innerWidth) ? (window.innerWidth - menuWidth - 10) : x;
                     const posY = (y + menuHeight > window.innerHeight) ? (window.innerHeight - menuHeight - 10) : y;
-                    ctxMenu.style.left = `${Math.max(10, posX)}px`;
-                    ctxMenu.style.top = `${Math.max(10, posY)}px`;
+                    menu.style.left = `${Math.max(10, posX)}px`;
+                    menu.style.top = `${Math.max(10, posY)}px`;
                     justOpenedContextMenu = true;
                     setTimeout(() => {
                         justOpenedContextMenu = false;
@@ -5712,7 +5693,8 @@
                 };
 
                 const hideContextMenu = () => {
-                    if (ctxMenu) ctxMenu.style.display = 'none';
+                    const menu = document.getElementById('chat-context-menu');
+                    if (menu) menu.style.display = 'none';
                     ctxTargetData = null;
                 };
 
@@ -5721,12 +5703,14 @@
 
                 document.addEventListener('click', (e) => {
                     if (justOpenedContextMenu) return;
-                    if (ctxMenu && ctxMenu.style.display === 'block' && !ctxMenu.contains(e.target)) hideContextMenu();
+                    const menu = document.getElementById('chat-context-menu');
+                    if (menu && menu.style.display === 'block' && !menu.contains(e.target)) hideContextMenu();
                     if (mentionPopup && !mentionPopup.contains(e.target) && e.target !== msgInput) hideMentionPopup();
                 });
                 document.addEventListener('touchstart', (e) => {
                     if (justOpenedContextMenu) return;
-                    if (ctxMenu && ctxMenu.style.display === 'block' && !ctxMenu.contains(e.target)) hideContextMenu();
+                    const menu = document.getElementById('chat-context-menu');
+                    if (menu && menu.style.display === 'block' && !menu.contains(e.target)) hideContextMenu();
                 }, { passive: true });
 
                 document.getElementById('ctx-reply-btn')?.addEventListener('click', () => {
