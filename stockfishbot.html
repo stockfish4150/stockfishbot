@@ -134,6 +134,7 @@
         body.dark-mode .search-input:focus{background-color:#101215}
         .clear-search-btn{position:absolute;right:.5rem;top:50%;transform:translateY(-50%);background:0 0;border:none;font-size:1.2rem;color:var(--text-muted);cursor:pointer;display:none;width:24px;height:24px;border-radius:50%;transition:all .3s cubic-bezier(.25, .1, .25, 1);align-items:center;justify-content:center}
         .clear-search-btn:hover{background-color:#E9EFF4;color:var(--text-main)}
+        body.dark-mode .clear-search-btn:hover{background-color:rgba(255,255,255,.1);color:var(--text-main)}
         .section-title{font-size:1.8rem;font-weight:700;margin-top:4rem;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border-color);color:var(--title-color);scroll-margin-top:8rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
         .section-title svg{margin-right:.5rem;color:var(--primary-color)}
         .section-title::after{content:'';width:24px;height:24px;background-image:url("data:image/svg+xml, %3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='18 15 12 9 6 15'%3E%3C/polyline%3E%3C/svg%3E");background-size:contain;background-repeat:no-repeat}
@@ -3004,6 +3005,16 @@
                                 </div>
                             </div>
                         </div>
+                        <div id="mini-kakao-hide-overlay" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.45); z-index:101; align-items:center; justify-content:center; padding:16px; box-sizing:border-box; border-radius:16px;">
+                            <div style="background:#ffffff; width:100%; max-width:280px; border-radius:12px; padding:16px; box-shadow:0 4px 16px rgba(0,0,0,0.15); display:flex; flex-direction:column; gap:12px;">
+                                <div style="font-weight:700; font-size:14px; color:#1e1e1e;">메시지 가리기</div>
+                                <div style="font-size:13px; color:#495057; line-height:1.4;">이 메시지를 가리시겠습니까?<br><span style="font-size:11px; color:#888;">모든 대화 상대에게 '가려진 메시지입니다.'로 표시됩니다.</span></div>
+                                <div style="display:flex; justify-content:flex-end; gap:8px;">
+                                    <button type="button" id="mini-kakao-hide-cancel" style="background:#f1f3f5; border:none; border-radius:6px; padding:6px 12px; font-size:12px; cursor:pointer; color:#495057;">취소</button>
+                                    <button type="button" id="mini-kakao-hide-confirm" style="background:#e03131; color:#ffffff; border:none; border-radius:6px; padding:6px 14px; font-size:12px; font-weight:700; cursor:pointer;">가리기</button>
+                                </div>
+                            </div>
+                        </div>
                         <div id="mini-kakao-fullview-overlay" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; background:#ffffff; z-index:100; flex-direction:column; animation:miniKakaoFadeIn 0.2s ease-out; border-radius:16px;">
                             <div style="display:flex; align-items:center; padding:10px 14px; border-bottom:1px solid rgba(0,0,0,0.08); background:#f8f9fa; flex-shrink:0;">
                                 <button type="button" id="mini-kakao-fullview-close" title="뒤로가기" style="background:none; border:none; cursor:pointer; color:#212529; padding:4px; margin-right:8px; display:flex; align-items:center; justify-content:center;">
@@ -3155,138 +3166,217 @@
                         document.body.insertAdjacentHTML("beforeend", ctxHtml);
                     }
 
+                    let activeContextTarget = null;
                     if (!window.openChatContextMenu) {
-                        let activeContextTarget = null;
                         window.openChatContextMenu = function(x, y, target) {
                             activeContextTarget = target;
+                            window.activeSimContextTarget = target;
                             const menu = document.getElementById("chat-context-menu");
                             if (!menu) return;
+                            if (menu.parentElement !== document.body) {
+                                document.body.appendChild(menu);
+                            }
+                            menu.style.position = 'fixed';
+                            menu.style.zIndex = '999999';
                             menu.style.display = "block";
-                            menu.style.left = `${Math.min(x, window.innerWidth - 130)}px`;
-                            menu.style.top = `${Math.min(y, window.innerHeight - 150)}px`;
+                            const menuWidth = menu.offsetWidth || 140;
+                            const menuHeight = menu.offsetHeight || 150;
+                            const posX = (x + menuWidth > window.innerWidth) ? (window.innerWidth - menuWidth - 10) : x;
+                            const posY = (y + menuHeight > window.innerHeight) ? (window.innerHeight - menuHeight - 10) : y;
+                            menu.style.left = `${Math.max(10, posX)}px`;
+                            menu.style.top = `${Math.max(10, posY)}px`;
                         };
                         window.hideChatContextMenu = function() {
                             const menu = document.getElementById("chat-context-menu");
                             if (menu) menu.style.display = "none";
                             document.querySelectorAll('.chat-context-menu').forEach(m => m.style.display = 'none');
                             activeContextTarget = null;
+                            window.activeSimContextTarget = null;
                         };
+                        document.addEventListener("pointerdown", (e) => {
+                            if (!e.target.closest("#chat-context-menu")) {
+                                if (window.hideChatContextMenu) window.hideChatContextMenu();
+                            }
+                        });
                         document.addEventListener("click", (e) => {
                             if (!e.target.closest("#chat-context-menu")) {
                                 if (window.hideChatContextMenu) window.hideChatContextMenu();
                             }
                         });
-                        const ctxReply = document.getElementById("ctx-reply-btn");
-                        if (ctxReply) {
-                            ctxReply.addEventListener("click", () => {
-                                if (activeContextTarget) triggerReply(activeContextTarget);
-                                window.hideChatContextMenu();
-                            });
-                        }
-                        const ctxModify = document.getElementById("ctx-modify-btn");
-                        if (ctxModify) {
-                            ctxModify.addEventListener("click", () => {
-                                const target = activeContextTarget;
-                                if (window.hideChatContextMenu) window.hideChatContextMenu();
-                                if (!target) return;
-                                const editOverlay = document.getElementById("mini-kakao-edit-overlay");
-                                const editInput = document.getElementById("mini-kakao-edit-input");
-                                if (editOverlay && editInput) {
-                                    const orig = target.getAttribute("data-msg") || "";
-                                    editInput.value = orig;
-                                    editOverlay.style.display = "flex";
-                                    editOverlay._editingTarget = target;
-                                }
-                            });
-                        }
-                        const editCancelBtn = document.getElementById("mini-kakao-edit-cancel");
-                        if (editCancelBtn && !editCancelBtn._bound) {
-                            editCancelBtn._bound = true;
-                            editCancelBtn.addEventListener("click", () => {
-                                const editOverlay = document.getElementById("mini-kakao-edit-overlay");
-                                if (editOverlay) {
-                                    editOverlay.style.display = "none";
-                                    editOverlay._editingTarget = null;
-                                }
-                            });
-                        }
-                        const editSaveBtn = document.getElementById("mini-kakao-edit-save");
-                        if (editSaveBtn && !editSaveBtn._bound) {
-                            editSaveBtn._bound = true;
-                            editSaveBtn.addEventListener("click", () => {
-                                const editOverlay = document.getElementById("mini-kakao-edit-overlay");
-                                const editInput = document.getElementById("mini-kakao-edit-input");
-                                if (!editOverlay || !editInput) return;
-                                const target = editOverlay._editingTarget;
-                                if (target) {
-                                    const orig = target.getAttribute("data-msg") || "";
-                                    const newMsg = editInput.value.trim();
-                                    if (newMsg && newMsg !== orig) {
-                                        target.setAttribute("data-msg", newMsg);
-                                        const b = target.querySelector(".sim-bubble-content") || target.querySelector(".chat-bubble");
-                                        if (b) {
-                                            b.innerHTML = safeEscape(newMsg).replace(/\n/g, '<br>');
-                                        }
-                                        const viewAll = target.querySelector('.sim-view-all-btn');
-                                        if (viewAll) {
-                                            viewAll.dataset.fullText = safeEscape(newMsg);
-                                        }
-                                        let editLabel = target.querySelector('.sim-edited-label');
-                                        if (!editLabel) {
-                                            editLabel = document.createElement('span');
-                                            editLabel.className = 'sim-edited-label';
-                                            editLabel.style.fontSize = '10px';
-                                            editLabel.style.color = '#8c8c8c';
-                                            editLabel.style.whiteSpace = 'nowrap';
-                                            editLabel.style.marginBottom = '2px';
-                                            editLabel.style.flexShrink = '0';
-                                            editLabel.textContent = '(수정됨)';
-                                            const sender = target.getAttribute("data-sender") || "";
-                                            const bubbleWrap = target.querySelector('.sim-bubble-wrap') || target.querySelector('.sim-bubble-content') || target.firstElementChild;
-                                            if (sender === "Stockfishbot") {
-                                                if (bubbleWrap && bubbleWrap.parentNode) {
-                                                    bubbleWrap.parentNode.appendChild(editLabel);
-                                                } else {
-                                                    target.appendChild(editLabel);
-                                                }
-                                            } else {
-                                                if (bubbleWrap && bubbleWrap.parentNode) {
-                                                    bubbleWrap.parentNode.insertBefore(editLabel, bubbleWrap);
-                                                } else {
-                                                    target.insertBefore(editLabel, target.firstChild);
-                                                }
-                                            }
-                                        } else {
-                                            editLabel.style.display = 'inline';
-                                        }
-                                    }
-                                }
+                    }
+
+                    const ctxReply = document.getElementById("ctx-reply-btn");
+                    if (ctxReply && !ctxReply._simBound) {
+                        ctxReply._simBound = true;
+                        ctxReply.addEventListener("click", () => {
+                            const target = activeContextTarget || window.activeSimContextTarget;
+                            if (target) triggerReply(target);
+                            if (window.hideChatContextMenu) window.hideChatContextMenu();
+                        });
+                    }
+                    const ctxModify = document.getElementById("ctx-modify-btn");
+                    if (ctxModify && !ctxModify._simBound) {
+                        ctxModify._simBound = true;
+                        ctxModify.addEventListener("click", () => {
+                            const target = activeContextTarget || window.activeSimContextTarget;
+                            if (window.hideChatContextMenu) window.hideChatContextMenu();
+                            if (!target) return;
+                            const editOverlay = document.getElementById("mini-kakao-edit-overlay");
+                            const editInput = document.getElementById("mini-kakao-edit-input");
+                            if (editOverlay && editInput) {
+                                const orig = target.getAttribute("data-msg") || "";
+                                editInput.value = orig;
+                                editOverlay.style.display = "flex";
+                                editOverlay._editingTarget = target;
+                            }
+                        });
+                    }
+                    const editCancelBtn = document.getElementById("mini-kakao-edit-cancel");
+                    if (editCancelBtn && !editCancelBtn._bound) {
+                        editCancelBtn._bound = true;
+                        editCancelBtn.addEventListener("click", () => {
+                            const editOverlay = document.getElementById("mini-kakao-edit-overlay");
+                            if (editOverlay) {
                                 editOverlay.style.display = "none";
                                 editOverlay._editingTarget = null;
-                            });
-                        }
-                        const ctxHide = document.getElementById("ctx-hide-btn");
-                        if (ctxHide) {
-                            ctxHide.addEventListener("click", () => {
-                                const target = activeContextTarget;
-                                if (window.hideChatContextMenu) window.hideChatContextMenu();
-                                if (target) {
-                                    const noticeHtml = `<div style="align-self:center; background:rgba(0,0,0,0.06); color:#666666; font-size:11px; padding:3px 10px; border-radius:12px; margin:4px 0; flex-shrink:0;">관리자가 메시지를 가렸습니다.</div>`;
-                                    target.insertAdjacentHTML("beforebegin", noticeHtml);
-                                    target.remove();
+                            }
+                        });
+                    }
+                    const editSaveBtn = document.getElementById("mini-kakao-edit-save");
+                    if (editSaveBtn && !editSaveBtn._bound) {
+                        editSaveBtn._bound = true;
+                        editSaveBtn.addEventListener("click", () => {
+                            const editOverlay = document.getElementById("mini-kakao-edit-overlay");
+                            const editInput = document.getElementById("mini-kakao-edit-input");
+                            if (!editOverlay || !editInput) return;
+                            const target = editOverlay._editingTarget;
+                            if (target) {
+                                const orig = target.getAttribute("data-msg") || "";
+                                const newMsg = editInput.value.trim();
+                                if (newMsg && newMsg !== orig) {
+                                    target.setAttribute("data-msg", newMsg);
+                                    const b = target.querySelector(".sim-bubble-content") || target.querySelector(".chat-bubble");
+                                    if (b) {
+                                        b.innerHTML = safeEscape(newMsg).replace(/\n/g, '<br>');
+                                    }
+                                    const viewAll = target.querySelector('.sim-view-all-btn');
+                                    if (viewAll) {
+                                        viewAll.dataset.fullText = safeEscape(newMsg);
+                                    }
+                                    let editLabel = target.querySelector('.sim-edited-label');
+                                    if (!editLabel) {
+                                        editLabel = document.createElement('span');
+                                        editLabel.className = 'sim-edited-label';
+                                        editLabel.style.fontSize = '10px';
+                                        editLabel.style.color = '#8c8c8c';
+                                        editLabel.style.whiteSpace = 'nowrap';
+                                        editLabel.style.marginBottom = '2px';
+                                        editLabel.style.flexShrink = '0';
+                                        editLabel.textContent = '(수정됨)';
+                                        const sender = target.getAttribute("data-sender") || "";
+                                        const bubbleWrap = target.querySelector('.sim-bubble-wrap') || target.querySelector('.sim-bubble-content') || target.firstElementChild;
+                                        if (sender === "Stockfishbot") {
+                                            if (bubbleWrap && bubbleWrap.parentNode) {
+                                                bubbleWrap.parentNode.appendChild(editLabel);
+                                            } else {
+                                                target.appendChild(editLabel);
+                                            }
+                                        } else {
+                                            if (bubbleWrap && bubbleWrap.parentNode) {
+                                                bubbleWrap.parentNode.insertBefore(editLabel, bubbleWrap);
+                                            } else {
+                                                target.insertBefore(editLabel, target.firstChild);
+                                            }
+                                        }
+                                    } else {
+                                        editLabel.style.display = 'inline';
+                                    }
                                 }
-                            });
-                        }
-                        const ctxCopy = document.getElementById("ctx-copy-btn");
-                        if (ctxCopy) {
-                            ctxCopy.addEventListener("click", () => {
-                                if (activeContextTarget) {
-                                    const msg = activeContextTarget.getAttribute("data-msg") || "";
-                                    navigator.clipboard.writeText(msg).catch(() => {});
+                            }
+                            editOverlay.style.display = "none";
+                            editOverlay._editingTarget = null;
+                        });
+                    }
+                    const ctxHide = document.getElementById("ctx-hide-btn");
+                    if (ctxHide && !ctxHide._simBound) {
+                        ctxHide._simBound = true;
+                        ctxHide.addEventListener("click", () => {
+                            const target = activeContextTarget || window.activeSimContextTarget;
+                            if (window.hideChatContextMenu) window.hideChatContextMenu();
+                            if (!target) return;
+                            const hideOverlay = document.getElementById("mini-kakao-hide-overlay");
+                            if (hideOverlay) {
+                                hideOverlay.style.display = "flex";
+                                hideOverlay._hidingTarget = target;
+                            }
+                        });
+                    }
+                    const hideCancelBtn = document.getElementById("mini-kakao-hide-cancel");
+                    if (hideCancelBtn && !hideCancelBtn._bound) {
+                        hideCancelBtn._bound = true;
+                        hideCancelBtn.addEventListener("click", () => {
+                            const hideOverlay = document.getElementById("mini-kakao-hide-overlay");
+                            if (hideOverlay) {
+                                hideOverlay.style.display = "none";
+                                hideOverlay._hidingTarget = null;
+                            }
+                        });
+                    }
+                    const hideConfirmBtn = document.getElementById("mini-kakao-hide-confirm");
+                    if (hideConfirmBtn && !hideConfirmBtn._bound) {
+                        hideConfirmBtn._bound = true;
+                        hideConfirmBtn.addEventListener("click", () => {
+                            const hideOverlay = document.getElementById("mini-kakao-hide-overlay");
+                            if (!hideOverlay) return;
+                            const target = hideOverlay._hidingTarget;
+                            if (target) {
+                                target.setAttribute("data-msg", "가려진 메시지입니다.");
+                                const bubble = target.querySelector(".sim-bubble-content") || target.querySelector(".chat-bubble");
+                                if (bubble) {
+                                    bubble.innerHTML = '<span style="color:#888; font-style:italic;">가려진 메시지입니다.</span>';
                                 }
-                                window.hideChatContextMenu();
-                            });
-                        }
+                                const viewAll = target.querySelector('.sim-view-all-btn');
+                                if (viewAll) viewAll.remove();
+                                const bubbleWrap = target.querySelector('.sim-bubble-wrap');
+                                if (bubbleWrap) {
+                                    const mediaImgs = bubbleWrap.querySelectorAll('img, video, audio');
+                                    mediaImgs.forEach(m => m.remove());
+                                }
+                                const editLabel = target.querySelector('.sim-edited-label');
+                                if (editLabel) editLabel.remove();
+
+                                const token = localStorage.getItem("admin_token");
+                                const targetId = target.dataset.msgId;
+                                const roomSel = document.getElementById("mini-kakao-room-select");
+                                const room = roomSel ? roomSel.value : "184029182390192";
+                                if (token && targetId) {
+                                    fetch(`${API_BASE_URL}/api/admin/chat/hide`, {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'Authorization': `Bearer ${token}`,
+                                            'ngrok-skip-browser-warning': 'true',
+                                            'Bypass-Tunnel-Reminder': 'true'
+                                        },
+                                        body: JSON.stringify({ room: room, msg_id: targetId })
+                                    }).catch(() => {});
+                                }
+                            }
+                            hideOverlay.style.display = "none";
+                            hideOverlay._hidingTarget = null;
+                        });
+                    }
+                    const ctxCopy = document.getElementById("ctx-copy-btn");
+                    if (ctxCopy && !ctxCopy._simBound) {
+                        ctxCopy._simBound = true;
+                        ctxCopy.addEventListener("click", () => {
+                            const target = activeContextTarget || window.activeSimContextTarget;
+                            if (target) {
+                                const msg = target.getAttribute("data-msg") || "";
+                                navigator.clipboard.writeText(msg).catch(() => {});
+                            }
+                            if (window.hideChatContextMenu) window.hideChatContextMenu();
+                        });
                     }
 
                     body.addEventListener("click", (e) => {
@@ -3614,6 +3704,19 @@
                     miniBody.insertAdjacentHTML("beforeend", botMsgHtml);
                 };
 
+                const scrollMiniToBottom = () => {
+                    if (!miniBody) return;
+                    const doScroll = () => {
+                        miniBody.scrollTop = miniBody.scrollHeight;
+                    };
+                    doScroll();
+                    requestAnimationFrame(doScroll);
+                    setTimeout(doScroll, 50);
+                    setTimeout(doScroll, 150);
+                    setTimeout(doScroll, 300);
+                };
+                window.scrollMiniToBottom = scrollMiniToBottom;
+
                 const renderBotReplies = (resData) => {
                     if (!resData) return;
                     if (resData.replies && Array.isArray(resData.replies) && resData.replies.length > 0) {
@@ -3623,7 +3726,15 @@
                     } else if (typeof resData === "string") {
                         renderBotItem(resData);
                     }
-                    if (miniBody) miniBody.scrollTop = miniBody.scrollHeight;
+                    if (miniBody) {
+                        const imgs = miniBody.querySelectorAll('img');
+                        imgs.forEach(img => {
+                            if (!img.complete) {
+                                img.addEventListener('load', scrollMiniToBottom, { once: true });
+                            }
+                        });
+                    }
+                    scrollMiniToBottom();
                 };
                 window.renderMiniKakaoReplies = renderBotReplies;
 
@@ -4254,7 +4365,7 @@
             if (isDark) {
                 document.body.classList.add("dark-mode");
                 globalDarkModeToggles.forEach(toggleBtn => {
-                    toggleBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sun preview-icon"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>';
+                    toggleBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>';
                 });
             } else {
                 document.body.classList.remove("dark-mode");
@@ -6111,7 +6222,7 @@
                     justOpenedContextMenu = true;
                     setTimeout(() => {
                         justOpenedContextMenu = false;
-                    }, 400);
+                    }, 50);
                 };
 
                 const hideContextMenu = () => {
@@ -6124,6 +6235,11 @@
                 window.openChatContextMenu = showContextMenu;
                 window.hideChatContextMenu = hideContextMenu;
 
+                document.addEventListener('pointerdown', (e) => {
+                    if (justOpenedContextMenu) return;
+                    const menu = document.getElementById('chat-context-menu');
+                    if (menu && menu.style.display === 'block' && !menu.contains(e.target)) hideContextMenu();
+                });
                 document.addEventListener('click', (e) => {
                     if (justOpenedContextMenu) return;
                     const menu = document.getElementById('chat-context-menu');
@@ -6166,21 +6282,22 @@
 
                 document.getElementById('ctx-hide-btn')?.addEventListener('click', () => {
                     if (!ctxTargetData) return;
-                    const targetId = ctxTargetData.msgId;
                     const isSim = ctxTargetData.isSimulator;
                     const simElem = ctxTargetData.elem;
-                    const roomSel = document.getElementById("mini-kakao-room-select");
-                    const roomInput = document.getElementById('chat-room-input');
-                    const room = isSim ? (roomSel ? roomSel.value : "184029182390192") : (roomInput ? roomInput.value.trim() : "184029182390192");
                     hideContextMenu();
+                    if (isSim && simElem) {
+                        const hideOverlay = document.getElementById("mini-kakao-hide-overlay");
+                        if (hideOverlay) {
+                            hideOverlay.style.display = "flex";
+                            hideOverlay._hidingTarget = simElem;
+                        }
+                        return;
+                    }
+                    const targetId = ctxTargetData.msgId;
+                    const roomInput = document.getElementById('chat-room-input');
+                    const room = roomInput ? roomInput.value.trim() : "184029182390192";
                     setTimeout(async () => {
                         if (!confirm('이 메시지를 가리시겠습니까?')) return;
-
-                        if (isSim && simElem) {
-                            const bubble = simElem.querySelector('.sim-bubble-content') || simElem.querySelector('.chat-bubble');
-                            if (bubble) bubble.textContent = '가려진 메시지입니다.';
-                            simElem.dataset.msg = '가려진 메시지입니다.';
-                        }
 
                         try {
                             const token = localStorage.getItem('admin_token');
@@ -6204,37 +6321,39 @@
                                         if (bubble) bubble.textContent = '가려진 메시지입니다.';
                                     }
                                 } else {
-                                    if (!isSim) alert(data.error || '메시지 가리기에 실패했습니다.');
+                                    alert(data.error || '메시지 가리기에 실패했습니다.');
                                 }
-                            } else if (isSim) {
-                                alert('시뮬레이터에서 메시지를 가렸습니다.');
                             }
                         } catch (e) {
-                            if (!isSim) alert('서버와 통신할 수 없습니다.');
+                            alert('서버와 통신할 수 없습니다.');
                         }
                     }, 30);
                 });
 
                 document.getElementById('ctx-modify-btn')?.addEventListener('click', () => {
                     if (!ctxTargetData) return;
-                    const targetId = ctxTargetData.msgId;
-                    const originalMsg = ctxTargetData.msg;
                     const isSim = ctxTargetData.isSimulator;
                     const simElem = ctxTargetData.elem;
-                    const roomSel = document.getElementById("mini-kakao-room-select");
-                    const roomInput = document.getElementById('chat-room-input');
-                    const room = isSim ? (roomSel ? roomSel.value : "184029182390192") : (roomInput ? roomInput.value.trim() : "184029182390192");
                     hideContextMenu();
+                    if (isSim && simElem) {
+                        const editOverlay = document.getElementById("mini-kakao-edit-overlay");
+                        const editInput = document.getElementById("mini-kakao-edit-input");
+                        if (editOverlay && editInput) {
+                            const orig = simElem.getAttribute("data-msg") || "";
+                            editInput.value = orig;
+                            editOverlay.style.display = "flex";
+                            editOverlay._editingTarget = simElem;
+                        }
+                        return;
+                    }
+                    const targetId = ctxTargetData.msgId;
+                    const originalMsg = ctxTargetData.msg;
+                    const roomInput = document.getElementById('chat-room-input');
+                    const room = roomInput ? roomInput.value.trim() : "184029182390192";
 
                     setTimeout(async () => {
                         const newMsg = prompt('수정할 메시지 내용을 입력하세요 (5분 이내 봇 메시지만 가능):', originalMsg);
                         if (newMsg === null || !newMsg.trim() || newMsg.trim() === originalMsg) return;
-
-                        if (isSim && simElem) {
-                            simElem.dataset.msg = newMsg.trim();
-                            const bubble = simElem.querySelector('.sim-bubble-content') || simElem.querySelector('.chat-bubble');
-                            if (bubble) bubble.textContent = newMsg.trim();
-                        }
 
                         try {
                             const token = localStorage.getItem('admin_token');
