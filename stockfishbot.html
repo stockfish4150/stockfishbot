@@ -2313,10 +2313,6 @@
                     return `[ 스톡봇 ]\n네! 부르셨나요? /도움말 을 입력하면 명령어를 확인하실 수 있습니다.`;
                 }
 
-                // 3. _cmd_test (/test, /테스트)
-                if (cmd === "test" || cmd === "테스트") {
-                    return `[ 봇 ]\ntest 명령어가 정상적으로 처리되었습니다.`;
-                }
 
                 // 4. information_change_language (/언어변경, /changelang)
                 if (cmd === "언어변경" || cmd === "changelang") {
@@ -2398,15 +2394,6 @@
                     return `[ 정보 ]\n유저 ID: 441160464\n닉네임: 사용자\n방 ID: 184029182390192\n권한: 관리자`;
                 }
 
-                // 20. _cmd_iptracker (/iptracker, /아이피추적기, /아이피추적)
-                if (cmd === "iptracker" || cmd === "아이피추적기" || cmd === "아이피추적") {
-                    return `[ 정보 ]\niptracker 명령어가 정상적으로 처리되었습니다.`;
-                }
-
-                // 21. tool_image_link (/이미지링크, /imagelink, /imglink)
-                if (cmd === "이미지링크" || cmd === "imagelink" || cmd === "imglink") {
-                    return `[ 도구 ]\n이미지링크 명령어가 정상적으로 처리되었습니다.`;
-                }
 
                 // 22. tool_en_to_kr (/entokr, /영타)
                 if (cmd === "entokr" || cmd === "영타") {
@@ -2843,27 +2830,6 @@
                     return `[IMAGE: ${avatarUrl}]\n[ 유저 프로필 ]\n이름: ${currentUser.name}\n식별자: ${currentUser.id}\n등급: ${currentUser.role.toUpperCase()}\n포인트: ${currentUser.points.toLocaleString()} P`;
                 }
 
-                // 퀴즈 시스템 (/퀴즈)
-                if (cmd === "퀴즈" || cmd === "quiz") {
-                    const quizBank = [
-                        { q: "체스에서 대각선으로만 움직일 수 있는 기물은 무엇일까요?", a: "비숍" },
-                        { q: "체스 보드의 총 칸 수는 몇 칸일까요? (숫자만 입력)", a: "64" },
-                        { q: "체스에서 가장 강력한 이동력을 가진 기물은?", a: "퀸" }
-                    ];
-                    const selected = quizBank[Math.floor(Math.random() * quizBank.length)];
-                    vdb.quiz_state = selected;
-                    return `[ ♟️ 체스 상식 퀴즈 ]\nQ. ${selected.q}\n(정답을 채팅창에 바로 입력해주세요!)`;
-                }
-
-                // 퀴즈 정답 검사
-                if (vdb.quiz_state && !isCmd) {
-                    if (raw.trim().toLowerCase() === vdb.quiz_state.a.toLowerCase()) {
-                        vdb.quiz_state = null;
-                        currentUser.points += 200;
-                        return `[ ⭕ 퀴즈 정답! ]\n정답입니다! 상금으로 200 포인트가 적립되었습니다.\n현재 포인트: ${currentUser.points.toLocaleString()} P`;
-                    }
-                }
-
                 // 후원 (/후원, /donate)
                 if (cmd === "후원" || cmd === "donate") {
                     return `[ 후원 ]\n후원해주신 금액은 모두 AI 및 서버 비용 부담에 사용됩니다.\n카카오페이: https://qr.kakaopay.com/FU43svaLj`;
@@ -2884,67 +2850,18 @@
                     return MOCK_COMMAND_RESPONSES.weather(argStr);
                 }
 
-                // 굴비봇 (LLM API 연동 및 일일 쿼터/사용량 제한 검증)
+                // 개발자 권한 및 굴비봇 등 고위험 기능 차단
                 const isGulbiCall = (
                     raw.startsWith("굴비야") || raw.toLowerCase().startsWith("hey gulbi") ||
                     raw.startsWith("코딩굴비야") || raw.startsWith("상담굴비야") || raw.startsWith("설명굴비야") ||
                     cmd === "굴비" || cmd === "gulbi" || cmd === "hey"
                 );
-
-                if (isGulbiCall) {
-                    if (currentUser.gulbi_usage === undefined) currentUser.gulbi_usage = 0;
-                    if (currentUser.gulbi_limit === undefined) currentUser.gulbi_limit = 100;
-                    if (currentUser.gulbi_img_usage === undefined) currentUser.gulbi_img_usage = 0;
-                    if (currentUser.gulbi_img_limit === undefined) currentUser.gulbi_img_limit = 15;
-                    if (!currentUser.gulbi_model) currentUser.gulbi_model = "Gemini 3.5 Flash Lite";
-                    if (!currentUser.gulbi_persona) currentUser.gulbi_persona = "기본";
-
-                    // 서브 커맨드 처리
-                    if (raw.includes("내정보")) {
-                        return `[ 굴비봇 내 정보 ]\n👤 유저: ${currentUser.name} (${currentUser.id})\n🧠 모델: ${currentUser.gulbi_model}\n🎭 페르소나: ${currentUser.gulbi_persona}\n📊 텍스트 질문 한도: ${currentUser.gulbi_usage}/${currentUser.gulbi_limit}회 (잔여: ${Math.max(0, currentUser.gulbi_limit - currentUser.gulbi_usage)}회)\n🎨 이미지 생성 한도: ${currentUser.gulbi_img_usage}/${currentUser.gulbi_img_limit}회 (잔여: ${Math.max(0, currentUser.gulbi_img_limit - currentUser.gulbi_img_usage)}회)\n🔄 초기화 일시: 매일 자정 자동 리셋`;
-                    }
-                    if (raw.includes("패치노트")) {
-                        return `[ 굴비봇 패치노트 ]\n- 웹 UI 시뮬레이터 실시간 API 연동 지원\n- Gemini 3.8 Flash 및 최신 모델 라인업 탑재\n- 일일 사용량 쿼터 및 실시간 DB 자동 리셋 최적화`;
-                    }
-                    if (raw.includes("모델 설정")) {
-                        const mParts = raw.split(/\s+/);
-                        const newModel = mParts[mParts.length - 1] || "Gemini 3.8 Flash";
-                        currentUser.gulbi_model = newModel;
-                        return `[ 굴비봇 설정 ]\n기본 모델이 '${newModel}'(으)로 변경되었습니다.`;
-                    }
-                    if (raw.includes("페르소나 설정")) {
-                        const pParts = raw.split(/\s+/);
-                        const newPersona = pParts[pParts.length - 1] || "기본";
-                        currentUser.gulbi_persona = newPersona;
-                        return `[ 굴비봇 설정 ]\n페르소나가 '${newPersona}'(으)로 변경되었습니다.`;
-                    }
-
-                    // 이미지 생성 요청
-                    const isDraw = raw.includes("그려줘") || raw.toLowerCase().includes("draw") || raw.includes("그림");
-                    if (isDraw) {
-                        if (currentUser.gulbi_img_usage >= currentUser.gulbi_img_limit) {
-                            return `[ ⚠️ 굴비봇 한도 초과 ]\n오늘의 이미지 생성 요청 한도(${currentUser.gulbi_img_limit}회)를 모두 소모하였습니다.\n내일 자정에 한도가 자동 초기화됩니다.\n(현재 사용량: ${currentUser.gulbi_img_usage}/${currentUser.gulbi_img_limit}회)`;
-                        }
-                        currentUser.gulbi_img_usage++;
-                        const prompt = raw.replace(/^(\/굴비|굴비야|hey gulbi|gulbi)?\s*(그려줘|draw)?/i, "").trim() || "신비로운 풍경";
-                        const seed = Math.abs(prompt.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0) * 113) % 10000;
-                        return `[ 굴비봇 AI 화가 ]\n🎨 요청하신 이미지를 성공적으로 생성했습니다!\n- 프롬프트: "${prompt}"\n- 모델: imagen-4.0-generate\n- 잔여 쿼터: ${currentUser.gulbi_img_limit - currentUser.gulbi_img_usage}/${currentUser.gulbi_img_limit}회\n[IMAGE: https://picsum.photos/seed/${seed}/600/400]`;
-                    }
-
-                    // 텍스트 질의
-                    if (currentUser.gulbi_usage >= currentUser.gulbi_limit) {
-                        return `[ ⚠️ 굴비봇 한도 초과 ]\n오늘의 AI 질문 사용 한도(${currentUser.gulbi_limit}회)를 모두 소모하였습니다.\n내일 자정에 한도가 자동 초기화됩니다.\n(현재 사용량: ${currentUser.gulbi_usage}/${currentUser.gulbi_limit}회)`;
-                    }
-                    currentUser.gulbi_usage++;
-                    const cleanPrompt = raw.replace(/^(코딩굴비야|상담굴비야|설명굴비야|기본굴비야|굴비야|\/굴비|hey gulbi|gulbi)\s*/i, "").trim() || "안녕하세요";
-                    return `[ 굴비봇 (${currentUser.gulbi_model}) ]\n안녕하세요, ${currentUser.name}님! 질문에 답변드립니다.\n\n💡 '${cleanPrompt}'에 대한 분석 결과:\n스톡피쉬봇의 통합 AI 엔진이 질의를 정상 수신하여 처리 완료했습니다.\n\n[일일 쿼터 잔여: ${currentUser.gulbi_limit - currentUser.gulbi_usage}/${currentUser.gulbi_limit}회]`;
+                const isDevCall = raw.startsWith(";") || [";ubuntu", ";upd", ";sudo", ";sh", ";eval", ";exec", ";admin", "ubuntu", "sudo"].some(c => raw.startsWith(c) || cmd === c);
+                if (isGulbiCall || isDevCall) {
+                    return "보안상의 이유로 봇을 이용해주세요.";
                 }
 
-                if (isCmd) {
-                    return `[ 봇 ]\n'${cmd}' 명령어가 정상적으로 처리되었습니다.\n(상세 도움말은 '/도움말'을 입력해보세요)`;
-                }
-
-                return `[ Stockfishbot ]\n안녕하세요! 명령어를 실행하려면 앞에 '/'를 붙여 입력해주세요. (예: /도움말, /핑, /봇, /출석, /포인트, /인벤, /채팅로그)`;
+                return null;
             }
 
             window.simulateWebKakaoResponse = processStockfishBotCommand;
@@ -3146,10 +3063,16 @@
                 }
                 const simTier = tierSel ? parseInt(tierSel.value, 10) : 0;
 
-                // 개발자 전용 명령어 차단
-                const blockedCommands = [";ubuntu", ";upd", ";sudo", ";sh", ";eval", ";exec"];
-                if (blockedCommands.some(cmd => text.startsWith(cmd))) {
-                    renderBotItem("⚠️ [보안] 마스터 권한 및 개발자 전용 명령어는 시뮬레이터에서 실행할 수 없습니다.");
+                // 개발자 권한 및 굴비봇 등 고위험 기능 차단
+                const isGulbiCall = (
+                    text.startsWith("굴비야") || text.toLowerCase().startsWith("hey gulbi") ||
+                    text.startsWith("코딩굴비야") || text.startsWith("상담굴비야") || text.startsWith("설명굴비야") ||
+                    text.startsWith("/굴비") || text.startsWith("!굴비") || text === "굴비" || text.startsWith("굴비 ") ||
+                    text === "gulbi" || text.startsWith("gulbi ") || text === "hey" || text.startsWith("hey ")
+                );
+                const blockedCommands = [";ubuntu", ";upd", ";sudo", ";sh", ";eval", ";exec", ";", "/eval", "/exec", "/sh", "/sudo"];
+                if (blockedCommands.some(cmd => text.startsWith(cmd)) || isGulbiCall) {
+                    renderBotItem("보안상의 이유로 봇을 이용해주세요.");
                     return;
                 }
 
@@ -5374,6 +5297,8 @@
 
                 document.getElementById('cancel-reply-btn').addEventListener('click', () => {
                     window.replyTargetId = null;
+                    window.replyTargetSender = null;
+                    window.replyTargetMsg = null;
                     document.getElementById('reply-target-banner').style.display = 'none';
                 });
 
@@ -5596,6 +5521,8 @@
                 document.getElementById('ctx-reply-btn')?.addEventListener('click', () => {
                     if (!ctxTargetData) return;
                     window.replyTargetId = ctxTargetData.msgId;
+                    window.replyTargetSender = ctxTargetData.sender;
+                    window.replyTargetMsg = ctxTargetData.msg;
                     document.getElementById('reply-preview-text').textContent = `${ctxTargetData.sender}에게 답장: ${ctxTargetData.msg.substring(0, 20)}...`;
                     document.getElementById('reply-target-banner').style.display = 'flex';
                     document.getElementById('chat-message-input').focus();
@@ -5769,6 +5696,8 @@
                         const container = currentSwipeElement.closest('.chat-bubble-container');
                         if (container) {
                             window.replyTargetId = container.dataset.msgId;
+                            window.replyTargetSender = container.dataset.sender;
+                            window.replyTargetMsg = container.dataset.msg;
                             document.getElementById('reply-preview-text').textContent = `${container.dataset.sender}에게 답장: ${container.dataset.msg.substring(0, 20)}...`;
                             document.getElementById('reply-target-banner').style.display = 'flex';
                             document.getElementById('chat-message-input').focus();
@@ -5796,11 +5725,7 @@
                     }
                 });
 
-                let isSendingText = false;
-
                 document.getElementById('send-chat-btn').addEventListener('click', async () => {
-                    if (isSendingText) return;
-
                     const roomInput = document.getElementById('chat-room-input');
                     const msgInput = document.getElementById('chat-message-input');
                     const msg = msgInput ? msgInput.value.trim() : "";
@@ -5821,13 +5746,20 @@
                         msgInput.style.height = '40px';
                     }
 
+                    const threadId = window.replyTargetId || null;
+                    const replyMsg = window.replyTargetMsg || "";
+                    const replySender = window.replyTargetSender || "";
+
+                    window.replyTargetId = null;
+                    window.replyTargetSender = null;
+                    window.replyTargetMsg = null;
+                    const banner = document.getElementById('reply-target-banner');
+                    if (banner) banner.style.display = 'none';
+
                     const token = localStorage.getItem("admin_token");
                     if (!token) return;
 
-                    isSendingText = true;
-
                     try {
-                        const threadId = window.replyTargetId || null;
                         const prefixToggle = document.getElementById('prefix-toggle');
                         const usePrefix = prefixToggle ? prefixToggle.checked : false;
                         const scopeToggle = document.getElementById('reply-scope-toggle');
@@ -5848,6 +5780,7 @@
                                 }
                             }
                         }
+                        selectedMentions.clear();
 
                         const payload = { type: "text", room: room, msg: msg, use_prefix: usePrefix };
                         if (mentions.length > 0) {
@@ -5856,9 +5789,16 @@
                         if (threadId) {
                             payload.thread_id = threadId;
                             payload.scope = (scopeToggle && scopeToggle.checked) ? 1 : 0;
+                            payload.reply = {
+                                src_message: replyMsg,
+                                src_user_id: replySender,
+                                src_type: 1
+                            };
+                            payload.src_message = replyMsg;
+                            payload.src_user_id = replySender;
                         }
 
-                        const response = await fetch(`${API_BASE_URL}/api/admin/reply`, {
+                        await fetch(`${API_BASE_URL}/api/admin/reply`, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
@@ -5868,17 +5808,8 @@
                             },
                             body: JSON.stringify(payload)
                         });
-
-                        if (response.ok) {
-                            selectedMentions.clear();
-                            window.replyTargetId = null;
-                            const banner = document.getElementById('reply-target-banner');
-                            if (banner) banner.style.display = 'none';
-                        }
                     } catch (e) {
                         // ignore API error during local KakaoTalk test
-                    } finally {
-                        isSendingText = false;
                     }
                 });
 
@@ -5905,8 +5836,16 @@
                         const token = localStorage.getItem("admin_token");
                         const prefixToggle = document.getElementById('prefix-toggle');
                         const threadId = window.replyTargetId || null;
+                        const replyMsg = window.replyTargetMsg || "";
+                        const replySender = window.replyTargetSender || "";
                         const scopeToggle = document.getElementById('reply-scope-toggle');
                         const scopeVal = (scopeToggle && scopeToggle.checked) ? 1 : 0;
+
+                        window.replyTargetId = null;
+                        window.replyTargetSender = null;
+                        window.replyTargetMsg = null;
+                        const banner = document.getElementById('reply-target-banner');
+                        if (banner) banner.style.display = 'none';
                         
                         try {
                             for (let i = 0; i < files.length; i++) {
@@ -5920,20 +5859,31 @@
                                 });
 
                                 const isImage = file.type.startsWith('image/');
+                                const isAudio = file.type.startsWith('audio/') || /\.(m4a|mp3|ogg|wav|aac|flac|opus|amr)$/i.test(file.name);
+                                const isVideo = file.type.startsWith('video/') || /\.(mp4|mov|avi|mkv|webm)$/i.test(file.name);
+                                const fileType = isImage ? "image" : (isAudio ? "audio" : (isVideo ? "video" : "file"));
+
                                 const payload = { 
-                                    type: isImage ? "image" : "file", 
+                                    type: fileType, 
                                     room: room, 
                                     data: base64Data,
                                     filename: file.name,
-                                    file_type: file.type || "application/octet-stream",
+                                    file_type: file.type || (isAudio ? "audio/m4a" : "application/octet-stream"),
                                     use_prefix: prefixToggle ? prefixToggle.checked : true
                                 };
                                 if (threadId) {
                                     payload.thread_id = threadId;
                                     payload.scope = scopeVal;
+                                    payload.reply = {
+                                        src_message: replyMsg,
+                                        src_user_id: replySender,
+                                        src_type: 1
+                                    };
+                                    payload.src_message = replyMsg;
+                                    payload.src_user_id = replySender;
                                 }
 
-                                const targetUrl = isImage ? `${API_BASE_URL}/api/admin/reply` : `${API_BASE_URL}/api/admin/chat/file`;
+                                const targetUrl = (isImage || isAudio || threadId) ? `${API_BASE_URL}/api/admin/reply` : `${API_BASE_URL}/api/admin/chat/file`;
                                 const response = await fetch(targetUrl, {
                                     method: 'POST',
                                     headers: {
@@ -5946,13 +5896,23 @@
                                 });
 
                                 if (!response.ok) {
-                                    alert(`전송에 실패했습니다: ${file.name}\n관리자에게 문의해주세요.`);
-                                    break;
+                                    if (targetUrl !== `${API_BASE_URL}/api/admin/chat/file`) {
+                                        await fetch(`${API_BASE_URL}/api/admin/chat/file`, {
+                                            method: 'POST',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                'Authorization': `Bearer ${token}`,
+                                                'ngrok-skip-browser-warning': 'true',
+                                                'Bypass-Tunnel-Reminder': 'true'
+                                            },
+                                            body: JSON.stringify(payload)
+                                        });
+                                    } else {
+                                        alert(`전송에 실패했습니다: ${file.name}\n관리자에게 문의해주세요.`);
+                                        break;
+                                    }
                                 }
                             }
-
-                            window.replyTargetId = null;
-                            document.getElementById('reply-target-banner').style.display = 'none';
                         } catch (e) {
                             alert("서버와 통신할 수 없습니다.\n관리자에게 문의해주세요.");
                         }
