@@ -2927,9 +2927,15 @@
                         <div id="mini-kakao-body" style="flex:1; overflow-y:auto; padding:12px; display:flex; flex-direction:column; gap:10px; scroll-behavior:smooth;">
                             <div style="align-self:center; background:rgba(0,0,0,0.08); color:#4e5968; font-size:11px; padding:4px 10px; border-radius:12px; margin-bottom:4px;">명령어를 클릭하거나 직접 메시지를 전송해보세요!</div>
                         </div>
-                        <form id="mini-kakao-form" style="display:flex; gap:6px; padding:8px 10px; background:#ffffff; border-top:1px solid #d5dce2; margin:0;" onsubmit="return false;">
-                            <input id="mini-kakao-input" type="text" placeholder="메시지 또는 명령어 입력..." style="flex:1; border:1px solid #dcdfe3; border-radius:8px; padding:7px 10px; font-size:13px; outline:none; background:#f8f9fa; color:#111;">
-                            <button type="submit" id="mini-kakao-send" style="background:#fee500; color:#3c1e1e; border:none; border-radius:8px; padding:0 12px; font-size:12px; font-weight:700; cursor:pointer; white-space:nowrap;">전송</button>
+                        <div id="mini-kakao-reply-banner" style="display:none; background:#e4edf5; border-top:1px solid #b8cddc; padding:6px 10px; font-size:11px; color:#2c3e50; justify-content:space-between; align-items:center; border-left:3px solid #fee500;">
+                            <span id="mini-kakao-reply-text" style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:260px; font-weight:600;"></span>
+                            <button type="button" id="mini-kakao-reply-cancel" title="답장 취소" style="background:none; border:none; color:#666; font-size:16px; cursor:pointer; padding:0 4px; line-height:1; font-weight:bold;">&times;</button>
+                        </div>
+                        <form id="mini-kakao-form" style="display:flex; gap:6px; padding:8px 10px; background:#ffffff; border-top:1px solid #d5dce2; margin:0; align-items:center;" onsubmit="return false;">
+                            <input type="file" id="mini-kakao-file-input" style="display:none;">
+                            <button type="button" id="mini-kakao-attach-btn" title="파일 첨부 (음성, 문서 등)" style="background:#f1f3f5; border:1px solid #dcdfe3; border-radius:8px; width:34px; height:34px; font-size:15px; cursor:pointer; color:#555; display:flex; align-items:center; justify-content:center; flex-shrink:0;">📎</button>
+                            <input id="mini-kakao-input" type="text" placeholder="메시지 또는 명령어 입력..." style="flex:1; border:1px solid #dcdfe3; border-radius:8px; padding:7px 10px; font-size:13px; outline:none; background:#f8f9fa; color:#111; height:34px; box-sizing:border-box;">
+                            <button type="submit" id="mini-kakao-send" style="background:#fee500; color:#3c1e1e; border:none; border-radius:8px; padding:0 12px; height:34px; font-size:12px; font-weight:700; cursor:pointer; white-space:nowrap; flex-shrink:0;">전송</button>
                         </form>
                     </div>
                 `;
@@ -2941,6 +2947,10 @@
                 if (closeBtn) {
                     closeBtn.addEventListener("click", () => {
                         widget.style.display = "none";
+                        window.simReplyTarget = null;
+                        const rb = document.getElementById("mini-kakao-reply-banner");
+                        if (rb) rb.style.display = "none";
+                        if (window.hideChatContextMenu) window.hideChatContextMenu();
                     });
                 }
 
@@ -2950,6 +2960,79 @@
                         const body = document.getElementById("mini-kakao-body");
                         if (body) {
                             body.innerHTML = `<div style="align-self:center; background:rgba(0,0,0,0.08); color:#4e5968; font-size:11px; padding:4px 10px; border-radius:12px; margin-bottom:4px;">대화가 초기화되었습니다.</div>`;
+                        }
+                        window.simReplyTarget = null;
+                        const rb = document.getElementById("mini-kakao-reply-banner");
+                        if (rb) rb.style.display = "none";
+                        if (window.hideChatContextMenu) window.hideChatContextMenu();
+                    });
+                }
+
+                const replyCancelBtn = document.getElementById("mini-kakao-reply-cancel");
+                if (replyCancelBtn) {
+                    replyCancelBtn.addEventListener("click", () => {
+                        window.simReplyTarget = null;
+                        const rb = document.getElementById("mini-kakao-reply-banner");
+                        if (rb) rb.style.display = "none";
+                    });
+                }
+
+                const attachBtn = document.getElementById("mini-kakao-attach-btn");
+                const fileInput = document.getElementById("mini-kakao-file-input");
+                if (attachBtn && fileInput) {
+                    attachBtn.addEventListener("click", () => {
+                        fileInput.click();
+                    });
+                    fileInput.addEventListener("change", () => {
+                        if (fileInput.files && fileInput.files[0]) {
+                            const file = fileInput.files[0];
+                            fileInput.value = "";
+                            if (window.sendWebKakaoFile) {
+                                window.sendWebKakaoFile(file);
+                            }
+                        }
+                    });
+                }
+
+                const body = document.getElementById("mini-kakao-body");
+                if (body) {
+                    body.addEventListener("contextmenu", (e) => {
+                        const target = e.target.closest(".sim-msg-item");
+                        if (target && window.openChatContextMenu) {
+                            e.preventDefault();
+                            window.openChatContextMenu(e.clientX, e.clientY, target);
+                        }
+                    });
+
+                    let simLongPressTimer = null;
+                    let simTouchMoved = false;
+                    body.addEventListener("touchstart", (e) => {
+                        const target = e.target.closest(".sim-msg-item");
+                        if (!target) return;
+                        simTouchMoved = false;
+                        const touch = e.touches[0];
+                        const clientX = touch.clientX;
+                        const clientY = touch.clientY;
+                        if (simLongPressTimer) clearTimeout(simLongPressTimer);
+                        simLongPressTimer = setTimeout(() => {
+                            if (!simTouchMoved && window.openChatContextMenu) {
+                                window.openChatContextMenu(clientX, clientY, target);
+                            }
+                        }, 500);
+                    }, { passive: true });
+
+                    body.addEventListener("touchmove", () => {
+                        simTouchMoved = true;
+                        if (simLongPressTimer) {
+                            clearTimeout(simLongPressTimer);
+                            simLongPressTimer = null;
+                        }
+                    }, { passive: true });
+
+                    body.addEventListener("touchend", () => {
+                        if (simLongPressTimer) {
+                            clearTimeout(simLongPressTimer);
+                            simLongPressTimer = null;
                         }
                     });
                 }
@@ -2982,11 +3065,35 @@
                 const miniBody = document.getElementById("mini-kakao-body");
                 const safeText = safeEscape(text).replace(/\n/g, '<br>');
 
+                const roleSel = document.getElementById("mini-kakao-role-select");
+                let simRole = roleSel ? roleSel.value : "user";
+                if (simRole === "master" || simRole === "super_admin") {
+                    simRole = "user";
+                }
+                const userSender = simRole === "admin" ? "방장" : (simRole === "subadmin" ? "부방장" : "게스트(사용자)");
+                const userMsgId = "sim_user_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
+
+                const activeReplyTarget = window.simReplyTarget;
+                window.simReplyTarget = null;
+                const replyBanner = document.getElementById("mini-kakao-reply-banner");
+                if (replyBanner) replyBanner.style.display = "none";
+
+                let replyQuoteHtml = "";
+                if (activeReplyTarget) {
+                    replyQuoteHtml = `
+                        <div style="font-size:11px; background:rgba(0,0,0,0.06); padding:4px 8px; border-radius:6px; margin-bottom:5px; border-left:3px solid #3c1e1e; color:#495057; line-height:1.3;">
+                            <div style="font-weight:700; color:#212529;">↩ ${safeEscape(activeReplyTarget.sender || '메시지')}</div>
+                            <div style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:220px;">${safeEscape(activeReplyTarget.msg || '')}</div>
+                        </div>
+                    `;
+                }
+
                 if (miniBody) {
                     const userMsgHtml = `
-                        <div style="align-self:flex-end; max-width:82%; display:flex; flex-direction:column; align-items:flex-end;">
+                        <div class="sim-msg-item chat-bubble-container" data-msg-id="${userMsgId}" data-sender="${safeEscape(userSender)}" data-msg="${safeEscape(text)}" style="align-self:flex-end; max-width:82%; display:flex; flex-direction:column; align-items:flex-end; cursor:pointer;">
                             <div style="background:#fee500; color:#1e1e1e; padding:8px 11px; border-radius:10px; border-top-right-radius:2px; font-size:13px; line-height:1.4; word-break:break-word; box-shadow:0 1px 2px rgba(0,0,0,0.08);">
-                                ${safeText}
+                                ${replyQuoteHtml}
+                                <div class="sim-bubble-content">${safeText}</div>
                             </div>
                         </div>
                     `;
@@ -3020,8 +3127,9 @@
                     }
 
                     const safeReply = safeEscape(textContent).replace(/\n/g, '<br>');
+                    const botMsgId = "sim_bot_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
                     const botMsgHtml = `
-                        <div style="align-self:flex-start; max-width:88%; display:flex; gap:8px;">
+                        <div class="sim-msg-item chat-bubble-container" data-msg-id="${botMsgId}" data-sender="Stockfishbot" data-msg="${safeEscape(textContent)}" style="align-self:flex-start; max-width:88%; display:flex; gap:8px; cursor:pointer;">
                             <img src="https://ui-avatars.com/api/?name=Stockfishbot&background=3C1E1E&color=FEE500" style="width:34px; height:34px; border-radius:12px; flex-shrink:0; margin-top:2px;" alt="Bot">
                             <div style="display:flex; flex-direction:column; gap:3px;">
                                 <div style="font-size:11px; font-weight:600; color:#444; display:flex; align-items:center; gap:4px;">
@@ -3029,7 +3137,7 @@
                                     <span style="font-size:9px; background:#3c1e1e; color:#fee500; padding:1px 4px; border-radius:3px; font-weight:700;">BOT</span>
                                 </div>
                                 <div style="background:#ffffff; color:#1e1e1e; padding:8px 11px; border-radius:10px; border-top-left-radius:2px; font-size:13px; line-height:1.45; word-break:break-word; box-shadow:0 1px 2px rgba(0,0,0,0.08);">
-                                    ${safeReply}
+                                    <div class="sim-bubble-content">${safeReply}</div>
                                     ${mediaHtml}
                                 </div>
                             </div>
@@ -3049,18 +3157,14 @@
                     }
                     if (miniBody) miniBody.scrollTop = miniBody.scrollHeight;
                 };
+                window.renderMiniKakaoReplies = renderBotReplies;
 
                 const roomSel = document.getElementById("mini-kakao-room-select");
-                const roleSel = document.getElementById("mini-kakao-role-select");
                 const tierSel = document.getElementById("mini-kakao-tier-select");
 
                 const roomInput = document.getElementById("chat-room-input");
                 const targetRoom = roomSel ? roomSel.value : (roomInput ? roomInput.value.trim() || "184029182390192" : "184029182390192");
                 const token = localStorage.getItem("admin_token");
-                let simRole = roleSel ? roleSel.value : "user";
-                if (simRole === "master" || simRole === "super_admin") {
-                    simRole = "user";
-                }
                 const simTier = tierSel ? parseInt(tierSel.value, 10) : 0;
 
                 // 개발자 권한 및 굴비봇 등 고위험 기능 차단
@@ -3083,17 +3187,24 @@
                     apiHeaders["Bypass-Tunnel-Reminder"] = "true";
                 }
 
+                const postPayload = {
+                    room: targetRoom,
+                    user_id: "441160464",
+                    sender: userSender,
+                    msg: text,
+                    sim_role: simRole,
+                    sim_tier: simTier
+                };
+                if (activeReplyTarget) {
+                    postPayload.thread_id = activeReplyTarget.id;
+                    postPayload.reply_target_sender = activeReplyTarget.sender;
+                    postPayload.reply_target_msg = activeReplyTarget.msg;
+                }
+
                 fetch(`${API_BASE_URL}/api/simulator/packet`, {
                     method: "POST",
                     headers: apiHeaders,
-                    body: JSON.stringify({
-                        room: targetRoom,
-                        user_id: "441160464",
-                        sender: simRole === "admin" ? "방장" : (simRole === "subadmin" ? "부방장" : "게스트(사용자)"),
-                        msg: text,
-                        sim_role: simRole,
-                        sim_tier: simTier
-                    })
+                    body: JSON.stringify(postPayload)
                 })
                 .then(r => r.json())
                 .then(data => {
@@ -3110,6 +3221,102 @@
                     const botReply = processStockfishBotCommand(text);
                     if (botReply) setTimeout(() => renderBotReplies(botReply), 80);
                 });
+            };
+
+            window.sendWebKakaoFile = function(file) {
+                if (!file) return;
+                const widget = ensureMiniKakaoWidget();
+                if (widget) widget.style.display = "flex";
+                const miniBody = document.getElementById("mini-kakao-body");
+                const roleSel = document.getElementById("mini-kakao-role-select");
+                let simRole = roleSel ? roleSel.value : "user";
+                if (simRole === "master" || simRole === "super_admin") simRole = "user";
+                const userSender = simRole === "admin" ? "방장" : (simRole === "subadmin" ? "부방장" : "게스트(사용자)");
+                const tierSel = document.getElementById("mini-kakao-tier-select");
+                const simTier = tierSel ? parseInt(tierSel.value, 10) : 0;
+                const roomSel = document.getElementById("mini-kakao-room-select");
+                const roomInput = document.getElementById("chat-room-input");
+                const targetRoom = roomSel ? roomSel.value : (roomInput ? roomInput.value.trim() || "184029182390192" : "184029182390192");
+                const token = localStorage.getItem("admin_token");
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const dataUrl = e.target.result;
+                    const msgId = "sim_user_file_" + Date.now();
+                    let previewHtml = "";
+                    const isAudio = (file.type && file.type.startsWith("audio/")) || /\.(mp3|wav|ogg|m4a|aac|flac)$/i.test(file.name);
+                    const isImage = (file.type && file.type.startsWith("image/")) || /\.(png|jpe?g|gif|webp|bmp)$/i.test(file.name);
+
+                    if (isAudio) {
+                        previewHtml = `
+                            <div style="display:flex; flex-direction:column; gap:4px;">
+                                <div style="font-size:11px; font-weight:700; color:#2b2b2b;">🎙️ 음성/오디오 파일</div>
+                                <audio controls src="${dataUrl}" style="max-width:220px; height:32px; outline:none;"></audio>
+                                <div style="font-size:10px; color:#555;">${safeEscape(file.name)} (${(file.size/1024).toFixed(1)} KB)</div>
+                            </div>
+                        `;
+                    } else if (isImage) {
+                        previewHtml = `
+                            <div>
+                                <img src="${dataUrl}" style="max-width:200px; max-height:200px; border-radius:6px; display:block;" alt="${safeEscape(file.name)}">
+                                <div style="font-size:10px; color:#555; margin-top:2px;">${safeEscape(file.name)}</div>
+                            </div>
+                        `;
+                    } else {
+                        previewHtml = `
+                            <div style="display:flex; align-items:center; gap:6px; font-size:12px; font-weight:600; color:#1e1e1e;">
+                                <span style="font-size:18px;">📄</span>
+                                <div>
+                                    <div>${safeEscape(file.name)}</div>
+                                    <div style="font-size:10px; color:#666; font-weight:normal;">${(file.size/1024).toFixed(1)} KB</div>
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    if (miniBody) {
+                        const userMsgHtml = `
+                            <div class="sim-msg-item chat-bubble-container" data-msg-id="${msgId}" data-sender="${safeEscape(userSender)}" data-msg="[FILE:${safeEscape(file.name)}]" style="align-self:flex-end; max-width:82%; display:flex; flex-direction:column; align-items:flex-end; cursor:pointer;">
+                                <div style="background:#fee500; color:#1e1e1e; padding:8px 11px; border-radius:10px; border-top-right-radius:2px; font-size:13px; line-height:1.4; word-break:break-word; box-shadow:0 1px 2px rgba(0,0,0,0.08);">
+                                    <div class="sim-bubble-content">${previewHtml}</div>
+                                </div>
+                            </div>
+                        `;
+                        miniBody.insertAdjacentHTML("beforeend", userMsgHtml);
+                        miniBody.scrollTop = miniBody.scrollHeight;
+                    }
+
+                    const apiHeaders = { "Content-Type": "application/json" };
+                    if (token) {
+                        apiHeaders["Authorization"] = `Bearer ${token}`;
+                        apiHeaders["ngrok-skip-browser-warning"] = "true";
+                        apiHeaders["Bypass-Tunnel-Reminder"] = "true";
+                    }
+
+                    fetch(`${API_BASE_URL}/api/simulator/packet`, {
+                        method: "POST",
+                        headers: apiHeaders,
+                        body: JSON.stringify({
+                            room: targetRoom,
+                            user_id: "441160464",
+                            sender: userSender,
+                            msg: `[FILE:${file.name}]`,
+                            file_name: file.name,
+                            file_type: file.type,
+                            file_data: dataUrl,
+                            sim_role: simRole,
+                            sim_tier: simTier
+                        })
+                    })
+                    .then(r => r.json())
+                    .then(data => {
+                        if (window.renderMiniKakaoReplies) {
+                            window.renderMiniKakaoReplies(data);
+                        }
+                    })
+                    .catch(() => {});
+                };
+                reader.readAsDataURL(file);
             };
 
             window.openSimulatorWithCommand = function(cmd) {
@@ -5482,14 +5689,16 @@
                     ctxTargetData = {
                         msgId: container.dataset.msgId,
                         sender: container.dataset.sender,
-                        msg: container.dataset.msg
+                        msg: container.dataset.msg,
+                        isSimulator: container.classList.contains('sim-msg-item') || !!container.closest('#mini-kakao-body'),
+                        elem: container
                     };
                     if (!ctxMenu) return;
                     if (ctxMenu.parentElement !== document.body) {
                         document.body.appendChild(ctxMenu);
                     }
                     ctxMenu.style.position = 'fixed';
-                    ctxMenu.style.zIndex = '99999';
+                    ctxMenu.style.zIndex = '999999';
                     ctxMenu.style.display = 'block';
                     const menuWidth = ctxMenu.offsetWidth || 140;
                     const menuHeight = ctxMenu.offsetHeight || 150;
@@ -5508,6 +5717,9 @@
                     ctxTargetData = null;
                 };
 
+                window.openChatContextMenu = showContextMenu;
+                window.hideChatContextMenu = hideContextMenu;
+
                 document.addEventListener('click', (e) => {
                     if (justOpenedContextMenu) return;
                     if (ctxMenu && ctxMenu.style.display === 'block' && !ctxMenu.contains(e.target)) hideContextMenu();
@@ -5520,6 +5732,23 @@
 
                 document.getElementById('ctx-reply-btn')?.addEventListener('click', () => {
                     if (!ctxTargetData) return;
+                    if (ctxTargetData.isSimulator) {
+                        window.simReplyTarget = {
+                            id: ctxTargetData.msgId,
+                            sender: ctxTargetData.sender,
+                            msg: ctxTargetData.msg
+                        };
+                        const simBanner = document.getElementById('mini-kakao-reply-banner');
+                        const simReplyText = document.getElementById('mini-kakao-reply-text');
+                        if (simBanner && simReplyText) {
+                            simReplyText.textContent = `${ctxTargetData.sender}에게 답장: ${(ctxTargetData.msg || '').substring(0, 25)}`;
+                            simBanner.style.display = 'flex';
+                        }
+                        const simInput = document.getElementById('mini-kakao-input');
+                        if (simInput) simInput.focus();
+                        hideContextMenu();
+                        return;
+                    }
                     window.replyTargetId = ctxTargetData.msgId;
                     window.replyTargetSender = ctxTargetData.sender;
                     window.replyTargetMsg = ctxTargetData.msg;
@@ -5532,35 +5761,49 @@
                 document.getElementById('ctx-hide-btn')?.addEventListener('click', async () => {
                     if (!ctxTargetData) return;
                     const targetId = ctxTargetData.msgId;
-                    const room = document.getElementById('chat-room-input').value.trim();
+                    const isSim = ctxTargetData.isSimulator;
+                    const simElem = ctxTargetData.elem;
+                    const roomSel = document.getElementById("mini-kakao-room-select");
+                    const roomInput = document.getElementById('chat-room-input');
+                    const room = isSim ? (roomSel ? roomSel.value : "184029182390192") : (roomInput ? roomInput.value.trim() : "184029182390192");
                     hideContextMenu();
                     if (!confirm('이 메시지를 가리시겠습니까?')) return;
 
+                    if (isSim && simElem) {
+                        const bubble = simElem.querySelector('.sim-bubble-content') || simElem.querySelector('.chat-bubble');
+                        if (bubble) bubble.textContent = '가려진 메시지입니다.';
+                        simElem.dataset.msg = '가려진 메시지입니다.';
+                    }
+
                     try {
                         const token = localStorage.getItem('admin_token');
-                        const res = await fetch(`${API_BASE_URL}/api/admin/chat/hide`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Authorization': `Bearer ${token}`,
-                                'ngrok-skip-browser-warning': 'true',
-                                'Bypass-Tunnel-Reminder': 'true'
-                            },
-                            body: JSON.stringify({ room: room, msg_id: targetId })
-                        });
-                        const data = await res.json();
-                        if (res.ok) {
-                            alert('메시지를 성공적으로 가렸습니다.');
-                            const elem = document.querySelector(`.chat-bubble-container[data-msg-id="${targetId}"]`);
-                            if (elem) {
-                                const bubble = elem.querySelector('.chat-bubble');
-                                if (bubble) bubble.textContent = '가려진 메시지입니다.';
+                        if (token) {
+                            const res = await fetch(`${API_BASE_URL}/api/admin/chat/hide`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${token}`,
+                                    'ngrok-skip-browser-warning': 'true',
+                                    'Bypass-Tunnel-Reminder': 'true'
+                                },
+                                body: JSON.stringify({ room: room, msg_id: targetId })
+                            });
+                            const data = await res.json();
+                            if (res.ok) {
+                                alert('메시지를 성공적으로 가렸습니다.');
+                                const elem = document.querySelector(`.chat-bubble-container[data-msg-id="${targetId}"]`);
+                                if (elem) {
+                                    const bubble = elem.querySelector('.chat-bubble');
+                                    if (bubble) bubble.textContent = '가려진 메시지입니다.';
+                                }
+                            } else {
+                                if (!isSim) alert(data.error || '메시지 가리기에 실패했습니다.');
                             }
-                        } else {
-                            alert(data.error || '메시지 가리기에 실패했습니다.');
+                        } else if (isSim) {
+                            alert('시뮬레이터에서 메시지를 가렸습니다.');
                         }
                     } catch (e) {
-                        alert('서버와 통신할 수 없습니다.');
+                        if (!isSim) alert('서버와 통신할 수 없습니다.');
                     }
                 });
 
@@ -5568,38 +5811,52 @@
                     if (!ctxTargetData) return;
                     const targetId = ctxTargetData.msgId;
                     const originalMsg = ctxTargetData.msg;
-                    const room = document.getElementById('chat-room-input').value.trim();
+                    const isSim = ctxTargetData.isSimulator;
+                    const simElem = ctxTargetData.elem;
+                    const roomSel = document.getElementById("mini-kakao-room-select");
+                    const roomInput = document.getElementById('chat-room-input');
+                    const room = isSim ? (roomSel ? roomSel.value : "184029182390192") : (roomInput ? roomInput.value.trim() : "184029182390192");
                     hideContextMenu();
 
                     const newMsg = prompt('수정할 메시지 내용을 입력하세요 (5분 이내 봇 메시지만 가능):', originalMsg);
                     if (newMsg === null || !newMsg.trim() || newMsg.trim() === originalMsg) return;
 
+                    if (isSim && simElem) {
+                        simElem.dataset.msg = newMsg.trim();
+                        const bubble = simElem.querySelector('.sim-bubble-content') || simElem.querySelector('.chat-bubble');
+                        if (bubble) bubble.textContent = newMsg.trim();
+                    }
+
                     try {
                         const token = localStorage.getItem('admin_token');
-                        const res = await fetch(`${API_BASE_URL}/api/admin/chat/modify`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Authorization': `Bearer ${token}`,
-                                'ngrok-skip-browser-warning': 'true',
-                                'Bypass-Tunnel-Reminder': 'true'
-                            },
-                            body: JSON.stringify({ room: room, msg_id: targetId, msg: newMsg.trim() })
-                        });
-                        const data = await res.json();
-                        if (res.ok) {
-                            alert('메시지가 성공적으로 수정되었습니다.');
-                            const elem = document.querySelector(`.chat-bubble-container[data-msg-id="${targetId}"]`);
-                            if (elem) {
-                                elem.dataset.msg = newMsg.trim();
-                                const bubble = elem.querySelector('.chat-bubble');
-                                if (bubble) bubble.textContent = newMsg.trim();
+                        if (token) {
+                            const res = await fetch(`${API_BASE_URL}/api/admin/chat/modify`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${token}`,
+                                    'ngrok-skip-browser-warning': 'true',
+                                    'Bypass-Tunnel-Reminder': 'true'
+                                },
+                                body: JSON.stringify({ room: room, msg_id: targetId, msg: newMsg.trim() })
+                            });
+                            const data = await res.json();
+                            if (res.ok) {
+                                alert('메시지가 성공적으로 수정되었습니다.');
+                                const elem = document.querySelector(`.chat-bubble-container[data-msg-id="${targetId}"]`);
+                                if (elem) {
+                                    elem.dataset.msg = newMsg.trim();
+                                    const bubble = elem.querySelector('.chat-bubble');
+                                    if (bubble) bubble.textContent = newMsg.trim();
+                                }
+                            } else {
+                                if (!isSim) alert(data.error || '메시지 수정에 실패했습니다.');
                             }
-                        } else {
-                            alert(data.error || '메시지 수정에 실패했습니다.');
+                        } else if (isSim) {
+                            alert('시뮬레이터에서 메시지가 수정되었습니다.');
                         }
                     } catch (e) {
-                        alert('서버와 통신할 수 없습니다.');
+                        if (!isSim) alert('서버와 통신할 수 없습니다.');
                     }
                 });
 
