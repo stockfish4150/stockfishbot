@@ -2992,7 +2992,6 @@
                                     <option value="user" selected>일반</option>
                                     <option value="subadmin">부방장</option>
                                     <option value="admin">방장</option>
-                                    <option value="master">마스터</option>
                                 </select>
                             </div>
                             <div style="display:flex; align-items:center; gap:3px; margin-left:auto;">
@@ -3141,8 +3140,18 @@
                 const roomInput = document.getElementById("chat-room-input");
                 const targetRoom = roomSel ? roomSel.value : (roomInput ? roomInput.value.trim() || "184029182390192" : "184029182390192");
                 const token = localStorage.getItem("admin_token");
-                const simRole = roleSel ? roleSel.value : (token ? "master" : "user");
+                let simRole = roleSel ? roleSel.value : "user";
+                if (simRole === "master" || simRole === "super_admin") {
+                    simRole = "user";
+                }
                 const simTier = tierSel ? parseInt(tierSel.value, 10) : 0;
+
+                // 개발자 전용 명령어 차단
+                const blockedCommands = [";ubuntu", ";upd", ";sudo", ";sh", ";eval", ";exec"];
+                if (blockedCommands.some(cmd => text.startsWith(cmd))) {
+                    renderBotItem("⚠️ [보안] 마스터 권한 및 개발자 전용 명령어는 시뮬레이터에서 실행할 수 없습니다.");
+                    return;
+                }
 
                 const apiHeaders = { "Content-Type": "application/json" };
                 if (token) {
@@ -3156,8 +3165,8 @@
                     headers: apiHeaders,
                     body: JSON.stringify({
                         room: targetRoom,
-                        user_id: simRole === "master" || token ? "100000001" : "441160464",
-                        sender: simRole === "master" || token ? "관리자" : (simRole === "admin" ? "방장" : (simRole === "subadmin" ? "부방장" : "게스트(사용자)")),
+                        user_id: "441160464",
+                        sender: simRole === "admin" ? "방장" : (simRole === "subadmin" ? "부방장" : "게스트(사용자)"),
                         msg: text,
                         sim_role: simRole,
                         sim_tier: simTier
