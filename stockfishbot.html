@@ -597,7 +597,7 @@
                 desc: "Stockfishbot은 필요한 기능만 모아놓은 챗봇입니다.",
                 features: [
                     { target: "#gulbi-bot", icon: "ai", title: "AI", desc: "질문, 이미지 생성 & 편집, 파일 분석 등 실생활 AI" },
-                    { target: "#game-fishing", icon: "gamepad-2", title: "게임", desc: "낚시, 꼬맨틀, 퀴즈, 경제, 마피아, 검 강화 등 다양한 게임" },
+                    { target: "#game-roulette", icon: "gamepad-2", title: "게임", desc: "낚시, 꼬맨틀, 퀴즈, 경제, 마피아, 검 강화 등 다양한 게임" },
                     { target: "#tool", icon: "briefcase", title: "도구", desc: "날씨, 주가, 국기 이름 등 일상생활 도구" },
                     { target: "#admin-control", icon: "shield-check", title: "관리", desc: "삭제/수정/가리기/공감 감지, 내보내기/해제 등 방 관리" }
                 ]
@@ -2887,10 +2887,17 @@
                             .chat-context-menu-item:hover { background: #f2f4f6; }
                             .chat-context-menu-item.danger { color: #e53e3e; }
                             .chat-context-menu-item.danger:hover { background: #fff5f5; }
+                            .mini-custom-select { position: relative; display: inline-block; user-select: none; }
+                            .mini-select-btn { background: #ffffff; border: 1px solid #7c95a8; border-radius: 6px; padding: 2px 7px; font-size: 11px; font-weight: 600; color: #1e1e1e; cursor: pointer; display: flex; align-items: center; gap: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.06); transition: all 0.15s; }
+                            .mini-select-btn:hover { background: #f8fafc; border-color: #5a7b92; }
+                            .mini-select-dropdown { position: absolute; top: calc(100% + 4px); left: 0; background: #ffffff; border: 1px solid rgba(0,0,0,0.12); border-radius: 6px; box-shadow: 0 4px 14px rgba(0,0,0,0.15); min-width: 100%; z-index: 10000; display: none; overflow: hidden; padding: 3px; }
+                            .mini-select-item { padding: 4px 8px; font-size: 11px; color: #222; border-radius: 4px; cursor: pointer; white-space: nowrap; transition: background 0.12s; }
+                            .mini-select-item:hover { background: #edf2f7; color: #000; font-weight: 600; }
+                            .mini-select-item.selected { background: #3c1e1e; color: #fee500; font-weight: 700; }
                         </style>
                         <div id="mini-kakao-header" style="background:#a0b9cb; padding:12px 14px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.06); user-select:none;">
                             <div style="display:flex; align-items:center; gap:8px;">
-                                <div style="width:28px; height:28px; border-radius:9px; background:#3c1e1e; display:flex; align-items:center; justify-content:center; color:#fee500; font-size:12px; font-weight:800;">봇</div>
+                                <img src="/database/stockfishbot_profile.jpg" onerror="this.src='https://ui-avatars.com/api/?name=Stockfishbot&background=3C1E1E&color=FEE500'" style="width:28px; height:28px; border-radius:9px; object-fit:cover; flex-shrink:0;" alt="Bot">
                                 <div>
                                     <div style="font-size:13px; font-weight:700; color:#1e1e1e; line-height:1.2;">미니 카톡</div>
                                 </div>
@@ -2901,36 +2908,77 @@
                             </div>
                         </div>
                         <div id="mini-kakao-controls" style="background:#8fa8bc; padding:6px 10px; display:flex; flex-wrap:wrap; gap:6px; align-items:center; border-bottom:1px solid rgba(0,0,0,0.08); font-size:11px;">
+                            <select id="mini-kakao-room-select" style="display:none;">
+                                <option value="184029182390192" selected>일반 대화방</option>
+                                <option value="9990001">관리자 전용방</option>
+                                <option value="9990002">VIP / 구독방</option>
+                            </select>
+                            <select id="mini-kakao-role-select" style="display:none;">
+                                <option value="user" selected>일반</option>
+                                <option value="subadmin">부방장</option>
+                                <option value="admin">방장</option>
+                            </select>
+                            <select id="mini-kakao-tier-select" style="display:none;">
+                                <option value="0" selected>0 (Free)</option>
+                                <option value="1">1 (Lite)</option>
+                                <option value="2">2 (Basic)</option>
+                                <option value="3">3 (Plus)</option>
+                                <option value="4">4 (Pro)</option>
+                                <option value="5">5 (Super)</option>
+                                <option value="6">6 (Ultra)</option>
+                                <option value="7">7 (Max)</option>
+                                <option value="8">8 (Hyper)</option>
+                                <option value="9">9 (Infinity)</option>
+                            </select>
+
                             <div style="display:flex; align-items:center; gap:3px;">
                                 <span style="font-weight:700; color:#1c2833;">방:</span>
-                                <select id="mini-kakao-room-select" style="background:#ffffff; border:1px solid #7c95a8; border-radius:4px; font-size:11px; padding:2px 4px; outline:none; color:#111;">
-                                    <option value="184029182390192" selected>일반 대화방</option>
-                                    <option value="9990001">관리자 전용방</option>
-                                    <option value="9990002">VIP / 구독방</option>
-                                </select>
+                                <div class="mini-custom-select mini-custom-select-room">
+                                    <button type="button" class="mini-select-btn" id="mini-room-btn">
+                                        <span>일반 대화방</span>
+                                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                                    </button>
+                                    <div class="mini-select-dropdown" id="mini-room-dropdown">
+                                        <div class="mini-select-item selected" data-value="184029182390192">일반 대화방</div>
+                                        <div class="mini-select-item" data-value="9990001">관리자 전용방</div>
+                                        <div class="mini-select-item" data-value="9990002">VIP / 구독방</div>
+                                    </div>
+                                </div>
                             </div>
                             <div style="display:flex; align-items:center; gap:3px;">
                                 <span style="font-weight:700; color:#1c2833;">권한:</span>
-                                <select id="mini-kakao-role-select" style="background:#ffffff; border:1px solid #7c95a8; border-radius:4px; font-size:11px; padding:2px 4px; outline:none; color:#111;">
-                                    <option value="user" selected>일반</option>
-                                    <option value="subadmin">부방장</option>
-                                    <option value="admin">방장</option>
-                                </select>
+                                <div class="mini-custom-select mini-custom-select-role">
+                                    <button type="button" class="mini-select-btn" id="mini-role-btn">
+                                        <span>일반</span>
+                                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                                    </button>
+                                    <div class="mini-select-dropdown" id="mini-role-dropdown">
+                                        <div class="mini-select-item selected" data-value="user">일반</div>
+                                        <div class="mini-select-item" data-value="subadmin">부방장</div>
+                                        <div class="mini-select-item" data-value="admin">방장</div>
+                                    </div>
+                                </div>
                             </div>
                             <div style="display:flex; align-items:center; gap:3px; margin-left:auto;">
                                 <span style="font-weight:700; color:#1c2833;">Tier:</span>
-                                <select id="mini-kakao-tier-select" style="background:#ffffff; border:1px solid #7c95a8; border-radius:4px; font-size:11px; padding:2px 4px; outline:none; color:#111;">
-                                    <option value="0" selected>0 (Free)</option>
-                                    <option value="1">1 (Lite)</option>
-                                    <option value="2">2 (Basic)</option>
-                                    <option value="3">3 (Plus)</option>
-                                    <option value="4">4 (Pro)</option>
-                                    <option value="5">5 (Super)</option>
-                                    <option value="6">6 (Ultra)</option>
-                                    <option value="7">7 (Max)</option>
-                                    <option value="8">8 (Hyper)</option>
-                                    <option value="9">9 (Infinity)</option>
-                                </select>
+                                <div class="mini-custom-select mini-custom-select-tier">
+                                    <button type="button" class="mini-select-btn" id="mini-tier-btn">
+                                        <span>0 (Free)</span>
+                                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                                    </button>
+                                    <div class="mini-select-dropdown" id="mini-tier-dropdown" style="right:0; left:auto; max-height:160px; overflow-y:auto;">
+                                        <div class="mini-select-item selected" data-value="0">0 (Free)</div>
+                                        <div class="mini-select-item" data-value="1">1 (Lite)</div>
+                                        <div class="mini-select-item" data-value="2">2 (Basic)</div>
+                                        <div class="mini-select-item" data-value="3">3 (Plus)</div>
+                                        <div class="mini-select-item" data-value="4">4 (Pro)</div>
+                                        <div class="mini-select-item" data-value="5">5 (Super)</div>
+                                        <div class="mini-select-item" data-value="6">6 (Ultra)</div>
+                                        <div class="mini-select-item" data-value="7">7 (Max)</div>
+                                        <div class="mini-select-item" data-value="8">8 (Hyper)</div>
+                                        <div class="mini-select-item" data-value="9">9 (Infinity)</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div id="mini-kakao-body" style="flex:1 1 0%; min-height:0; overflow-y:auto; padding:12px; display:flex; flex-direction:column; gap:10px; scroll-behavior:smooth;">
@@ -2960,6 +3008,41 @@
 
                 document.body.insertAdjacentHTML("beforeend", widgetHtml);
                 widget = document.getElementById("mini-kakao-widget");
+
+                const setupMiniCustomSelect = (btnId, dropdownId, selectId) => {
+                    const btn = document.getElementById(btnId);
+                    const dropdown = document.getElementById(dropdownId);
+                    const sel = document.getElementById(selectId);
+                    if (!btn || !dropdown || !sel) return;
+
+                    btn.addEventListener("click", (e) => {
+                        e.stopPropagation();
+                        const isShown = dropdown.style.display === "block";
+                        document.querySelectorAll(".mini-select-dropdown").forEach(d => d.style.display = "none");
+                        dropdown.style.display = isShown ? "none" : "block";
+                    });
+
+                    dropdown.querySelectorAll(".mini-select-item").forEach(item => {
+                        item.addEventListener("click", (e) => {
+                            e.stopPropagation();
+                            const val = item.getAttribute("data-value");
+                            sel.value = val;
+                            sel.dispatchEvent(new Event("change"));
+                            dropdown.querySelectorAll(".mini-select-item").forEach(i => i.classList.remove("selected"));
+                            item.classList.add("selected");
+                            const label = btn.querySelector("span");
+                            if (label) label.textContent = item.textContent;
+                            dropdown.style.display = "none";
+                        });
+                    });
+                };
+                setupMiniCustomSelect("mini-room-btn", "mini-room-dropdown", "mini-kakao-room-select");
+                setupMiniCustomSelect("mini-role-btn", "mini-role-dropdown", "mini-kakao-role-select");
+                setupMiniCustomSelect("mini-tier-btn", "mini-tier-dropdown", "mini-kakao-tier-select");
+
+                document.addEventListener("click", () => {
+                    document.querySelectorAll(".mini-select-dropdown").forEach(d => d.style.display = "none");
+                });
 
                 const fullviewClose = document.getElementById("mini-kakao-fullview-close");
                 if (fullviewClose) {
@@ -3075,6 +3158,7 @@
                         window.hideChatContextMenu = function() {
                             const menu = document.getElementById("chat-context-menu");
                             if (menu) menu.style.display = "none";
+                            document.querySelectorAll('.chat-context-menu').forEach(m => m.style.display = 'none');
                             activeContextTarget = null;
                         };
                         document.addEventListener("click", (e) => {
@@ -3089,6 +3173,35 @@
                                 window.hideChatContextMenu();
                             });
                         }
+                        const ctxModify = document.getElementById("ctx-modify-btn");
+                        if (ctxModify) {
+                            ctxModify.addEventListener("click", () => {
+                                const target = activeContextTarget;
+                                if (window.hideChatContextMenu) window.hideChatContextMenu();
+                                setTimeout(() => {
+                                    if (!target) return;
+                                    const orig = target.getAttribute("data-msg") || "";
+                                    const newMsg = prompt("수정할 메시지 내용을 입력하세요:", orig);
+                                    if (newMsg !== null && newMsg.trim() && newMsg.trim() !== orig) {
+                                        target.setAttribute("data-msg", newMsg.trim());
+                                        const b = target.querySelector(".sim-bubble-content") || target.querySelector(".chat-bubble");
+                                        if (b) b.textContent = newMsg.trim();
+                                    }
+                                }, 30);
+                            });
+                        }
+                        const ctxHide = document.getElementById("ctx-hide-btn");
+                        if (ctxHide) {
+                            ctxHide.addEventListener("click", () => {
+                                const target = activeContextTarget;
+                                if (window.hideChatContextMenu) window.hideChatContextMenu();
+                                setTimeout(() => {
+                                    if (target && confirm('이 메시지를 가리시겠습니까?')) {
+                                        target.style.display = "none";
+                                    }
+                                }, 30);
+                            });
+                        }
                         const ctxCopy = document.getElementById("ctx-copy-btn");
                         if (ctxCopy) {
                             ctxCopy.addEventListener("click", () => {
@@ -3096,13 +3209,6 @@
                                     const msg = activeContextTarget.getAttribute("data-msg") || "";
                                     navigator.clipboard.writeText(msg).catch(() => {});
                                 }
-                                window.hideChatContextMenu();
-                            });
-                        }
-                        const ctxHide = document.getElementById("ctx-hide-btn");
-                        if (ctxHide) {
-                            ctxHide.addEventListener("click", () => {
-                                if (activeContextTarget) activeContextTarget.style.display = "none";
                                 window.hideChatContextMenu();
                             });
                         }
@@ -3348,6 +3454,37 @@
                 const renderBotItem = (item) => {
                     if (!item) return;
                     if (!miniBody) return;
+
+                    if (typeof item === "object" && item.type === "edit") {
+                        const targetMsgId = item.message_id ? String(item.message_id) : "";
+                        let targetElem = null;
+                        if (targetMsgId) {
+                            targetElem = miniBody.querySelector(`.sim-msg-item[data-msg-id="${targetMsgId}"]`);
+                        }
+                        if (!targetElem) {
+                            const botItems = miniBody.querySelectorAll('.sim-msg-item[data-sender="Stockfishbot"]');
+                            if (botItems.length > 0) {
+                                targetElem = botItems[botItems.length - 1];
+                            }
+                        }
+                        if (targetElem) {
+                            const newText = item.text || "";
+                            targetElem.dataset.msg = newText;
+                            const bubble = targetElem.querySelector('.sim-bubble-content');
+                            if (bubble) {
+                                const isBotLong = newText.length > 250 || newText.split('\n').length > 6;
+                                bubble.innerHTML = safeEscape(newText).replace(/\n/g, '<br>');
+                                if (isBotLong) bubble.classList.add('sim-msg-truncated');
+                                else bubble.classList.remove('sim-msg-truncated');
+                            }
+                            const viewAll = targetElem.querySelector('.sim-view-all-btn');
+                            if (viewAll) {
+                                viewAll.dataset.fullText = safeEscape(newText);
+                            }
+                            return;
+                        }
+                    }
+
                     let textContent = "";
                     let mediaHtml = "";
 
@@ -3379,7 +3516,7 @@
                     const botMsgId = (item && item.id) ? item.id : (Math.floor(Date.now() / 1000) * 1000 + Math.floor(Math.random() * 900 + 100));
                     const botMsgHtml = `
                         <div class="sim-msg-item chat-bubble-container" data-msg-id="${botMsgId}" data-sender="Stockfishbot" data-msg="${safeEscape(textContent)}" style="align-self:flex-start; max-width:88%; display:flex; align-items:flex-start; gap:8px; cursor:pointer; flex-shrink:0;">
-                            <img src="https://ui-avatars.com/api/?name=Stockfishbot&background=3C1E1E&color=FEE500" style="width:34px; height:34px; border-radius:12px; flex-shrink:0; margin-top:0;" alt="Bot">
+                            <img src="/database/stockfishbot_profile.jpg" onerror="this.src='https://ui-avatars.com/api/?name=Stockfishbot&background=3C1E1E&color=FEE500'" style="width:34px; height:34px; border-radius:12px; flex-shrink:0; margin-top:0; object-fit:cover;" alt="Bot">
                             <div style="display:flex; flex-direction:column; gap:3px; max-width:calc(100% - 42px);">
                                 <div style="font-size:11px; font-weight:600; color:#444; display:flex; align-items:center; gap:4px;">
                                     <span>Stockfishbot</span>
@@ -5885,6 +6022,7 @@
                 const hideContextMenu = () => {
                     const menu = document.getElementById('chat-context-menu');
                     if (menu) menu.style.display = 'none';
+                    document.querySelectorAll('.chat-context-menu').forEach(m => m.style.display = 'none');
                     ctxTargetData = null;
                 };
 
@@ -5931,7 +6069,7 @@
                     hideContextMenu();
                 });
 
-                document.getElementById('ctx-hide-btn')?.addEventListener('click', async () => {
+                document.getElementById('ctx-hide-btn')?.addEventListener('click', () => {
                     if (!ctxTargetData) return;
                     const targetId = ctxTargetData.msgId;
                     const isSim = ctxTargetData.isSimulator;
@@ -5940,47 +6078,49 @@
                     const roomInput = document.getElementById('chat-room-input');
                     const room = isSim ? (roomSel ? roomSel.value : "184029182390192") : (roomInput ? roomInput.value.trim() : "184029182390192");
                     hideContextMenu();
-                    if (!confirm('이 메시지를 가리시겠습니까?')) return;
+                    setTimeout(async () => {
+                        if (!confirm('이 메시지를 가리시겠습니까?')) return;
 
-                    if (isSim && simElem) {
-                        const bubble = simElem.querySelector('.sim-bubble-content') || simElem.querySelector('.chat-bubble');
-                        if (bubble) bubble.textContent = '가려진 메시지입니다.';
-                        simElem.dataset.msg = '가려진 메시지입니다.';
-                    }
-
-                    try {
-                        const token = localStorage.getItem('admin_token');
-                        if (token) {
-                            const res = await fetch(`${API_BASE_URL}/api/admin/chat/hide`, {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'Authorization': `Bearer ${token}`,
-                                    'ngrok-skip-browser-warning': 'true',
-                                    'Bypass-Tunnel-Reminder': 'true'
-                                },
-                                body: JSON.stringify({ room: room, msg_id: targetId })
-                            });
-                            const data = await res.json();
-                            if (res.ok) {
-                                alert('메시지를 성공적으로 가렸습니다.');
-                                const elem = document.querySelector(`.chat-bubble-container[data-msg-id="${targetId}"]`);
-                                if (elem) {
-                                    const bubble = elem.querySelector('.chat-bubble');
-                                    if (bubble) bubble.textContent = '가려진 메시지입니다.';
-                                }
-                            } else {
-                                if (!isSim) alert(data.error || '메시지 가리기에 실패했습니다.');
-                            }
-                        } else if (isSim) {
-                            alert('시뮬레이터에서 메시지를 가렸습니다.');
+                        if (isSim && simElem) {
+                            const bubble = simElem.querySelector('.sim-bubble-content') || simElem.querySelector('.chat-bubble');
+                            if (bubble) bubble.textContent = '가려진 메시지입니다.';
+                            simElem.dataset.msg = '가려진 메시지입니다.';
                         }
-                    } catch (e) {
-                        if (!isSim) alert('서버와 통신할 수 없습니다.');
-                    }
+
+                        try {
+                            const token = localStorage.getItem('admin_token');
+                            if (token) {
+                                const res = await fetch(`${API_BASE_URL}/api/admin/chat/hide`, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'Authorization': `Bearer ${token}`,
+                                        'ngrok-skip-browser-warning': 'true',
+                                        'Bypass-Tunnel-Reminder': 'true'
+                                    },
+                                    body: JSON.stringify({ room: room, msg_id: targetId })
+                                });
+                                const data = await res.json();
+                                if (res.ok) {
+                                    alert('메시지를 성공적으로 가렸습니다.');
+                                    const elem = document.querySelector(`.chat-bubble-container[data-msg-id="${targetId}"]`);
+                                    if (elem) {
+                                        const bubble = elem.querySelector('.chat-bubble');
+                                        if (bubble) bubble.textContent = '가려진 메시지입니다.';
+                                    }
+                                } else {
+                                    if (!isSim) alert(data.error || '메시지 가리기에 실패했습니다.');
+                                }
+                            } else if (isSim) {
+                                alert('시뮬레이터에서 메시지를 가렸습니다.');
+                            }
+                        } catch (e) {
+                            if (!isSim) alert('서버와 통신할 수 없습니다.');
+                        }
+                    }, 30);
                 });
 
-                document.getElementById('ctx-modify-btn')?.addEventListener('click', async () => {
+                document.getElementById('ctx-modify-btn')?.addEventListener('click', () => {
                     if (!ctxTargetData) return;
                     const targetId = ctxTargetData.msgId;
                     const originalMsg = ctxTargetData.msg;
@@ -5991,46 +6131,48 @@
                     const room = isSim ? (roomSel ? roomSel.value : "184029182390192") : (roomInput ? roomInput.value.trim() : "184029182390192");
                     hideContextMenu();
 
-                    const newMsg = prompt('수정할 메시지 내용을 입력하세요 (5분 이내 봇 메시지만 가능):', originalMsg);
-                    if (newMsg === null || !newMsg.trim() || newMsg.trim() === originalMsg) return;
+                    setTimeout(async () => {
+                        const newMsg = prompt('수정할 메시지 내용을 입력하세요 (5분 이내 봇 메시지만 가능):', originalMsg);
+                        if (newMsg === null || !newMsg.trim() || newMsg.trim() === originalMsg) return;
 
-                    if (isSim && simElem) {
-                        simElem.dataset.msg = newMsg.trim();
-                        const bubble = simElem.querySelector('.sim-bubble-content') || simElem.querySelector('.chat-bubble');
-                        if (bubble) bubble.textContent = newMsg.trim();
-                    }
-
-                    try {
-                        const token = localStorage.getItem('admin_token');
-                        if (token) {
-                            const res = await fetch(`${API_BASE_URL}/api/admin/chat/modify`, {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'Authorization': `Bearer ${token}`,
-                                    'ngrok-skip-browser-warning': 'true',
-                                    'Bypass-Tunnel-Reminder': 'true'
-                                },
-                                body: JSON.stringify({ room: room, msg_id: targetId, msg: newMsg.trim() })
-                            });
-                            const data = await res.json();
-                            if (res.ok) {
-                                alert('메시지가 성공적으로 수정되었습니다.');
-                                const elem = document.querySelector(`.chat-bubble-container[data-msg-id="${targetId}"]`);
-                                if (elem) {
-                                    elem.dataset.msg = newMsg.trim();
-                                    const bubble = elem.querySelector('.chat-bubble');
-                                    if (bubble) bubble.textContent = newMsg.trim();
-                                }
-                            } else {
-                                if (!isSim) alert(data.error || '메시지 수정에 실패했습니다.');
-                            }
-                        } else if (isSim) {
-                            alert('시뮬레이터에서 메시지가 수정되었습니다.');
+                        if (isSim && simElem) {
+                            simElem.dataset.msg = newMsg.trim();
+                            const bubble = simElem.querySelector('.sim-bubble-content') || simElem.querySelector('.chat-bubble');
+                            if (bubble) bubble.textContent = newMsg.trim();
                         }
-                    } catch (e) {
-                        if (!isSim) alert('서버와 통신할 수 없습니다.');
-                    }
+
+                        try {
+                            const token = localStorage.getItem('admin_token');
+                            if (token) {
+                                const res = await fetch(`${API_BASE_URL}/api/admin/chat/modify`, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'Authorization': `Bearer ${token}`,
+                                        'ngrok-skip-browser-warning': 'true',
+                                        'Bypass-Tunnel-Reminder': 'true'
+                                    },
+                                    body: JSON.stringify({ room: room, msg_id: targetId, msg: newMsg.trim() })
+                                });
+                                const data = await res.json();
+                                if (res.ok) {
+                                    alert('메시지가 성공적으로 수정되었습니다.');
+                                    const elem = document.querySelector(`.chat-bubble-container[data-msg-id="${targetId}"]`);
+                                    if (elem) {
+                                        elem.dataset.msg = newMsg.trim();
+                                        const bubble = elem.querySelector('.chat-bubble');
+                                        if (bubble) bubble.textContent = newMsg.trim();
+                                    }
+                                } else {
+                                    if (!isSim) alert(data.error || '메시지 수정에 실패했습니다.');
+                                }
+                            } else if (isSim) {
+                                alert('시뮬레이터에서 메시지가 수정되었습니다.');
+                            }
+                        } catch (e) {
+                            if (!isSim) alert('서버와 통신할 수 없습니다.');
+                        }
+                    }, 30);
                 });
 
                 document.getElementById('ctx-copy-btn')?.addEventListener('click', () => {
