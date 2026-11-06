@@ -2857,7 +2857,7 @@
                     raw.startsWith("코딩굴비야") || raw.startsWith("상담굴비야") || raw.startsWith("설명굴비야") ||
                     cmd === "굴비" || cmd === "gulbi" || cmd === "hey"
                 );
-                const isDevCall = raw.startsWith(";") || [";ubuntu", ";upd", ";sudo", ";sh", ";eval", ";exec", ";admin", "ubuntu", "sudo"].some(c => raw.startsWith(c) || cmd === c);
+                const isDevCall = [";ubuntu", ";upd", ";sudo", ";sh", ";eval", ";exec", ";admin", "ubuntu", "sudo"].some(c => raw.startsWith(c) || cmd === c);
                 if (isGulbiCall || isDevCall) {
                     return "보안상의 이유로 봇을 이용해주세요.";
                 }
@@ -2920,8 +2920,16 @@
                             <div style="display:flex; align-items:center; gap:3px; margin-left:auto;">
                                 <span style="font-weight:700; color:#1c2833;">Tier:</span>
                                 <select id="mini-kakao-tier-select" style="background:#ffffff; border:1px solid #7c95a8; border-radius:4px; font-size:11px; padding:2px 4px; outline:none; color:#111;">
-                                    <option value="0" selected>Free</option>
-                                    <option value="1">Basic</option>
+                                    <option value="0" selected>0 (Free)</option>
+                                    <option value="1">1 (Lite)</option>
+                                    <option value="2">2 (Basic)</option>
+                                    <option value="3">3 (Plus)</option>
+                                    <option value="4">4 (Pro)</option>
+                                    <option value="5">5 (Super)</option>
+                                    <option value="6">6 (Ultra)</option>
+                                    <option value="7">7 (Max)</option>
+                                    <option value="8">8 (Hyper)</option>
+                                    <option value="9">9 (Infinity)</option>
                                 </select>
                             </div>
                         </div>
@@ -2938,12 +2946,14 @@
                             <input id="mini-kakao-input" type="text" placeholder="메시지 또는 명령어 입력..." style="flex:1; border:1px solid #dcdfe3; border-radius:8px; padding:7px 10px; font-size:13px; outline:none; background:#f8f9fa; color:#111; height:34px; box-sizing:border-box;">
                             <button type="submit" id="mini-kakao-send" style="background:#fee500; color:#3c1e1e; border:none; border-radius:8px; padding:0 12px; height:34px; font-size:12px; font-weight:700; cursor:pointer; white-space:nowrap; flex-shrink:0;">전송</button>
                         </form>
-                        <div id="mini-kakao-fullview-overlay" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; background:#ffffff; z-index:100; flex-direction:column; animation:miniKakaoFadeIn 0.2s ease-out;">
-                            <div style="background:#a0b9cb; padding:10px 14px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,0,0,0.1); user-select:none;">
-                                <div style="font-size:13px; font-weight:700; color:#1e1e1e;" id="mini-kakao-fullview-title">전체보기</div>
-                                <button type="button" id="mini-kakao-fullview-close" style="background:rgba(0,0,0,0.08); border:none; cursor:pointer; color:#222; font-size:16px; font-weight:bold; width:26px; height:26px; border-radius:6px; display:flex; align-items:center; justify-content:center; line-height:1;">&times;</button>
+                        <div id="mini-kakao-fullview-overlay" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; background:#ffffff; z-index:100; flex-direction:column; animation:miniKakaoFadeIn 0.2s ease-out; border-radius:16px;">
+                            <div style="display:flex; align-items:center; padding:10px 14px; border-bottom:1px solid rgba(0,0,0,0.08); background:#f8f9fa; flex-shrink:0;">
+                                <button type="button" id="mini-kakao-fullview-close" title="뒤로가기" style="background:none; border:none; cursor:pointer; color:#212529; padding:4px; margin-right:8px; display:flex; align-items:center; justify-content:center;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+                                </button>
+                                <span id="mini-kakao-fullview-title" style="font-weight:700; font-size:14px; color:#1e1e1e;">전체 보기</span>
                             </div>
-                            <div id="mini-kakao-fullview-content" style="flex:1; overflow-y:auto; padding:14px; font-size:13px; line-height:1.6; color:#222; word-break:break-word; white-space:pre-wrap; background:#fdfdfd;"></div>
+                            <div id="mini-kakao-fullview-content" style="flex:1; overflow-y:auto; padding:14px 16px; font-size:13px; line-height:1.6; color:#212529; word-break:break-word; white-space:pre-wrap; background:#ffffff;"></div>
                         </div>
                     </div>
                 `;
@@ -3108,7 +3118,7 @@
                             const title = document.getElementById("mini-kakao-fullview-title");
                             const content = document.getElementById("mini-kakao-fullview-content");
                             if (overlay && content) {
-                                if (title) title.textContent = `${sender} - 전체보기`;
+                                if (title) title.textContent = "전체 보기";
                                 content.textContent = fullText;
                                 overlay.style.display = "flex";
                             }
@@ -3259,6 +3269,29 @@
                 return widget;
             }
 
+            // 초기 로드 시 미니 카톡 위젯 초기화 및 토글 버튼 직접 바인딩
+            try {
+                ensureMiniKakaoWidget();
+                const botChatToggleBtn = document.getElementById("botChatToggleBtn");
+                if (botChatToggleBtn && !botChatToggleBtn._boundMiniToggle) {
+                    botChatToggleBtn._boundMiniToggle = true;
+                    botChatToggleBtn.addEventListener("click", (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        const widget = ensureMiniKakaoWidget();
+                        if (widget) {
+                            if (widget.style.display === "none" || !widget.style.display) {
+                                widget.style.display = "flex";
+                                const input = document.getElementById("mini-kakao-input");
+                                if (input) input.focus();
+                            } else {
+                                widget.style.display = "none";
+                            }
+                        }
+                    });
+                }
+            } catch (e) {}
+
             window.sendWebKakaoMessage = function(inputRaw) {
                 const text = (inputRaw || "").trim();
                 if (!text) return;
@@ -3277,7 +3310,7 @@
                     simRole = "user";
                 }
                 const userSender = simRole === "admin" ? "방장" : (simRole === "subadmin" ? "부방장" : "게스트(사용자)");
-                const userMsgId = "sim_user_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
+                const userMsgId = Math.floor(Date.now() / 1000) * 1000 + Math.floor(Math.random() * 900 + 100);
 
                 const activeReplyTarget = window.simReplyTarget;
                 window.simReplyTarget = null;
@@ -3343,14 +3376,13 @@
                     if (isBotLong) {
                         botBubbleHtml += `<button type="button" class="sim-view-all-btn" data-full-text="${safeEscape(textContent)}" data-sender="Stockfishbot">전체보기 &gt;</button>`;
                     }
-                    const botMsgId = "sim_bot_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
+                    const botMsgId = (item && item.id) ? item.id : (Math.floor(Date.now() / 1000) * 1000 + Math.floor(Math.random() * 900 + 100));
                     const botMsgHtml = `
                         <div class="sim-msg-item chat-bubble-container" data-msg-id="${botMsgId}" data-sender="Stockfishbot" data-msg="${safeEscape(textContent)}" style="align-self:flex-start; max-width:88%; display:flex; align-items:flex-start; gap:8px; cursor:pointer; flex-shrink:0;">
                             <img src="https://ui-avatars.com/api/?name=Stockfishbot&background=3C1E1E&color=FEE500" style="width:34px; height:34px; border-radius:12px; flex-shrink:0; margin-top:0;" alt="Bot">
                             <div style="display:flex; flex-direction:column; gap:3px; max-width:calc(100% - 42px);">
                                 <div style="font-size:11px; font-weight:600; color:#444; display:flex; align-items:center; gap:4px;">
                                     <span>Stockfishbot</span>
-                                    <span style="font-size:9px; background:#3c1e1e; color:#fee500; padding:1px 4px; border-radius:3px; font-weight:700;">BOT</span>
                                 </div>
                                 <div style="background:#ffffff; color:#1e1e1e; padding:8px 11px; border-radius:10px; border-top-left-radius:2px; font-size:13px; line-height:1.45; word-break:break-word; box-shadow:0 1px 2px rgba(0,0,0,0.08);">
                                     ${botBubbleHtml}
@@ -3390,7 +3422,7 @@
                     text.startsWith("/굴비") || text.startsWith("!굴비") || text === "굴비" || text.startsWith("굴비 ") ||
                     text === "gulbi" || text.startsWith("gulbi ") || text === "hey" || text.startsWith("hey ")
                 );
-                const blockedCommands = [";ubuntu", ";upd", ";sudo", ";sh", ";eval", ";exec", ";", "/eval", "/exec", "/sh", "/sudo"];
+                const blockedCommands = [";ubuntu", ";upd", ";sudo", ";sh", ";eval", ";exec", ";admin", "/eval", "/exec", "/sh", "/sudo"];
                 if (blockedCommands.some(cmd => text.startsWith(cmd)) || isGulbiCall) {
                     renderBotItem("보안상의 이유로 봇을 이용해주세요.");
                     return;
@@ -3412,7 +3444,9 @@
                     sim_tier: simTier
                 };
                 if (activeReplyTarget) {
-                    postPayload.thread_id = activeReplyTarget.id;
+                    const rawTid = activeReplyTarget.id;
+                    const numTid = parseInt(String(rawTid).replace(/\D/g, '').slice(-9), 10);
+                    postPayload.thread_id = !isNaN(numTid) ? numTid : rawTid;
                     postPayload.reply_target_sender = activeReplyTarget.sender;
                     postPayload.reply_target_msg = activeReplyTarget.msg;
                 }
@@ -4685,6 +4719,9 @@
     }
 
     document.addEventListener("DOMContentLoaded", async () => {
+        if (typeof ensureMiniKakaoWidget === "function") {
+            try { ensureMiniKakaoWidget(); } catch (e) {}
+        }
         const sidebarLoginBtn = document.getElementById('sidebar-login-btn');
         if (sidebarLoginBtn) {
             const handleSidebarLogin = async (e) => {
